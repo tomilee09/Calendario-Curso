@@ -141,10 +141,86 @@ def crear_calendario_curso(
 # ============================================================
 # Exportar Excel
 # ============================================================
+# def df_a_excel_bytes(df: pd.DataFrame) -> bytes:
+#     buffer = io.BytesIO()
+#     with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
+#         df.to_excel(writer, index=False, sheet_name="Calendario")
+#     return buffer.getvalue()
 def df_a_excel_bytes(df: pd.DataFrame) -> bytes:
+    import io
+    from openpyxl.utils import get_column_letter
+    from openpyxl.styles import Alignment, Font
+    from openpyxl.worksheet.table import Table, TableStyleInfo
+
     buffer = io.BytesIO()
-    with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
+    with pd.ExcelWriter(buffer, engine="openpyxl", datetime_format="DD/MM/YYYY") as writer:
         df.to_excel(writer, index=False, sheet_name="Calendario")
+        ws = writer.sheets["Calendario"]
+
+        # --- Congelar fila de encabezados ---
+        ws.freeze_panes = "A2"
+
+        # --- Estilo encabezados ---
+        for cell in ws[1]:
+            cell.font = Font(bold=True)
+            cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+        # --- Encontrar columnas por nombre ---
+        headers = [c.value for c in ws[1]]
+        col_fecha = headers.index("fecha") + 1 if "fecha" in headers else None
+        col_horario = headers.index("horario") + 1 if "horario" in headers else None
+
+        # --- Formatos Excel ---
+        # Fecha: dd/mm/yyyy
+        if col_fecha is not None:
+            for r in range(2, ws.max_row + 1):
+                c = ws.cell(row=r, column=col_fecha)
+                # Si viene como string, intenta convertirlo
+                if isinstance(c.value, str) and c.value.strip():
+                    try:
+                        c.value = pd.to_datetime(c.value).date()
+                    except Exception:
+                        pass
+                c.number_format = "DD/MM/YYYY"
+                c.alignment = Alignment(horizontal="center")
+
+        # Horario: texto (para que no intente convertir)
+        if col_horario is not None:
+            for r in range(2, ws.max_row + 1):
+                c = ws.cell(row=r, column=col_horario)
+                if c.value is None:
+                    c.value = ""
+                c.number_format = "@"
+                c.alignment = Alignment(horizontal="center")
+
+        # --- Ajustar ancho de columnas (evita ######) ---
+        # estimación simple: largo máximo del contenido en cada columna
+        for col_idx in range(1, ws.max_column + 1):
+            max_len = 0
+            for r in range(1, ws.max_row + 1):
+                v = ws.cell(row=r, column=col_idx).value
+                if v is None:
+                    continue
+                v_str = str(v)
+                if len(v_str) > max_len:
+                    max_len = len(v_str)
+            ws.column_dimensions[get_column_letter(col_idx)].width = min(max(10, max_len + 2), 45)
+
+        # --- (Opcional) Convertir a "Tabla" Excel bonita ---
+        try:
+            tab = Table(displayName="TablaCalendario", ref=f"A1:{get_column_letter(ws.max_column)}{ws.max_row}")
+            style = TableStyleInfo(
+                name="TableStyleMedium9",
+                showFirstColumn=False,
+                showLastColumn=False,
+                showRowStripes=True,
+                showColumnStripes=False,
+            )
+            tab.tableStyleInfo = style
+            ws.add_table(tab)
+        except Exception:
+            pass
+
     return buffer.getvalue()
 
 
@@ -211,36 +287,40 @@ CASOS_ESPECIALES = {
             "set": {"tema": "Modelos y Derivadas 3"}
         },
         {
-            "filtro": {"semana": 7},
+            "filtro": {"semana": 8},
             "set": {"tema": "Modelos y Derivadas 4"}
         },
         {
-            "filtro": {"semana": 8},
+            "filtro": {"semana": 9},
             "set": {"tema": "Modelos y Derivadas 5"}
         },
         {
-            "filtro": {"semana": 9},
+            "filtro": {"semana": 10},
             "set": {"tema": "Modelos y Derivadas 6"}
         },
         {
-            "filtro": {"semana": 10},
+            "filtro": {"semana": 11},
             "set": {"tema": "Modelos y Derivadas 7"}
         },
         {
-            "filtro": {"semana": 11},
+            "filtro": {"semana": 12 },
             "set": {"tema": "Trigonometría 1"}
         },
         {
-            "filtro": {"semana": 12},
+            "filtro": {"semana": 13},
             "set": {"tema": "Trigonometría 2"}
         },
         {
-            "filtro": {"semana": 13},
+            "filtro": {"semana": 14},
             "set": {"tema": "Trigonometría 3"}
         },
         {
-            "filtro": {"semana": 14},
+            "filtro": {"semana": 15},
             "set": {"tema": "Taller"}
+        },
+        {
+            "filtro": {"semana": 15},
+            "set": {"tema": "Taller 2"}
         },
         # {
         #     "filtro": {"sección": "Sección 4", "semana": 8, "actividad": "Clase teórica"},
