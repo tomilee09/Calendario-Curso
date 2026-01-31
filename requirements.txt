@@ -4,3 +4,7 @@ plotly
 streamlit-calendar
 holidays
 openpyxl
+pyyaml
+google-api-python-client
+google-auth
+google-auth-oauthlib

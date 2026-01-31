@@ -1,0 +1,169 @@
+# calendario_config.yml
+
+curso:
+  nombre: "Calendario Curso"
+  timezone: "America/Santiago"
+
+periodo:
+  fecha_inicio: "2026-03-16"
+  numero_semanas: 20
+
+secciones:
+  "Sección 1":
+    teorica:   { dia_semana: "Monday",    inicio: "12:00", fin: "13:30" }
+    seminario: { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
+    lab:       { dia_semana: "Wednesday", inicio: "16:45", fin: "18:15" }
+
+  "Sección 2":
+    teorica:   { dia_semana: "Monday", inicio: "16:45", fin: "18:15" }
+    seminario: { dia_semana: "Friday", inicio: "08:30", fin: "10:00" }
+    lab:       { dia_semana: "Monday", inicio: "15:00", fin: "16:30" }
+
+  "Sección 3":
+    teorica:   { dia_semana: "Wednesday", inicio: "16:45", fin: "18:15" }
+    seminario: { dia_semana: "Friday",    inicio: "10:15", fin: "11:45" }
+    lab:       { dia_semana: "Friday",    inicio: "12:00", fin: "13:30" }
+
+  "Sección 4":
+    teorica:   { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
+    seminario: { dia_semana: "Friday",    inicio: "08:30", fin: "10:00" }
+    lab:       { dia_semana: "Friday",    inicio: "10:15", fin: "11:45" }
+
+laboratorios:
+  frecuencia: "cada_2_semanas"
+  semanas: "pares"
+
+profesores_base:
+  - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "TY" }
+  - { seccion: "Sección 1", actividad: "Seminario",    profesores: "IG" }
+  - { seccion: "Sección 1", actividad: "Laboratorio",  profesores: "CC" }
+
+  - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "AR" }
+  - { seccion: "Sección 2", actividad: "Seminario",    profesores: "JCS" }
+  - { seccion: "Sección 2", actividad: "Laboratorio",  profesores: "IG" }
+
+  - { seccion: "Sección 3", actividad: "Clase teórica", profesores: "CC" }
+  - { seccion: "Sección 3", actividad: "Seminario",    profesores: "TY" }
+  - { seccion: "Sección 3", actividad: "Laboratorio",  profesores: "AR" }
+
+  - { seccion: "Sección 4", actividad: "Clase teórica", profesores: "IG" }
+  - { seccion: "Sección 4", actividad: "Seminario",    profesores: "CC" }
+  - { seccion: "Sección 4", actividad: "Laboratorio",  profesores: "JCS" }
+
+temas_por_semana:
+  1: "Lógica 1"
+
+evaluaciones:
+  - { modo: "por_filtro", seccion: "Sección 4", semana: 8, actividad: "Clase teórica", tipo: "Prueba", observaciones: "45 min" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 6, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Entrega al final" }
+
+misiones:
+  - { fecha: "2026-04-10", seccion: "Equipo docente", mision: "Propuesta de preguntas", profesores: "TY, IG", observaciones: "Subir doc a carpeta" }
+  - { fecha: "2026-05-08", seccion: "Equipo docente", mision: "Revisión prueba", profesores: "IG", observaciones: "Enviar versión final" }
+  - { fecha: "2026-06-05", seccion: "Equipo docente", mision: "Revisión taller", profesores: "CC, AR", observaciones: "Revisar guía y pauta" }
+
+pausas_academicas:
+  - { inicio: "2026-05-18", fin: "2026-05-24", etiqueta: "Semana de Pausa Académica" }
+  - { inicio: "2026-07-27", fin: "2026-08-09", etiqueta: "Trabajo autónomo institucional" }
+
+semanas_trabajo_autonomo:
+  - 16
+
+bloques:
+  definicion:
+    "3": { inicio: "12:00", fin: "13:30" }
+    "4": { inicio: "15:00", fin: "16:30" }
+  protegidos:
+    - { fecha: "2026-04-01", bloque: "3" }
+    - { fecha: "2026-05-04", bloque: "4" }
+    - { fecha: "2026-06-11", bloque: "3" }
+    - { fecha: "2026-06-23", bloque: "4" }
+
+feriados:
+  usar_automaticos_chile: true
+  manuales:
+    - { fecha: "2026-04-03", nombre: "Feriado (ejemplo)" }
+
+examenes:
+  semanas_examenes: [17, 18]
+  eventos:
+    - { seccion: "Sección 1", fecha: "2026-07-06", inicio: "09:00", fin: "11:00", actividad: "Examen", profesores: "TY", observaciones: "Examen final" }
+    - { seccion: "Sección 2", fecha: "2026-07-07", inicio: "16:00", fin: "18:00", actividad: "Examen", profesores: "IG", observaciones: "Examen final" }
+    - { seccion: "Sección 3", fecha: "2026-07-08", inicio: "10:00", fin: "12:00", actividad: "Examen", profesores: "CC", observaciones: "Examen final" }
+    - { seccion: "Sección 4", fecha: "2026-07-09", inicio: "18:00", fin: "20:00", actividad: "Examen", profesores: "AR, JCS", observaciones: "Examen final" }
+
+salida:
+  excel_path: "data/calendario.xlsx"
+
+# ============================================================
+# ✅ EMAILS (NUEVO)
+# ============================================================
+emails:
+  # Map de iniciales -> email real
+  profesor_a_email:
+    TY: "ty@ejemplo.cl"
+    IG: "ig@ejemplo.cl"
+    CC: "cc@ejemplo.cl"
+    AR: "ar@ejemplo.cl"
+    JCS: "jcs@ejemplo.cl"
+
+  # Remitente (debe ser el "me" del token de Gmail)
+  from_name: "Calendario del Curso"
+
+  # Si quieres copiar a alguien siempre:
+  cc:
+    - ""  # ejemplo: "coordinacion@ug.uchile.cl"
+
+  # Reglas de recordatorio:
+  # - Para cada tipo de evento define cuántos días antes se manda.
+  reglas:
+    mision:
+      enviar_dias_antes: [7, 2, 0]        # 0 = el mismo día
+      hora_envio: "09:00"                 # hora local Chile
+      asunto: "[Curso] Recordatorio misión: {titulo} (vence {fecha})"
+      cuerpo: |
+        Hola {nombre_prof}:
+
+        Recordatorio: {titulo}
+        Fecha límite: {fecha} {hora}
+
+        Sección/Equipo: {seccion}
+        Observaciones: {observaciones}
+
+        — {from_name}
+
+    evaluacion:
+      enviar_dias_antes: [7, 2]
+      hora_envio: "09:00"
+      asunto: "[Curso] Evaluación ({evaluacion}) — {seccion} — Semana {semana}"
+      cuerpo: |
+        Hola {nombre_prof}:
+
+        Se acerca una evaluación asociada al curso:
+        - Tipo: {evaluacion}
+        - Sección: {seccion}
+        - Semana: {semana}
+        - Fecha/Hora: {fecha} {hora}
+        - Actividad: {actividad}
+        - Tema: {tema}
+
+        Observaciones: {observaciones}
+
+        — {from_name}
+
+    examen:
+      enviar_dias_antes: [14, 7, 2]
+      hora_envio: "09:00"
+      asunto: "[Curso] Examen — {seccion} — {fecha} {hora}"
+      cuerpo: |
+        Hola {nombre_prof}:
+
+        Recordatorio de examen:
+        - Sección: {seccion}
+        - Fecha/Hora: {fecha} {hora}
+        - Observaciones: {observaciones}
+
+        — {from_name}
+
+  # Archivo donde guardamos qué correos ya se enviaron (para no repetir)
+  estado_envios_path: "data/email_log.json"
