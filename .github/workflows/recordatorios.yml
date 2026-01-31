@@ -1,0 +1,61 @@
+name: Recordatorios por correo (Gmail)
+
+on:
+  schedule:
+    # 12:00 UTC = 09:00 en Chile (CLT, UTC-3) normalmente.
+    # Si Chile cambiara a horario de verano/invierno, ajusta esta hora.
+    - cron: "0 12 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: recordatorios
+  cancel-in-progress: false
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Ensure data folder exists
+        run: |
+          mkdir -p data
+          # crea log si no existe (para evitar errores)
+          if [ ! -f data/email_log.json ]; then echo '{"sent":{}}' > data/email_log.json; fi
+
+      - name: Send reminders
+        env:
+          # 👇 tus secrets tal cual (sin base64)
+          GMAIL_TOKEN_JSON: ${{ secrets.token }}
+          GMAIL_CREDENTIALS_JSON: ${{ secrets.credentials }}
+        run: |
+          python enviar_recordatorios.py --config calendario_config.yml
+
+      - name: Commit updated email log (if changed)
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/email_log.json
+          git commit -m "Update email log [skip ci]"
+          git push
