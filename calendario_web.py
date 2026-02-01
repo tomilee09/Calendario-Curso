@@ -1472,24 +1472,68 @@ with tab3:
         pendientes = [x for x in filas if not x[0]]
         completadas = [x for x in filas if x[0]]
 
+        # def render_group(title, items, gray=False):
+        #     st.markdown(f"### {title}")
+        #     if not items:
+        #         st.caption("—")
+        #         return
+        #     for done, uid, row in items:
+        #         fecha = pd.Timestamp(row["fecha"]).strftime("%d/%m/%Y")
+        #         mtxt = str(row.get("misiones", "") or "").strip()
+        #         profs = split_profes(row.get("profesores", ""))
+
+        #         # checkbox
+        #         key = f"m_done_{uid}"
+        #         if key not in st.session_state:
+        #             st.session_state[key] = done
+
+        #         cA, cB = st.columns([1, 8])
+        #         with cA:
+        #             st.session_state[key] = st.checkbox("", value=st.session_state[key], key=key)
+        #         with cB:
+        #             icon = MISION_ICON.get(mtxt, "📌")
+        #             prof_tags = "".join(tag_persona(p) for p in profs) if profs else "<span style='color:#777'>Sin asignar</span>"
+        #             style = "color:#777;" if gray else ""
+        #             st.markdown(
+        #                 f"""
+        #                 <div style="{style}">
+        #                   <b>{icon} {mtxt}</b> — <span style="opacity:0.9">{fecha}</span><br/>
+        #                   {prof_tags}<br/>
+        #                   <span style="opacity:0.8">{row.get('observaciones','')}</span>
+        #                 </div>
+        #                 """,
+        #                 unsafe_allow_html=True
+        #             )
+
+        #         # actualizar estado persistente
+        #         new_done = bool(st.session_state[key])
+        #         if new_done != done:
+        #             state[uid] = new_done
+        #             save_misiones_state(state)
+
+        # render_group("Pendientes", pendientes, gray=False)
+        # st.divider()
+        # render_group("Completadas", completadas, gray=True)
+        
         def render_group(title, items, gray=False):
             st.markdown(f"### {title}")
             if not items:
                 st.caption("—")
                 return
+
             for done, uid, row in items:
                 fecha = pd.Timestamp(row["fecha"]).strftime("%d/%m/%Y")
                 mtxt = str(row.get("misiones", "") or "").strip()
                 profs = split_profes(row.get("profesores", ""))
 
-                # checkbox
-                key = f"m_done_{uid}"
-                if key not in st.session_state:
-                    st.session_state[key] = done
+                # checkbox: usamos una key estable, pero NO asignamos a session_state manualmente
+                widget_key = f"m_done_{uid}"
 
                 cA, cB = st.columns([1, 8])
                 with cA:
-                    st.session_state[key] = st.checkbox("", value=st.session_state[key], key=key)
+                    # ✅ Streamlit gestiona session_state[widget_key]
+                    st.checkbox("", value=done, key=widget_key)
+
                 with cB:
                     icon = MISION_ICON.get(mtxt, "📌")
                     prof_tags = "".join(tag_persona(p) for p in profs) if profs else "<span style='color:#777'>Sin asignar</span>"
@@ -1497,23 +1541,19 @@ with tab3:
                     st.markdown(
                         f"""
                         <div style="{style}">
-                          <b>{icon} {mtxt}</b> — <span style="opacity:0.9">{fecha}</span><br/>
-                          {prof_tags}<br/>
-                          <span style="opacity:0.8">{row.get('observaciones','')}</span>
+                        <b>{icon} {mtxt}</b> — <span style="opacity:0.9">{fecha}</span><br/>
+                        {prof_tags}<br/>
+                        <span style="opacity:0.8">{row.get('observaciones','')}</span>
                         </div>
                         """,
                         unsafe_allow_html=True
                     )
 
-                # actualizar estado persistente
-                new_done = bool(st.session_state[key])
+                # ✅ leer el valor luego
+                new_done = bool(st.session_state.get(widget_key, done))
                 if new_done != done:
                     state[uid] = new_done
                     save_misiones_state(state)
-
-        render_group("Pendientes", pendientes, gray=False)
-        st.divider()
-        render_group("Completadas", completadas, gray=True)
 
 # ============================================================
 # TAB 4: Plots (sin Plotly)
