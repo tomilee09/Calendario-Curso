@@ -52,6 +52,25 @@ profesores_base:
 
 temas_por_semana:
   1: "Lógica 1"
+  2: "Lógica 2"
+  3: "Lógica 3"
+  4: "Funciones 1"
+  5: "Funciones 2"
+  6: "Funciones 3"
+  7: "Funciones 4"
+  8: "Funciones 5"
+  9: "Funciones 6"
+  10: "Funciones 7"
+  11: "Funciones 8"
+  12: "Funciones 9"
+  13: "Funciones 10"
+  14: "Funciones 11"
+  15: "Funciones 12"
+  16: "Funciones 13"
+  17: "Funciones 14"
+  18: "Funciones 15"
+  19: "Funciones 16"
+  20: "Funciones 17"
 
 evaluaciones:
   - { modo: "por_filtro", seccion: "Sección 4", semana: 8, actividad: "Clase teórica", tipo: "Prueba", observaciones: "45 min" }
