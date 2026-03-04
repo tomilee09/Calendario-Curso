@@ -1,0 +1,171 @@
+# calendario_config.yml
+
+curso:
+  nombre: "Calendario Curso"
+  timezone: "America/Santiago"
+
+periodo:
+  fecha_inicio: "2026-03-16"
+  numero_semanas: 19
+
+secciones:
+  # "Sección 1":
+  #   teorica:   { dia_semana: "Monday",    inicio: "12:00", fin: "13:30" }
+  #   seminario: { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
+
+  "Sección 2":
+    teorica:   { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
+    seminario: { dia_semana: "Thursday", inicio: "08:30", fin: "10:00" }
+
+# laboratorios:
+#   frecuencia: "cada_2_semanas"
+#   semanas: "pares"
+
+profesores_base:
+  # - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "TY" }
+  # - { seccion: "Sección 1", actividad: "Seminario",    profesores: "IG" }
+
+  - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "AR" }
+  - { seccion: "Sección 2", actividad: "Seminario",    profesores: "JCS" }
+
+temas_por_semana:
+  1: "Lógica 1"
+  2: "Lógica 2"
+  3: "Lógica 3"
+  4: "Sin actividades (semana mechona)"
+  5: "Certamen 1"
+  6: "Modelos y Derivadas 1"
+  7: "Modelos y Derivadas 2"
+  8: "Modelos y Derivadas 3"
+  9: "Modelos y Derivadas 4"
+  10: "Semana Receso"
+  11: "Certamen 2"
+  12: "Linealización de modelos"
+  13: "Trigonometría y Vectores 1"
+  14: "Trigonometría y Vectores 2"
+  15: "Trigonometría y Vectores 3"
+  16: "Certamen 3"
+  17: "Trabajo Autónomo"
+  18: "Examen Primera Oportunidad"
+  19: "Examen Segunda Oportunidad"
+
+evaluaciones:
+
+  # CONTROLES
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2, 15 min" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 3, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 3, 15 min" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 7, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 2, 15 min" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 8, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 3, 15 min" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 9, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 4, 15 min" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 14, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 2, 15 min" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 3, 15 min" }
+  
+  # CERTAMENES
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 11, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 3" }
+
+  # TRABAJO PRACTICO
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+
+  # EXAMENES
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
+  - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+
+pausas_academicas:
+  # - { inicio: "2026-05-18", fin: "2026-05-24", etiqueta: "Semana de Pausa Académica" }
+  # - { inicio: "2026-07-27", fin: "2026-08-09", etiqueta: "Trabajo autónomo institucional" }
+
+semanas_trabajo_autonomo:
+  - 17
+
+bloques:
+  definicion:
+    "3": { inicio: "12:00", fin: "13:30" }
+    "4": { inicio: "15:00", fin: "16:30" }
+  protegidos:
+    - { fecha: "2026-04-01", bloque: "3" }
+    - { fecha: "2026-05-04", bloque: "4" }
+    - { fecha: "2026-06-11", bloque: "3" }
+    - { fecha: "2026-06-23", bloque: "4" }
+
+feriados:
+  usar_automaticos_chile: true
+  manuales:
+    # - { fecha: "2026-04-03", nombre: "Feriado (ejemplo)" }
+
+salida:
+  excel_path: "data/calendario.xlsx"
+
+# # ============================================================
+# # ✅ EMAILS (NUEVO)
+# # ============================================================
+# emails:
+#   # Map de iniciales -> email real
+#   profesor_a_email:
+#     TY: "ty@ejemplo.cl"
+#     IG: "ig@ejemplo.cl"
+#     CC: "cc@ejemplo.cl"
+#     AR: "ar@ejemplo.cl"
+#     JCS: "jcs@ejemplo.cl"
+
+#   # Remitente (debe ser el "me" del token de Gmail)
+#   from_name: "Calendario del Curso"
+
+#   # Si quieres copiar a alguien siempre:
+#   cc:
+#     - ""  # ejemplo: "coordinacion@ug.uchile.cl"
+
+#   # Reglas de recordatorio:
+#   # - Para cada tipo de evento define cuántos días antes se manda.
+#   reglas:
+#     mision:
+#       enviar_dias_antes: [7, 2, 0]        # 0 = el mismo día
+#       hora_envio: "09:00"                 # hora local Chile
+#       asunto: "[Curso] Recordatorio misión: {titulo} (vence {fecha})"
+#       cuerpo: |
+#         Hola {nombre_prof}:
+
+#         Recordatorio: {titulo}
+#         Fecha límite: {fecha} {hora}
+
+#         Sección/Equipo: {seccion}
+#         Observaciones: {observaciones}
+
+#         — {from_name}
+
+#     evaluacion:
+#       enviar_dias_antes: [7, 2]
+#       hora_envio: "09:00"
+#       asunto: "[Curso] Evaluación ({evaluacion}) — {seccion} — Semana {semana}"
+#       cuerpo: |
+#         Hola {nombre_prof}:
+
+#         Se acerca una evaluación asociada al curso:
+#         - Tipo: {evaluacion}
+#         - Sección: {seccion}
+#         - Semana: {semana}
+#         - Fecha/Hora: {fecha} {hora}
+#         - Actividad: {actividad}
+#         - Tema: {tema}
+
+#         Observaciones: {observaciones}
+
+#         — {from_name}
+
+#     examen:
+#       enviar_dias_antes: [14, 7, 2]
+#       hora_envio: "09:00"
+#       asunto: "[Curso] Examen — {seccion} — {fecha} {hora}"
+#       cuerpo: |
+#         Hola {nombre_prof}:
+
+#         Recordatorio de examen:
+#         - Sección: {seccion}
+#         - Fecha/Hora: {fecha} {hora}
+#         - Observaciones: {observaciones}
+
+#         — {from_name}
+
+#   # Archivo donde guardamos qué correos ya se enviaron (para no repetir)
+#   estado_envios_path: "data/email_log.json"

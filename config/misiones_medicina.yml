@@ -1,0 +1,158 @@
+# curso:
+#   nombre: "Calendario Curso"
+
+# periodo:
+#   fecha_inicio: "2026-03-16"
+
+# salida:
+#   excel_path: "data/misiones.xlsx"
+
+# aleatoriedad:
+#   semilla: 42
+
+# secciones:
+#   - "Sección 1"
+#   - "Sección 2"
+#   - "Sección 3"
+#   - "Sección 4"
+
+# profesores:
+#   - { codigo: "p1", horas_contrato: 10 }
+#   - { codigo: "p2", horas_contrato: 10 }
+#   - { codigo: "p3", horas_contrato: 10 }
+#   - { codigo: "p4", horas_contrato: 10 }
+#   - { codigo: "p5", horas_contrato: 10 }
+#   - { codigo: "p6", horas_contrato: 10 }
+
+# tipos_mision:
+#   "Propuesta de preguntas":
+#     cantidad_responsables: 2
+#     observaciones_default: "Subir documento a carpeta"
+
+#   "Revisión prueba":
+#     cantidad_responsables: 1
+#     observaciones_default: "Enviar versión final"
+
+#   "Revisión taller":
+#     cantidad_responsables: 2
+#     observaciones_default: "Revisar guía y pauta"
+
+# misiones:
+#   - { fecha: "2026-04-10", seccion: "Sección 1", mision: "Propuesta de preguntas" }
+#   - { fecha: "2026-04-10", seccion: "Sección 2", mision: "Propuesta de preguntas" }
+#   - { fecha: "2026-04-17", seccion: "Sección 3", mision: "Propuesta de preguntas" }
+#   - { fecha: "2026-04-17", seccion: "Sección 4", mision: "Propuesta de preguntas" }
+
+#   - { fecha: "2026-05-08", seccion: "Sección 1", mision: "Revisión prueba" }
+#   - { fecha: "2026-05-08", seccion: "Sección 2", mision: "Revisión prueba" }
+#   - { fecha: "2026-05-15", seccion: "Sección 3", mision: "Revisión prueba" }
+#   - { fecha: "2026-05-15", seccion: "Sección 4", mision: "Revisión prueba" }
+
+#   - { fecha: "2026-06-05", seccion: "Sección 1", mision: "Revisión taller" }
+#   - { fecha: "2026-06-05", seccion: "Sección 2", mision: "Revisión taller" }
+#   - { fecha: "2026-06-12", seccion: "Sección 3", mision: "Revisión taller" }
+#   - { fecha: "2026-06-12", seccion: "Sección 4", mision: "Revisión taller" }
+
+curso:
+  nombre: "Calendario Curso"
+
+periodo:
+  fecha_inicio: "2026-03-16"
+
+salida:
+  excel_path: "data/misiones.xlsx"
+
+fuentes:
+  calendario_excel_path: "data/calendario.xlsx"   # para leer fechas reales
+
+aleatoriedad:
+  semilla: 42
+
+secciones:
+  - "Sección 2"
+
+profesores:
+  - { codigo: "p1", horas_contrato: 10 }
+  - { codigo: "p2", horas_contrato: 10 }
+  - { codigo: "p3", horas_contrato: 10 }
+  - { codigo: "p4", horas_contrato: 10 }
+  - { codigo: "p5", horas_contrato: 10 }
+  - { codigo: "p6", horas_contrato: 10 }
+
+# Para mostrar bonito en la matriz (opcional)
+alias_seccion:
+  "Sección 2": "Sección 2 (Jueves)"
+
+# Reglas de plazos
+reglas_plazos:
+  guia_y_pauta_dias_antes: 7
+  correccion_dias_despues: 14
+  escaneo_dias_despues: 2
+
+# Templates por tipo de evaluación (lo que tú pediste)
+protocolos:
+  Prueba:
+    pedir_preguntas:
+      responsables: "Todos"
+      detalle: "Cada profesor: 2 alternativas + 1 desarrollo (según tema de la prueba)."
+      offset_dias: -14
+    construir_control:
+      responsables: "Asignar"
+      detalle: "Armar versión final, diagramación y revisión cruzada."
+      offset_dias: -7
+    pauta_prueba:
+      responsables: "Asignar"
+      detalle: "Pauta oficial: dividir en 2 mitades si son 2 responsables."
+      offset_dias: -5
+    revisar_prueba:
+      responsables: "Asignar"
+      detalle: "Revisión final (errores, coherencia, puntajes)."
+      offset_dias: -3
+    escanear:
+      responsables: "Asignar"
+      detalle: "Escanear pruebas/controles y subir a carpeta."
+      offset_dias: +2
+    corregir_y_notas:
+      responsables: "Asignar"
+      detalle: "Corrección por sección. Subir nota final."
+      offset_dias: +14
+
+  TP:
+    revisar_tp:
+      responsables: "Todos"
+      detalle: "Revisar TP y poner nota; subir rúbrica si aplica."
+      offset_dias: +14
+
+  Seminario:
+    pauta_seminario:
+      responsables: "Asignar"
+      detalle: "Pauta de resolución ejercicios de seminario."
+      offset_dias: -7
+    presentacion_grupal:
+      responsables: "Asignar"
+      detalle: "Presentación grupal ejercicios (definir estructura y asignaciones)."
+      offset_dias: -3
+
+  Guia:
+    revision_guia:
+      responsables: "Asignar"
+      detalle: "Revisión de guía y pauta."
+      offset_dias: -7
+
+  Examen:
+    pedir_preguntas:
+      responsables: "Todos"
+      detalle: "Preguntas para examen (temas por unidad)."
+      offset_dias: -21
+    construir_examen:
+      responsables: "Asignar"
+      detalle: "Construcción examen final + revisión cruzada."
+      offset_dias: -14
+    pauta_examen:
+      responsables: "Asignar"
+      detalle: "Pauta oficial examen."
+      offset_dias: -7
+    corregir_examen:
+      responsables: "Asignar"
+      detalle: "Corrección examen por sección."
+      offset_dias: +14
