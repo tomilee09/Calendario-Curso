@@ -39,28 +39,251 @@ def fecha_de_dia_en_semana(lunes_semana: pd.Timestamp, dia_semana: str) -> pd.Ti
     idx = ORDEN_DIAS.index(dia_semana)
     return pd.Timestamp(lunes_semana.date()) + pd.Timedelta(days=idx)
 
+# def construir_df(config: dict) -> pd.DataFrame:
+#     inicio = pd.Timestamp(config["periodo"]["fecha_inicio"])
+#     nsem = int(config["periodo"]["numero_semanas"])
+
+#     filas = []
+
+#     # ------------------------------------------------------------
+#     # Clases regulares
+#     # ------------------------------------------------------------
+#     for seccion, cfg in config["secciones"].items():
+#         for semana in range(1, nsem + 1):
+#             lunes = inicio + pd.Timedelta(days=7 * (semana - 1))
+
+#             for clave, nombre in [("teorica", "Clase teórica"), ("seminario", "Seminario")]:
+#                 dia_semana = cfg[clave]["dia_semana"]
+#                 fecha = fecha_de_dia_en_semana(lunes, dia_semana)
+
+#                 filas.append({
+#                     "semana": semana,
+#                     "fecha": fecha.date(),
+#                     "día": DIAS_ES[dia_semana],
+#                     "horario": rango_horario_str(cfg[clave]["inicio"], cfg[clave]["fin"]),
+#                     "sección": seccion,
+#                     "actividad": nombre,
+#                     "tema": "",
+#                     "evaluación": "",
+#                     "profesores": "",
+#                     "observaciones": ""
+#                 })
+
+#             if config.get("laboratorios", {}).get("frecuencia") == "cada_2_semanas":
+#                 if config.get("laboratorios", {}).get("semanas") == "pares" and (semana % 2 == 0):
+#                     dia_semana = cfg["lab"]["dia_semana"]
+#                     fecha = fecha_de_dia_en_semana(lunes, dia_semana)
+
+#                     filas.append({
+#                         "semana": semana,
+#                         "fecha": fecha.date(),
+#                         "día": DIAS_ES[dia_semana],
+#                         "horario": rango_horario_str(cfg["lab"]["inicio"], cfg["lab"]["fin"]),
+#                         "sección": seccion,
+#                         "actividad": "Laboratorio",
+#                         "tema": "",
+#                         "evaluación": "",
+#                         "profesores": "",
+#                         "observaciones": "Cada 2 semanas"
+#                     })
+
+#     df = pd.DataFrame(filas)
+
+#     # ------------------------------------------------------------
+#     # Temas por semana
+#     # ------------------------------------------------------------
+#     temas = config.get("temas_por_semana", {}) or {}
+#     if temas:
+#         temas_norm = {int(k): str(v) for k, v in temas.items()}
+#         df.loc[df["semana"].isin(list(temas_norm.keys())), "tema"] = df["semana"].map(temas_norm).fillna("")
+
+#     # ------------------------------------------------------------
+#     # Profesores base
+#     # ------------------------------------------------------------
+#     for r in config.get("profesores_base", []) or []:
+#         secc = r.get("seccion")
+#         act = r.get("actividad")
+#         prof = r.get("profesores", "")
+#         mask = (df["sección"] == secc) & (df["actividad"] == act)
+#         df.loc[mask, "profesores"] = prof
+
+#     # ------------------------------------------------------------
+#     # Evaluaciones
+#     # ------------------------------------------------------------
+#     for ev in config.get("evaluaciones", []) or []:
+#         if ev.get("modo") == "por_filtro":
+#             mask = (
+#                 (df["sección"] == ev.get("seccion")) &
+#                 (df["semana"] == int(ev.get("semana"))) &
+#                 (df["actividad"] == ev.get("actividad"))
+#             )
+#             df.loc[mask, "evaluación"] = ev.get("tipo", "")
+#             obs = str(ev.get("observaciones", "")).strip()
+#             if obs:
+#                 df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
+#                 df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
+#                     lambda x: (x + " | " if x else "") + obs
+#                 )
+
+#     # ------------------------------------------------------------
+#     # Feriados
+#     # ------------------------------------------------------------
+#     fer = config.get("feriados", {}) or {}
+#     feriados_map = {}
+
+#     if fer.get("usar_automaticos_chile", False):
+#         fmin = pd.Timestamp(df["fecha"].min()).date()
+#         fmax = pd.Timestamp(df["fecha"].max()).date()
+#         years = list(range(fmin.year, fmax.year + 1))
+#         cl = holidays.country_holidays("CL", years=years)
+#         for d, nombre in cl.items():
+#             if fmin <= d <= fmax:
+#                 feriados_map[pd.Timestamp(d).date()] = str(nombre)
+
+#     for fm in fer.get("manuales", []) or []:
+#         feriados_map[pd.Timestamp(fm["fecha"]).date()] = str(fm.get("nombre", "Feriado"))
+
+#     if feriados_map:
+#         mask = df["fecha"].isin(list(feriados_map.keys()))
+#         df.loc[mask, "actividad"] = "Sin clases (Feriado)"
+#         df.loc[mask, "observaciones"] = df.loc[mask, "fecha"].map(feriados_map)
+
+#     # ------------------------------------------------------------
+#     # Pausas académicas
+#     # ------------------------------------------------------------
+#     for p in config.get("pausas_academicas", []) or []:
+#         ini = pd.Timestamp(p["inicio"]).date()
+#         fin = pd.Timestamp(p["fin"]).date()
+#         etiqueta = str(p.get("etiqueta", "Pausa académica")).strip()
+
+#         mask = (df["fecha"] >= ini) & (df["fecha"] <= fin)
+#         df.loc[mask, "actividad"] = "Sin clases (Pausa académica)"
+#         df.loc[mask, "observaciones"] = etiqueta
+
+#     # ------------------------------------------------------------
+#     # Semanas trabajo autónomo
+#     # ------------------------------------------------------------
+#     semanas_auto = set(config.get("semanas_trabajo_autonomo", []) or [])
+#     if semanas_auto:
+#         mask = df["semana"].isin(list(semanas_auto))
+#         df.loc[mask, "actividad"] = "Trabajo autónomo"
+#         df.loc[mask, "observaciones"] = "No hay clases (trabajo autónomo)."
+
+#     # ------------------------------------------------------------
+#     # Exámenes
+#     # ------------------------------------------------------------
+#     ex = config.get("examenes", {}) or {}
+#     semanas_ex = set(ex.get("semanas_examenes", []) or [])
+#     ref = pd.Timestamp(config["periodo"]["fecha_inicio"])
+
+#     if semanas_ex:
+#         df = df[~df["semana"].isin(list(semanas_ex))].copy()
+
+#         nuevos_ex = []
+#         for e in ex.get("eventos", []) or []:
+#             fecha_ts = pd.Timestamp(e["fecha"])
+#             semana_ev = int((fecha_ts - ref).days // 7) + 1
+#             nuevos_ex.append({
+#                 "semana": semana_ev,
+#                 "fecha": fecha_ts.date(),
+#                 "día": DIAS_ES_POR_WEEKDAY[fecha_ts.weekday()],
+#                 "horario": rango_horario_str(e["inicio"], e["fin"]),
+#                 "sección": e["seccion"],
+#                 "actividad": e.get("actividad", "Examen"),
+#                 "tema": e.get("tema", ""),
+#                 "evaluación": e.get("evaluacion", ""),
+#                 "profesores": e.get("profesores", ""),
+#                 "observaciones": e.get("observaciones", "")
+#             })
+
+#         if nuevos_ex:
+#             df = pd.concat([df, pd.DataFrame(nuevos_ex)], ignore_index=True)
+
+#     # ------------------------------------------------------------
+#     # Bloques protegidos
+#     # ------------------------------------------------------------
+#     bloques = config.get("bloques", {}) or {}
+#     defin = (bloques.get("definicion", {}) or {})
+#     protegidos = bloques.get("protegidos", []) or []
+
+#     def parse_horario(h: str):
+#         a, b = h.split("–")
+#         ha, ma = map(int, a.split(":"))
+#         hb, mb = map(int, b.split(":"))
+#         return time(ha, ma), time(hb, mb)
+
+#     def overlap(a1, a2, b1, b2):
+#         return (a1 < b2) and (b1 < a2)
+
+#     if defin and protegidos:
+#         for bp in protegidos:
+#             fecha_bp = pd.Timestamp(bp["fecha"]).date()
+#             bloque_id = str(bp["bloque"])
+#             if bloque_id not in defin:
+#                 continue
+
+#             b_ini = hhmm_a_time(defin[bloque_id]["inicio"])
+#             b_fin = hhmm_a_time(defin[bloque_id]["fin"])
+
+#             mask_fecha = (df["fecha"] == fecha_bp)
+#             idxs = df.index[mask_fecha].tolist()
+
+#             for i in idxs:
+#                 h = str(df.at[i, "horario"] or "").strip()
+#                 if "–" not in h:
+#                     continue
+#                 e_ini, e_fin = parse_horario(h)
+#                 if overlap(e_ini, e_fin, b_ini, b_fin):
+#                     obs = str(df.at[i, "observaciones"] or "").strip()
+#                     tag = f"CONFLICTO: Bloque protegido {bloque_id}"
+#                     df.at[i, "observaciones"] = (obs + " | " if obs else "") + tag
+
+#     # ------------------------------------------------------------
+#     # Orden
+#     # ------------------------------------------------------------
+#     def hora_inicio(h):
+#         if isinstance(h, str) and "–" in h:
+#             return h.split("–")[0]
+#         return "00:00"
+
+#     df["_inicio_dt"] = pd.to_datetime(
+#         df["fecha"].astype(str) + " " + df["horario"].fillna("").apply(hora_inicio),
+#         errors="coerce"
+#     )
+#     df = df.sort_values(["sección", "fecha", "_inicio_dt"], na_position="last").drop(columns=["_inicio_dt"])
+
+#     cols = [
+#         "semana", "fecha", "día", "horario", "sección",
+#         "actividad", "tema", "evaluación", "profesores", "observaciones"
+#     ]
+#     df = df[cols]
+
+#     return df
+
 def construir_df(config: dict) -> pd.DataFrame:
-    inicio = pd.Timestamp(config["periodo"]["fecha_inicio"])
-    nsem = int(config["periodo"]["numero_semanas"])
+    cfg = config["calendario"]
+
+    inicio = pd.Timestamp(cfg["periodo"]["fecha_inicio"])
+    nsem = int(cfg["periodo"]["numero_semanas"])
 
     filas = []
 
-    # ------------------------------------------------------------
-    # Clases regulares
-    # ------------------------------------------------------------
-    for seccion, cfg in config["secciones"].items():
+    for seccion, scfg in cfg["secciones"].items():
         for semana in range(1, nsem + 1):
             lunes = inicio + pd.Timedelta(days=7 * (semana - 1))
 
             for clave, nombre in [("teorica", "Clase teórica"), ("seminario", "Seminario")]:
-                dia_semana = cfg[clave]["dia_semana"]
+                if clave not in scfg:
+                    continue
+
+                dia_semana = scfg[clave]["dia_semana"]
                 fecha = fecha_de_dia_en_semana(lunes, dia_semana)
 
                 filas.append({
                     "semana": semana,
                     "fecha": fecha.date(),
                     "día": DIAS_ES[dia_semana],
-                    "horario": rango_horario_str(cfg[clave]["inicio"], cfg[clave]["fin"]),
+                    "horario": rango_horario_str(scfg[clave]["inicio"], scfg[clave]["fin"]),
                     "sección": seccion,
                     "actividad": nombre,
                     "tema": "",
@@ -69,16 +292,16 @@ def construir_df(config: dict) -> pd.DataFrame:
                     "observaciones": ""
                 })
 
-            if config.get("laboratorios", {}).get("frecuencia") == "cada_2_semanas":
-                if config.get("laboratorios", {}).get("semanas") == "pares" and (semana % 2 == 0):
-                    dia_semana = cfg["lab"]["dia_semana"]
+            if cfg.get("laboratorios", {}).get("frecuencia") == "cada_2_semanas":
+                if cfg.get("laboratorios", {}).get("semanas") == "pares" and (semana % 2 == 0) and ("lab" in scfg):
+                    dia_semana = scfg["lab"]["dia_semana"]
                     fecha = fecha_de_dia_en_semana(lunes, dia_semana)
 
                     filas.append({
                         "semana": semana,
                         "fecha": fecha.date(),
                         "día": DIAS_ES[dia_semana],
-                        "horario": rango_horario_str(cfg["lab"]["inicio"], cfg["lab"]["fin"]),
+                        "horario": rango_horario_str(scfg["lab"]["inicio"], scfg["lab"]["fin"]),
                         "sección": seccion,
                         "actividad": "Laboratorio",
                         "tema": "",
@@ -89,28 +312,19 @@ def construir_df(config: dict) -> pd.DataFrame:
 
     df = pd.DataFrame(filas)
 
-    # ------------------------------------------------------------
-    # Temas por semana
-    # ------------------------------------------------------------
-    temas = config.get("temas_por_semana", {}) or {}
+    temas = cfg.get("temas_por_semana", {}) or {}
     if temas:
         temas_norm = {int(k): str(v) for k, v in temas.items()}
         df.loc[df["semana"].isin(list(temas_norm.keys())), "tema"] = df["semana"].map(temas_norm).fillna("")
 
-    # ------------------------------------------------------------
-    # Profesores base
-    # ------------------------------------------------------------
-    for r in config.get("profesores_base", []) or []:
+    for r in cfg.get("profesores_base", []) or []:
         secc = r.get("seccion")
         act = r.get("actividad")
         prof = r.get("profesores", "")
         mask = (df["sección"] == secc) & (df["actividad"] == act)
         df.loc[mask, "profesores"] = prof
 
-    # ------------------------------------------------------------
-    # Evaluaciones
-    # ------------------------------------------------------------
-    for ev in config.get("evaluaciones", []) or []:
+    for ev in cfg.get("evaluaciones", []) or []:
         if ev.get("modo") == "por_filtro":
             mask = (
                 (df["sección"] == ev.get("seccion")) &
@@ -125,10 +339,7 @@ def construir_df(config: dict) -> pd.DataFrame:
                     lambda x: (x + " | " if x else "") + obs
                 )
 
-    # ------------------------------------------------------------
-    # Feriados
-    # ------------------------------------------------------------
-    fer = config.get("feriados", {}) or {}
+    fer = cfg.get("feriados", {}) or {}
     feriados_map = {}
 
     if fer.get("usar_automaticos_chile", False):
@@ -148,10 +359,7 @@ def construir_df(config: dict) -> pd.DataFrame:
         df.loc[mask, "actividad"] = "Sin clases (Feriado)"
         df.loc[mask, "observaciones"] = df.loc[mask, "fecha"].map(feriados_map)
 
-    # ------------------------------------------------------------
-    # Pausas académicas
-    # ------------------------------------------------------------
-    for p in config.get("pausas_academicas", []) or []:
+    for p in cfg.get("pausas_academicas", []) or []:
         ini = pd.Timestamp(p["inicio"]).date()
         fin = pd.Timestamp(p["fin"]).date()
         etiqueta = str(p.get("etiqueta", "Pausa académica")).strip()
@@ -160,21 +368,15 @@ def construir_df(config: dict) -> pd.DataFrame:
         df.loc[mask, "actividad"] = "Sin clases (Pausa académica)"
         df.loc[mask, "observaciones"] = etiqueta
 
-    # ------------------------------------------------------------
-    # Semanas trabajo autónomo
-    # ------------------------------------------------------------
-    semanas_auto = set(config.get("semanas_trabajo_autonomo", []) or [])
+    semanas_auto = set(cfg.get("semanas_trabajo_autonomo", []) or [])
     if semanas_auto:
         mask = df["semana"].isin(list(semanas_auto))
         df.loc[mask, "actividad"] = "Trabajo autónomo"
         df.loc[mask, "observaciones"] = "No hay clases (trabajo autónomo)."
 
-    # ------------------------------------------------------------
-    # Exámenes
-    # ------------------------------------------------------------
-    ex = config.get("examenes", {}) or {}
+    ex = cfg.get("examenes", {}) or {}
     semanas_ex = set(ex.get("semanas_examenes", []) or [])
-    ref = pd.Timestamp(config["periodo"]["fecha_inicio"])
+    ref = pd.Timestamp(cfg["periodo"]["fecha_inicio"])
 
     if semanas_ex:
         df = df[~df["semana"].isin(list(semanas_ex))].copy()
@@ -199,10 +401,7 @@ def construir_df(config: dict) -> pd.DataFrame:
         if nuevos_ex:
             df = pd.concat([df, pd.DataFrame(nuevos_ex)], ignore_index=True)
 
-    # ------------------------------------------------------------
-    # Bloques protegidos
-    # ------------------------------------------------------------
-    bloques = config.get("bloques", {}) or {}
+    bloques = cfg.get("bloques", {}) or {}
     defin = (bloques.get("definicion", {}) or {})
     protegidos = bloques.get("protegidos", []) or []
 
@@ -238,9 +437,6 @@ def construir_df(config: dict) -> pd.DataFrame:
                     tag = f"CONFLICTO: Bloque protegido {bloque_id}"
                     df.at[i, "observaciones"] = (obs + " | " if obs else "") + tag
 
-    # ------------------------------------------------------------
-    # Orden
-    # ------------------------------------------------------------
     def hora_inicio(h):
         if isinstance(h, str) and "–" in h:
             return h.split("–")[0]
@@ -256,9 +452,7 @@ def construir_df(config: dict) -> pd.DataFrame:
         "semana", "fecha", "día", "horario", "sección",
         "actividad", "tema", "evaluación", "profesores", "observaciones"
     ]
-    df = df[cols]
-
-    return df
+    return df[cols]
 
 def exportar_excel(df: pd.DataFrame, path: str):
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -336,11 +530,53 @@ def exportar_excel(df: pd.DataFrame, path: str):
 # if __name__ == "__main__":
 #     main()
 
-# ============================================================
-# MAIN MULTI-CURSO
-# - Lee 3 YAML distintos desde config/
-# - Genera los 3 calendarios.xlsx
-# ============================================================
+# # ============================================================
+# # MAIN MULTI-CURSO
+# # - Lee 3 YAML distintos desde config/
+# # - Genera los 3 calendarios.xlsx
+# # ============================================================
+# def main():
+#     cursos = {
+#         "fokito": {
+#             "config_path": os.path.join("config", "calendario_fokito.yml"),
+#             "output_path": os.path.join("data", "fokito", "calendario.xlsx"),
+#         },
+#         "tecnologia_medica": {
+#             "config_path": os.path.join("config", "calendario_tecnologia_medica.yml"),
+#             "output_path": os.path.join("data", "tecnologia_medica", "calendario.xlsx"),
+#         },
+#         "medicina": {
+#             "config_path": os.path.join("config", "calendario_medicina.yml"),
+#             "output_path": os.path.join("data", "medicina", "calendario.xlsx"),
+#         },
+#     }
+
+#     for curso, info in cursos.items():
+#         config_path = info["config_path"]
+#         output_path = info["output_path"]
+
+#         if not os.path.exists(config_path):
+#             print(f"⚠️  Saltando {curso}: no existe {config_path}")
+#             continue
+
+#         config = cargar_config(config_path)
+
+#         # Sobrescribimos la salida para asegurar la carpeta correcta
+#         if "salida" not in config:
+#             config["salida"] = {}
+#         config["salida"]["excel_path"] = output_path
+
+#         os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+#         df = construir_df(config)
+#         exportar_excel(df, output_path)
+
+#         print(f"OK: [{curso}] Excel generado en {output_path} con {len(df)} filas.")
+
+# if __name__ == "__main__":
+#     main()
+
+
 def main():
     cursos = {
         "fokito": {
@@ -358,6 +594,7 @@ def main():
     }
 
     for curso, info in cursos.items():
+        print(curso)
         config_path = info["config_path"]
         output_path = info["output_path"]
 
@@ -366,11 +603,6 @@ def main():
             continue
 
         config = cargar_config(config_path)
-
-        # Sobrescribimos la salida para asegurar la carpeta correcta
-        if "salida" not in config:
-            config["salida"] = {}
-        config["salida"]["excel_path"] = output_path
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 

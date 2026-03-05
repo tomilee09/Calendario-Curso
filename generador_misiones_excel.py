@@ -70,42 +70,111 @@ def detectar_evaluaciones(df_cal):
 
     return pd.DataFrame(evs)
 
-def construir_misiones(config, df_cal):
-    rng = random.Random(int(config.get("aleatoriedad", {}).get("semilla", 42)))
+# def construir_misiones(config, df_cal):
+#     rng = random.Random(int(config.get("aleatoriedad", {}).get("semilla", 42)))
 
-    profs = config.get("profesores", []) or []
+#     profs = config.get("profesores", []) or []
+#     cargas = {p["codigo"]: 0 for p in profs}
+
+#     protocolos = config.get("protocolos", {}) or {}
+#     reglas = config.get("reglas_plazos", {}) or {}
+
+#     df_evs = detectar_evaluaciones(df_cal)
+#     if df_evs.empty:
+#         # fallback: inventa 2 pruebas y 1 TP coherente si no hay fechas
+#         f0 = pd.Timestamp(config["periodo"]["fecha_inicio"])
+#         df_evs = pd.DataFrame([
+#             {"tipo_evento":"Prueba", "nombre_evento":"Prueba 1", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=6)).date(), "tema":"", "observaciones":"(inventado)"},
+#             {"tipo_evento":"TP", "nombre_evento":"TP: Linealización", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=10)).date(), "tema":"", "observaciones":"(inventado)"},
+#             {"tipo_evento":"Prueba", "nombre_evento":"Prueba 2", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=14)).date(), "tema":"", "observaciones":"(inventado)"},
+#             {"tipo_evento":"Examen", "nombre_evento":"Examen", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=18)).date(), "tema":"", "observaciones":"(inventado)"},
+#         ])
+
+#     filas = []
+#     for _, ev in df_evs.iterrows():
+#         tipo = str(ev["tipo_evento"]).strip()
+#         nombre = str(ev.get("nombre_evento", tipo)).strip()
+#         seccion = str(ev.get("sección", "Equipo docente")).strip()
+#         fecha_evento = pd.Timestamp(ev["fecha_evento"])
+
+#         # Mapea tipo_evento -> protocolo
+#         if "prueba" in tipo.lower():
+#             proto = protocolos.get("Prueba", {})
+#         elif "trabajo" in tipo.lower() or tipo.lower() == "tp":
+#             proto = protocolos.get("TP", {})
+#         elif tipo.lower() == "examen":
+#             proto = protocolos.get("Examen", {})
+#         else:
+#             # por defecto usa Guia/Seminario si quieres, si no, salta
+#             proto = protocolos.get("Guia", {})
+
+#         for paso_key, paso in proto.items():
+#             offset = int(paso.get("offset_dias", 0))
+#             deadline = (fecha_evento + pd.Timedelta(days=offset)).date()
+
+#             resp = paso.get("responsables", "Asignar")
+#             detalle = paso.get("detalle", "")
+
+#             # asignaciones automáticas
+#             if str(resp).strip().lower() == "todos":
+#                 responsables = "Todos"
+#             else:
+#                 # 1 o 2 responsables típicamente
+#                 n_resp = 2 if ("pauta" in paso_key or "constru" in paso_key) else 1
+#                 elegidos = elegir_equilibrado(profs, cargas, n_resp, rng)
+#                 responsables = ", ".join(elegidos)
+
+#             filas.append({
+#                 "fecha_limite": deadline,
+#                 "fecha_evento": fecha_evento.date(),
+#                 "evento": nombre,
+#                 "paso": paso_key,
+#                 "sección": seccion,
+#                 "responsables": responsables,
+#                 "detalle": detalle,
+#                 "estado": "Pendiente",
+#             })
+
+#     df_mis = pd.DataFrame(filas).sort_values(["fecha_limite","evento","sección"]).reset_index(drop=True)
+#     return df_mis
+
+def construir_misiones(config, df_cal):
+    cfg = config["misiones"]
+
+    rng = random.Random(int(cfg.get("aleatoriedad", {}).get("semilla", 42)))
+    profs = cfg.get("profesores", []) or []
     cargas = {p["codigo"]: 0 for p in profs}
 
-    protocolos = config.get("protocolos", {}) or {}
-    reglas = config.get("reglas_plazos", {}) or {}
+    protocolos = cfg.get("protocolos", {}) or {}
 
     df_evs = detectar_evaluaciones(df_cal)
     if df_evs.empty:
-        # fallback: inventa 2 pruebas y 1 TP coherente si no hay fechas
-        f0 = pd.Timestamp(config["periodo"]["fecha_inicio"])
+        f0 = pd.Timestamp(config["calendario"]["periodo"]["fecha_inicio"])
         df_evs = pd.DataFrame([
-            {"tipo_evento":"Prueba", "nombre_evento":"Prueba 1", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=6)).date(), "tema":"", "observaciones":"(inventado)"},
-            {"tipo_evento":"TP", "nombre_evento":"TP: Linealización", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=10)).date(), "tema":"", "observaciones":"(inventado)"},
-            {"tipo_evento":"Prueba", "nombre_evento":"Prueba 2", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=14)).date(), "tema":"", "observaciones":"(inventado)"},
+            {"tipo_evento":"Certamen", "nombre_evento":"Certamen 1", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=5)).date(), "tema":"", "observaciones":"(inventado)"},
+            {"tipo_evento":"Trabajo práctico", "nombre_evento":"Trabajo práctico", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=12)).date(), "tema":"", "observaciones":"(inventado)"},
             {"tipo_evento":"Examen", "nombre_evento":"Examen", "sección":"Equipo docente", "fecha_evento":(f0+pd.Timedelta(weeks=18)).date(), "tema":"", "observaciones":"(inventado)"},
         ])
 
     filas = []
+
     for _, ev in df_evs.iterrows():
         tipo = str(ev["tipo_evento"]).strip()
         nombre = str(ev.get("nombre_evento", tipo)).strip()
         seccion = str(ev.get("sección", "Equipo docente")).strip()
         fecha_evento = pd.Timestamp(ev["fecha_evento"])
 
-        # Mapea tipo_evento -> protocolo
-        if "prueba" in tipo.lower():
-            proto = protocolos.get("Prueba", {})
-        elif "trabajo" in tipo.lower() or tipo.lower() == "tp":
-            proto = protocolos.get("TP", {})
-        elif tipo.lower() == "examen":
+        tipo_norm = tipo.lower()
+
+        if "control" in tipo_norm:
+            proto = protocolos.get("Control", {})
+        elif "certamen" in tipo_norm or "prueba" in tipo_norm:
+            proto = protocolos.get("Certamen", protocolos.get("Prueba", {}))
+        elif "trabajo" in tipo_norm or tipo_norm == "tp":
+            proto = protocolos.get("Trabajo práctico", protocolos.get("TP", {}))
+        elif "examen" in tipo_norm:
             proto = protocolos.get("Examen", {})
         else:
-            # por defecto usa Guia/Seminario si quieres, si no, salta
             proto = protocolos.get("Guia", {})
 
         for paso_key, paso in proto.items():
@@ -113,13 +182,27 @@ def construir_misiones(config, df_cal):
             deadline = (fecha_evento + pd.Timedelta(days=offset)).date()
 
             resp = paso.get("responsables", "Asignar")
-            detalle = paso.get("detalle", "")
+            # detalle = paso.get("detalle", "")
+            detalle_base = str(paso.get("detalle", "")).strip()
 
-            # asignaciones automáticas
+            obs_cal = str(ev.get("observaciones", "")).strip()   # viene del calendario
+            # opcional: si quieres también agregar el tema
+            tema_cal = str(ev.get("tema", "")).strip()
+
+            detalle_partes = []
+            if detalle_base:
+                detalle_partes.append(detalle_base)
+            if obs_cal:
+                detalle_partes.append(obs_cal)
+            # si quieres sumar tema en algunas, descomenta:
+            # if tema_cal:
+            #     detalle_partes.append(f"Tema: {tema_cal}")
+
+            detalle = " — ".join(detalle_partes)
+
             if str(resp).strip().lower() == "todos":
                 responsables = "Todos"
             else:
-                # 1 o 2 responsables típicamente
                 n_resp = 2 if ("pauta" in paso_key or "constru" in paso_key) else 1
                 elegidos = elegir_equilibrado(profs, cargas, n_resp, rng)
                 responsables = ", ".join(elegidos)
@@ -135,28 +218,56 @@ def construir_misiones(config, df_cal):
                 "estado": "Pendiente",
             })
 
-    df_mis = pd.DataFrame(filas).sort_values(["fecha_limite","evento","sección"]).reset_index(drop=True)
+    df_mis = pd.DataFrame(filas).sort_values(["fecha_limite", "evento", "sección"]).reset_index(drop=True)
     return df_mis
 
+# def armar_matriz(df_mis, config):
+#     # Vista tipo imagen: filas = evento, columnas = secciones, valor = responsables de "corregir_y_notas"/"corregir_examen"/etc.
+#     alias = config.get("alias_seccion", {}) or {}
+
+#     df = df_mis.copy()
+#     df["evento"] = df["evento"].astype(str)
+
+#     # define qué pasos van a la matriz (corrección)
+#     pasos_correccion = set(["corregir_y_notas", "corregir_examen", "revisar_tp"])
+#     df = df[df["paso"].isin(list(pasos_correccion))].copy()
+#     if df.empty:
+#         return pd.DataFrame()
+
+#     df["sección_col"] = df["sección"].apply(lambda s: alias.get(s, s))
+#     mat = df.pivot_table(index="evento", columns="sección_col", values="responsables", aggfunc="first", fill_value="")
+
+#     # Agrega segunda fila “Detalle / Corrección” estilo tu ejemplo si quieres hacerlo como header doble,
+#     # en Excel lo hacemos como 2 filas arriba; acá lo dejamos plano y lo formateamos al exportar.
+#     mat = mat.reset_index().rename(columns={"evento":"Evaluaciones"})
+#     return mat
+
 def armar_matriz(df_mis, config):
-    # Vista tipo imagen: filas = evento, columnas = secciones, valor = responsables de "corregir_y_notas"/"corregir_examen"/etc.
-    alias = config.get("alias_seccion", {}) or {}
+    alias = config.get("misiones", {}).get("alias_seccion", {}) or {}
 
     df = df_mis.copy()
-    df["evento"] = df["evento"].astype(str)
-
-    # define qué pasos van a la matriz (corrección)
-    pasos_correccion = set(["corregir_y_notas", "corregir_examen", "revisar_tp"])
-    df = df[df["paso"].isin(list(pasos_correccion))].copy()
     if df.empty:
         return pd.DataFrame()
 
+    df["evento"] = df["evento"].astype(str)
+    df["paso"] = df["paso"].astype(str)
+    df["detalle"] = df["detalle"].astype(str)
     df["sección_col"] = df["sección"].apply(lambda s: alias.get(s, s))
-    mat = df.pivot_table(index="evento", columns="sección_col", values="responsables", aggfunc="first", fill_value="")
 
-    # Agrega segunda fila “Detalle / Corrección” estilo tu ejemplo si quieres hacerlo como header doble,
-    # en Excel lo hacemos como 2 filas arriba; acá lo dejamos plano y lo formateamos al exportar.
-    mat = mat.reset_index().rename(columns={"evento":"Evaluaciones"})
+    mat = df.pivot_table(
+        index=["evento", "paso", "detalle"],
+        columns="sección_col",
+        values="responsables",
+        aggfunc="first",
+        fill_value=""
+    ).reset_index()
+
+    mat = mat.rename(columns={
+        "evento": "Evaluación",
+        "paso": "Misión",
+        "detalle": "Detalle"
+    })
+
     return mat
 
 def exportar_excel(df_mis, df_mat, path):
@@ -168,8 +279,10 @@ def exportar_excel(df_mis, df_mat, path):
             df_mat.to_excel(writer, index=False, sheet_name="Matriz")
 
         # Un “Plan” para lectura humana: filtramos pasos clave y orden lógico
-        orden = ["pedir_preguntas","construir_control","pauta_prueba","revisar_prueba","escaneo","corregir_y_notas",
-                 "construir_examen","pauta_examen","corregir_examen","revisar_tp","revision_guia","pauta_seminario","presentacion_grupal"]
+        # orden = ["pedir_preguntas","construir_control","pauta_prueba","revisar_prueba","escaneo","corregir_y_notas",
+                #  "construir_examen","pauta_examen","corregir_examen","revisar_tp","revision_guia","pauta_seminario","presentacion_grupal"]
+        orden = ["pedir_preguntas","construir_control","pauta_prueba","revisar_prueba","escanear","corregir_y_notas",
+         "construir_examen","pauta_examen","corregir_examen","revisar_tp","revision_guia","pauta_seminario","presentacion_grupal"]
         df_plan = df_mis.copy()
         df_plan["paso_rank"] = df_plan["paso"].apply(lambda x: orden.index(x) if x in orden else 999)
         df_plan = df_plan.sort_values(["evento","paso_rank","sección","fecha_limite"]).drop(columns=["paso_rank"])
@@ -233,26 +346,85 @@ def exportar_excel(df_mis, df_mat, path):
 # if __name__ == "__main__":
 #     main()
 
-# ============================================================
-# MAIN MULTI-CURSO
-# - Lee 3 YAML distintos desde config/
-# - Genera los 3 misiones.xlsx
-# - Usa el calendario.xlsx correspondiente de cada curso
-# ============================================================
+# # ============================================================
+# # MAIN MULTI-CURSO
+# # - Lee 3 YAML distintos desde config/
+# # - Genera los 3 misiones.xlsx
+# # - Usa el calendario.xlsx correspondiente de cada curso
+# # ============================================================
+# def main():
+#     cursos = {
+#         "fokito": {
+#             "config_path": os.path.join("config", "misiones_fokito.yml"),
+#             "cal_path": os.path.join("data", "fokito", "calendario.xlsx"),
+#             "out_path": os.path.join("data", "fokito", "misiones.xlsx"),
+#         },
+#         "tecnologia_medica": {
+#             "config_path": os.path.join("config", "misiones_tecnologia_medica.yml"),
+#             "cal_path": os.path.join("data", "tecnologia_medica", "calendario.xlsx"),
+#             "out_path": os.path.join("data", "tecnologia_medica", "misiones.xlsx"),
+#         },
+#         "medicina": {
+#             "config_path": os.path.join("config", "misiones_medicina.yml"),
+#             "cal_path": os.path.join("data", "medicina", "calendario.xlsx"),
+#             "out_path": os.path.join("data", "medicina", "misiones.xlsx"),
+#         },
+#     }
+
+#     for curso, info in cursos.items():
+#         config_path = info["config_path"]
+#         cal_path = info["cal_path"]
+#         out_path = info["out_path"]
+
+#         if not os.path.exists(config_path):
+#             print(f"⚠️  Saltando {curso}: no existe {config_path}")
+#             continue
+
+#         if not os.path.exists(cal_path):
+#             print(f"⚠️  Saltando {curso}: no existe {cal_path}. Genera primero el calendario.")
+#             continue
+
+#         config = cargar_yaml(config_path)
+
+#         # Sobrescribimos rutas para asegurar consistencia
+#         if "fuentes" not in config:
+#             config["fuentes"] = {}
+#         if "salida" not in config:
+#             config["salida"] = {}
+
+#         config["fuentes"]["calendario_excel_path"] = cal_path
+#         config["salida"]["excel_path"] = out_path
+
+#         os.makedirs(os.path.dirname(out_path), exist_ok=True)
+
+#         df_cal = pd.read_excel(cal_path, sheet_name="Calendario")
+#         df_mis = construir_misiones(config, df_cal)
+#         df_mat = armar_matriz(df_mis, config)
+
+#         exportar_excel(df_mis, df_mat, out_path)
+
+#         print(f"OK: [{curso}] generado {out_path} con {len(df_mis)} tareas.")
+
+# if __name__ == "__main__":
+#     main()
+
+
+
+
 def main():
     cursos = {
         "fokito": {
-            "config_path": os.path.join("config", "misiones_fokito.yml"),
+            "config_path": os.path.join("config", "calendario_fokito.yml"),
             "cal_path": os.path.join("data", "fokito", "calendario.xlsx"),
             "out_path": os.path.join("data", "fokito", "misiones.xlsx"),
         },
         "tecnologia_medica": {
-            "config_path": os.path.join("config", "misiones_tecnologia_medica.yml"),
+            "config_path": os.path.join("config", "calendario_tecnologia_medica.yml"),
             "cal_path": os.path.join("data", "tecnologia_medica", "calendario.xlsx"),
             "out_path": os.path.join("data", "tecnologia_medica", "misiones.xlsx"),
         },
         "medicina": {
-            "config_path": os.path.join("config", "misiones_medicina.yml"),
+            "config_path": os.path.join("config", "calendario_medicina.yml"),
             "cal_path": os.path.join("data", "medicina", "calendario.xlsx"),
             "out_path": os.path.join("data", "medicina", "misiones.xlsx"),
         },
@@ -273,15 +445,6 @@ def main():
 
         config = cargar_yaml(config_path)
 
-        # Sobrescribimos rutas para asegurar consistencia
-        if "fuentes" not in config:
-            config["fuentes"] = {}
-        if "salida" not in config:
-            config["salida"] = {}
-
-        config["fuentes"]["calendario_excel_path"] = cal_path
-        config["salida"]["excel_path"] = out_path
-
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
         df_cal = pd.read_excel(cal_path, sheet_name="Calendario")
@@ -291,6 +454,7 @@ def main():
         exportar_excel(df_mis, df_mat, out_path)
 
         print(f"OK: [{curso}] generado {out_path} con {len(df_mis)} tareas.")
+        
 
 if __name__ == "__main__":
     main()

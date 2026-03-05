@@ -1,58 +1,3 @@
-# curso:
-#   nombre: "Calendario Curso"
-
-# periodo:
-#   fecha_inicio: "2026-03-16"
-
-# salida:
-#   excel_path: "data/misiones.xlsx"
-
-# aleatoriedad:
-#   semilla: 42
-
-# secciones:
-#   - "Sección 1"
-#   - "Sección 2"
-#   - "Sección 3"
-#   - "Sección 4"
-
-# profesores:
-#   - { codigo: "p1", horas_contrato: 10 }
-#   - { codigo: "p2", horas_contrato: 10 }
-#   - { codigo: "p3", horas_contrato: 10 }
-#   - { codigo: "p4", horas_contrato: 10 }
-#   - { codigo: "p5", horas_contrato: 10 }
-#   - { codigo: "p6", horas_contrato: 10 }
-
-# tipos_mision:
-#   "Propuesta de preguntas":
-#     cantidad_responsables: 2
-#     observaciones_default: "Subir documento a carpeta"
-
-#   "Revisión prueba":
-#     cantidad_responsables: 1
-#     observaciones_default: "Enviar versión final"
-
-#   "Revisión taller":
-#     cantidad_responsables: 2
-#     observaciones_default: "Revisar guía y pauta"
-
-# misiones:
-#   - { fecha: "2026-04-10", seccion: "Sección 1", mision: "Propuesta de preguntas" }
-#   - { fecha: "2026-04-10", seccion: "Sección 2", mision: "Propuesta de preguntas" }
-#   - { fecha: "2026-04-17", seccion: "Sección 3", mision: "Propuesta de preguntas" }
-#   - { fecha: "2026-04-17", seccion: "Sección 4", mision: "Propuesta de preguntas" }
-
-#   - { fecha: "2026-05-08", seccion: "Sección 1", mision: "Revisión prueba" }
-#   - { fecha: "2026-05-08", seccion: "Sección 2", mision: "Revisión prueba" }
-#   - { fecha: "2026-05-15", seccion: "Sección 3", mision: "Revisión prueba" }
-#   - { fecha: "2026-05-15", seccion: "Sección 4", mision: "Revisión prueba" }
-
-#   - { fecha: "2026-06-05", seccion: "Sección 1", mision: "Revisión taller" }
-#   - { fecha: "2026-06-05", seccion: "Sección 2", mision: "Revisión taller" }
-#   - { fecha: "2026-06-12", seccion: "Sección 3", mision: "Revisión taller" }
-#   - { fecha: "2026-06-12", seccion: "Sección 4", mision: "Revisión taller" }
-
 curso:
   nombre: "Calendario Curso"
 
@@ -91,7 +36,7 @@ reglas_plazos:
 
 # Templates por tipo de evaluación (lo que tú pediste)
 protocolos:
-  Prueba:
+  Certamen:
     pedir_preguntas:
       responsables: "Todos"
       detalle: "Cada profesor: 2 alternativas + 1 desarrollo (según tema de la prueba)."

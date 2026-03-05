@@ -1,171 +1,181 @@
-# calendario_config.yml
-
 curso:
   nombre: "Calendario Curso"
   timezone: "America/Santiago"
 
-periodo:
-  fecha_inicio: "2026-03-16"
-  numero_semanas: 19
+calendario:
+  periodo:
+    fecha_inicio: "2026-03-16"
+    numero_semanas: 19
 
-secciones:
-  # "Sección 1":
-  #   teorica:   { dia_semana: "Monday",    inicio: "12:00", fin: "13:30" }
-  #   seminario: { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
+  secciones:
+    "Sección 1":
+      teorica:   { dia_semana: "Wednesday", inicio: "10:15", fin: "11:45" }
+      seminario: { dia_semana: "Thursday", inicio: "12:00", fin: "13:30" }
 
-  "Sección 2":
-    teorica:   { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
-    seminario: { dia_semana: "Thursday", inicio: "08:30", fin: "10:00" }
+    "Sección 2":
+      teorica:   { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
+      seminario: { dia_semana: "Thursday", inicio: "08:30", fin: "10:00" }
 
-# laboratorios:
-#   frecuencia: "cada_2_semanas"
-#   semanas: "pares"
+  profesores_base:
+    - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "AR" }
+    - { seccion: "Sección 1", actividad: "Seminario", profesores: "JCS" }
 
-profesores_base:
-  # - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "TY" }
-  # - { seccion: "Sección 1", actividad: "Seminario",    profesores: "IG" }
+    - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "AR" }
+    - { seccion: "Sección 2", actividad: "Seminario", profesores: "JCS" }
 
-  - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "AR" }
-  - { seccion: "Sección 2", actividad: "Seminario",    profesores: "JCS" }
+  temas_por_semana:
+    1: "Lógica 1"
+    2: "Lógica 2"
+    3: "Lógica 3"
+    4: "Repaso (semana mechona)"
+    5: "Certamen 1"
+    6: "Modelos y Derivadas 1"
+    7: "Modelos y Derivadas 2"
+    8: "Modelos y Derivadas 3"
+    9: "Modelos y Derivadas 4"
+    10: "Semana Receso"
+    11: "Certamen 2"
+    12: "Linealización de modelos"
+    13: "Trigonometría y Vectores 1"
+    14: "Trigonometría y Vectores 2"
+    15: "Trigonometría y Vectores 3"
+    16: "Certamen 3"
+    17: "Trabajo Autónomo"
+    18: "Examen Primera Oportunidad"
+    19: "Examen Segunda Oportunidad"
 
-temas_por_semana:
-  1: "Lógica 1"
-  2: "Lógica 2"
-  3: "Lógica 3"
-  4: "Sin actividades (semana mechona)"
-  5: "Certamen 1"
-  6: "Modelos y Derivadas 1"
-  7: "Modelos y Derivadas 2"
-  8: "Modelos y Derivadas 3"
-  9: "Modelos y Derivadas 4"
-  10: "Semana Receso"
-  11: "Certamen 2"
-  12: "Linealización de modelos"
-  13: "Trigonometría y Vectores 1"
-  14: "Trigonometría y Vectores 2"
-  15: "Trigonometría y Vectores 3"
-  16: "Certamen 3"
-  17: "Trabajo Autónomo"
-  18: "Examen Primera Oportunidad"
-  19: "Examen Segunda Oportunidad"
+  evaluaciones:
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 3, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 3" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 7, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 8, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 3" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 9, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 4" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 14, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 3" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 11, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 3" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
 
-evaluaciones:
 
-  # CONTROLES
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2, 15 min" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 3, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 3, 15 min" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 7, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 2, 15 min" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 8, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 3, 15 min" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 9, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 4, 15 min" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 14, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 2, 15 min" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 3, 15 min" }
-  
-  # CERTAMENES
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 11, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 3, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 7, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 8, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 9, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 4" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 14, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 11, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
 
-  # TRABAJO PRACTICO
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+  pausas_academicas: []
+  semanas_trabajo_autonomo: [17]
 
-  # EXAMENES
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
-  - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+  bloques:
+    definicion:
+      "3": { inicio: "12:00", fin: "13:30" }
+      "4": { inicio: "15:00", fin: "16:30" }
+    protegidos:
+      - { fecha: "2026-04-01", bloque: "3" }
+      - { fecha: "2026-05-04", bloque: "4" }
+      - { fecha: "2026-06-11", bloque: "3" }
+      - { fecha: "2026-06-23", bloque: "4" }
 
-pausas_academicas:
-  # - { inicio: "2026-05-18", fin: "2026-05-24", etiqueta: "Semana de Pausa Académica" }
-  # - { inicio: "2026-07-27", fin: "2026-08-09", etiqueta: "Trabajo autónomo institucional" }
+  feriados:
+    usar_automaticos_chile: true
+    manuales: []
 
-semanas_trabajo_autonomo:
-  - 17
+misiones:
+  aleatoriedad:
+    semilla: 42
 
-bloques:
-  definicion:
-    "3": { inicio: "12:00", fin: "13:30" }
-    "4": { inicio: "15:00", fin: "16:30" }
-  protegidos:
-    - { fecha: "2026-04-01", bloque: "3" }
-    - { fecha: "2026-05-04", bloque: "4" }
-    - { fecha: "2026-06-11", bloque: "3" }
-    - { fecha: "2026-06-23", bloque: "4" }
+  secciones:
+    - "Sección 1"
+    - "Sección 2"
 
-feriados:
-  usar_automaticos_chile: true
-  manuales:
-    # - { fecha: "2026-04-03", nombre: "Feriado (ejemplo)" }
+  profesores:
+    - { codigo: "p1", horas_contrato: 10 }
+    - { codigo: "p2", horas_contrato: 10 }
+    - { codigo: "p3", horas_contrato: 10 }
+    - { codigo: "p4", horas_contrato: 10 }
+    - { codigo: "p5", horas_contrato: 10 }
+    - { codigo: "p6", horas_contrato: 10 }
 
-salida:
-  excel_path: "data/calendario.xlsx"
+  alias_seccion:
+    "Sección 1": "Sección 1 (Miercoles)"
+    "Sección 2": "Sección 2 (Jueves)"
 
-# # ============================================================
-# # ✅ EMAILS (NUEVO)
-# # ============================================================
-# emails:
-#   # Map de iniciales -> email real
-#   profesor_a_email:
-#     TY: "ty@ejemplo.cl"
-#     IG: "ig@ejemplo.cl"
-#     CC: "cc@ejemplo.cl"
-#     AR: "ar@ejemplo.cl"
-#     JCS: "jcs@ejemplo.cl"
+  protocolos:
+    Control:
+      construir_control:
+        responsables: "Asignar"
+        detalle: "Construcción del control."
+        offset_dias: -6
+      pauta_prueba:
+        responsables: "Asignar"
+        detalle: "Pauta del control."
+        offset_dias: -5
+      escanear:
+        responsables: "Asignar"
+        detalle: "Escanear control y subir a carpeta."
+        offset_dias: 2
+      corregir_y_notas:
+        responsables: "Asignar"
+        detalle: "Corregir control y subir notas."
+        offset_dias: 13
 
-#   # Remitente (debe ser el "me" del token de Gmail)
-#   from_name: "Calendario del Curso"
+    Certamen:
+      pedir_preguntas:
+        responsables: "Todos"
+        detalle: "Cada profesor propone preguntas para el certamen."
+        offset_dias: -14
+      construir_control:
+        responsables: "Asignar"
+        detalle: "Construcción del certamen."
+        offset_dias: -7
+      pauta_prueba:
+        responsables: "Asignar"
+        detalle: "Pauta del certamen."
+        offset_dias: -5
+      revisar_prueba:
+        responsables: "Asignar"
+        detalle: "Revisión final del certamen."
+        offset_dias: -3
+      escanear:
+        responsables: "Asignar"
+        detalle: "Escanear certamen y subir a carpeta."
+        offset_dias: 2
+      corregir_y_notas:
+        responsables: "Asignar"
+        detalle: "Corregir certamen y subir notas."
+        offset_dias: 14
 
-#   # Si quieres copiar a alguien siempre:
-#   cc:
-#     - ""  # ejemplo: "coordinacion@ug.uchile.cl"
+    Trabajo práctico:
+      revisar_tp:
+        responsables: "Todos"
+        detalle: "Revisar TP y subir nota."
+        offset_dias: 14
 
-#   # Reglas de recordatorio:
-#   # - Para cada tipo de evento define cuántos días antes se manda.
-#   reglas:
-#     mision:
-#       enviar_dias_antes: [7, 2, 0]        # 0 = el mismo día
-#       hora_envio: "09:00"                 # hora local Chile
-#       asunto: "[Curso] Recordatorio misión: {titulo} (vence {fecha})"
-#       cuerpo: |
-#         Hola {nombre_prof}:
-
-#         Recordatorio: {titulo}
-#         Fecha límite: {fecha} {hora}
-
-#         Sección/Equipo: {seccion}
-#         Observaciones: {observaciones}
-
-#         — {from_name}
-
-#     evaluacion:
-#       enviar_dias_antes: [7, 2]
-#       hora_envio: "09:00"
-#       asunto: "[Curso] Evaluación ({evaluacion}) — {seccion} — Semana {semana}"
-#       cuerpo: |
-#         Hola {nombre_prof}:
-
-#         Se acerca una evaluación asociada al curso:
-#         - Tipo: {evaluacion}
-#         - Sección: {seccion}
-#         - Semana: {semana}
-#         - Fecha/Hora: {fecha} {hora}
-#         - Actividad: {actividad}
-#         - Tema: {tema}
-
-#         Observaciones: {observaciones}
-
-#         — {from_name}
-
-#     examen:
-#       enviar_dias_antes: [14, 7, 2]
-#       hora_envio: "09:00"
-#       asunto: "[Curso] Examen — {seccion} — {fecha} {hora}"
-#       cuerpo: |
-#         Hola {nombre_prof}:
-
-#         Recordatorio de examen:
-#         - Sección: {seccion}
-#         - Fecha/Hora: {fecha} {hora}
-#         - Observaciones: {observaciones}
-
-#         — {from_name}
-
-#   # Archivo donde guardamos qué correos ya se enviaron (para no repetir)
-#   estado_envios_path: "data/email_log.json"
+    Examen:
+      pedir_preguntas:
+        responsables: "Todos"
+        detalle: "Preguntas para examen."
+        offset_dias: -21
+      construir_examen:
+        responsables: "Asignar"
+        detalle: "Construcción del examen."
+        offset_dias: -14
+      pauta_examen:
+        responsables: "Asignar"
+        detalle: "Pauta del examen."
+        offset_dias: -7
+      corregir_examen:
+        responsables: "Asignar"
+        detalle: "Corregir examen."
+        offset_dias: 14
