@@ -312,10 +312,55 @@ def construir_df(config: dict) -> pd.DataFrame:
 
     df = pd.DataFrame(filas)
 
-    temas = cfg.get("temas_por_semana", {}) or {}
-    if temas:
-        temas_norm = {int(k): str(v) for k, v in temas.items()}
-        df.loc[df["semana"].isin(list(temas_norm.keys())), "tema"] = df["semana"].map(temas_norm).fillna("")
+    # temas = cfg.get("temas_por_semana", {}) or {}
+    # if temas:
+    #     temas_norm = {int(k): str(v) for k, v in temas.items()}
+    #     df.loc[df["semana"].isin(list(temas_norm.keys())), "tema"] = df["semana"].map(temas_norm).fillna("")
+
+    # ------------------------------------------------------------
+    # Temas por tipo de actividad
+    # ------------------------------------------------------------
+    temas_teoricos = cfg.get("temas_teoricos", {}) or {}
+    temas_seminarios = cfg.get("temas_seminarios", {}) or {}
+    temas_laboratorios = cfg.get("temas_laboratorios", {}) or {}
+
+    # Compatibilidad antigua: si no existen las nuevas listas, usar temas_por_semana
+    temas_por_semana = cfg.get("temas_por_semana", {}) or {}
+    if temas_por_semana:
+        temas_por_semana = {int(k): str(v) for k, v in temas_por_semana.items()}
+        if not temas_teoricos:
+            temas_teoricos = temas_por_semana.copy()
+        if not temas_seminarios:
+            temas_seminarios = temas_por_semana.copy()
+        if not temas_laboratorios:
+            temas_laboratorios = temas_por_semana.copy()
+
+    if temas_teoricos:
+        temas_teoricos = {int(k): str(v) for k, v in temas_teoricos.items()}
+        mask = (df["actividad"] == "Clase teórica") & (df["semana"].isin(list(temas_teoricos.keys())))
+        df.loc[mask, "tema"] = df.loc[mask, "semana"].map(temas_teoricos).fillna("")
+
+    if temas_seminarios:
+        temas_seminarios = {int(k): str(v) for k, v in temas_seminarios.items()}
+        mask = (df["actividad"] == "Seminario") & (df["semana"].isin(list(temas_seminarios.keys())))
+        df.loc[mask, "tema"] = df.loc[mask, "semana"].map(temas_seminarios).fillna("")
+
+    if temas_laboratorios:
+        temas_laboratorios = {int(k): str(v) for k, v in temas_laboratorios.items()}
+        mask = (df["actividad"] == "Laboratorio") & (df["semana"].isin(list(temas_laboratorios.keys())))
+        df.loc[mask, "tema"] = df.loc[mask, "semana"].map(temas_laboratorios).fillna("")
+
+
+    # ------------------------------------------------------------
+    # Excepciones de tema
+    # ------------------------------------------------------------
+    for ex in cfg.get("excepciones_tema", []) or []:
+        mask = (
+            (df["sección"] == ex.get("seccion", "")) &
+            (df["semana"] == int(ex.get("semana"))) &
+            (df["actividad"] == ex.get("actividad", ""))
+        )
+        df.loc[mask, "tema"] = str(ex.get("tema", "")).strip()
 
     for r in cfg.get("profesores_base", []) or []:
         secc = r.get("seccion")

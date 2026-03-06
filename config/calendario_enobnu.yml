@@ -17,8 +17,8 @@ calendario:
       seminario: { dia_semana: "Friday", inicio: "12:00", fin: "13:30" }
 
     "Sección 3": # Ingrid Galaz
-      teorica:   { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
-      seminario: { dia_semana: "Thursday", inicio: "08:30", fin: "10:00" }
+      teorica:   { dia_semana: "Tuesday", inicio: "10:15", fin: "11:45" }
+      seminario: { dia_semana: "Friday", inicio: "15:00", fin: "16:30" }
 
     "Sección 4": # Caroll Cuellar
       teorica:   { dia_semana: "Tuesday", inicio: "10:15", fin: "11:45" }
@@ -37,15 +37,39 @@ calendario:
     - { seccion: "Sección 4", actividad: "Clase teórica", profesores: "AR" }
     - { seccion: "Sección 4", actividad: "Seminario", profesores: "JCS" }
 
-  temas_por_semana:
+  temas_teoricos:
     1: "Lógica 1"
     2: "Lógica 2"
-    3: "Lógica 3"
-    4: "Repaso (semana mechona)"
-    5: "Modelos y Derivadas 1"
-    6: "Modelos y Derivadas 2"
-    7: "Certamen 1"
-    8: "Modelos y Derivadas 3"
+    3: "Lógica 3 teórico-práctico" # perdemos 1 seminario
+    4: "Modelos y Derivadas 1 teórico-práctico" # perdemos 1 seminario
+    5: "Modelos y Derivadas 2"
+    6: "Modelos y Derivadas 3"
+    7: "Certamen 1" # perdemos 1 seminario
+    8: "Modelos y Derivadas 4"
+    9: "Actividad Autónoma Portafolio"
+    10: "Semana Receso"
+    11: "Modelos y Derivadas 5"
+    12: "Linealización de modelos"
+    13: "Trigonometría y Vectores 1"
+    14: "Trigonometría y Vectores 2"
+    15: "Trigonometría y Vectores 3"
+    16: "Certamen 2"
+    17: "Trabajo Autónomo"
+    18: "Examen Primera Oportunidad"
+    19: "Examen Segunda Oportunidad"
+
+# tablas de frecuancia o estadoisticas
+# tipos de varaibles
+
+  temas_seminarios:
+    1: "Lógica 1"
+    2: "Lógica 2"
+    3: "Sin Seminario" # perdemos 1 seminario
+    4: "Sin Seminario (semana mechona)" # perdemos 1 seminario
+    5: "Modelos y Derivadas 2"
+    6: "Modelos y Derivadas 3"
+    7: "Sin Seminario" # perdemos 1 seminario
+    8: "Revision Certamen"
     9: "Modelos y Derivadas 4"
     10: "Semana Receso"
     11: "Modelos y Derivadas 5"
@@ -58,42 +82,64 @@ calendario:
     18: "Examen Primera Oportunidad"
     19: "Examen Segunda Oportunidad"
 
+  excepciones_tema:
+    - { seccion: "Sección 2", semana: 4, actividad: "Clase teórica", tema: "Sin Clase (semana mechona)" }
+    - { seccion: "Sección 2", semana: 4, actividad: "Seminario", tema: "Modelos y Derivadas 1 teórico-práctico" }
+
+# taller 1 después de terminar lógica
+# retroalimentación certamen 1 desface 1 semana y hay que adelantar en la semana de repaso
+# semana mechona alexander debe tomar viernes el teórico (seccion 2)
+# taller 2 en modelos y derivadas 4
+# taller 3 en trigonometria 2
+
+
+# Unidad 1 una entrega
+# Unidad 2 2 entregas
+# Unidad 3 1 entrega
+# Esquema
+# Rúbrica del año pasado
+# Carta para recomendar
+# Cosas iniciales (cuestionario inicial)
+# Cosas finales (reflexiones finales)
+# checklist de avances
+
+
   evaluaciones:
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 1" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 2" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 5, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 12, actividad: "Clase teórica", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
 
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 1" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 2" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Clase teórica", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
 
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 1" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 2" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 5, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 12, actividad: "Clase teórica", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
 
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 1" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 2" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Clase teórica", tipo: "Control", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 5, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 12, actividad: "Clase teórica", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
 
   pausas_academicas: []
   semanas_trabajo_autonomo: [17]
