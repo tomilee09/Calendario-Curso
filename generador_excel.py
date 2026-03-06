@@ -591,6 +591,11 @@ def main():
             "config_path": os.path.join("config", "calendario_medicina.yml"),
             "output_path": os.path.join("data", "medicina", "calendario.xlsx"),
         },
+        
+        "enobnu": {
+            "config_path": os.path.join("config", "calendario_enobnu.yml"),
+            "output_path": os.path.join("data", "enobnu", "calendario.xlsx"),
+        },
     }
 
     for curso, info in cursos.items():

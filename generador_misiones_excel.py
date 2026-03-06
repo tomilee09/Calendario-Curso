@@ -428,6 +428,12 @@ def main():
             "cal_path": os.path.join("data", "medicina", "calendario.xlsx"),
             "out_path": os.path.join("data", "medicina", "misiones.xlsx"),
         },
+        
+        "enobnu": {
+            "config_path": os.path.join("config", "calendario_enobnu.yml"),
+            "cal_path": os.path.join("data", "enobnu", "calendario.xlsx"),
+            "out_path": os.path.join("data", "enobnu", "misiones.xlsx"),
+        },
     }
 
     for curso, info in cursos.items():

@@ -104,8 +104,6 @@ misiones:
     - { codigo: "p2", horas_contrato: 10 }
     - { codigo: "p3", horas_contrato: 10 }
     - { codigo: "p4", horas_contrato: 10 }
-    - { codigo: "p5", horas_contrato: 10 }
-    - { codigo: "p6", horas_contrato: 10 }
 
   alias_seccion:
     "Sección 1": "Sección 1 (Miercoles)"

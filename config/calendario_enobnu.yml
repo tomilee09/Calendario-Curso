@@ -1,0 +1,204 @@
+curso:
+  nombre: "Calendario Curso"
+  timezone: "America/Santiago"
+
+calendario:
+  periodo:
+    fecha_inicio: "2026-03-16"
+    numero_semanas: 19
+
+  secciones:
+    "Sección 1": # Juan Carlos
+      teorica:   { dia_semana: "Tuesday", inicio: "8:30", fin: "10:00" }
+      seminario: { dia_semana: "Wednesday", inicio: "12:00", fin: "13:30" }
+
+    "Sección 2": # Alexander Riquelme
+      teorica:   { dia_semana: "Tuesday", inicio: "16:45", fin: "18:15" }
+      seminario: { dia_semana: "Friday", inicio: "12:00", fin: "13:30" }
+
+    "Sección 3": # Ingrid Galaz
+      teorica:   { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
+      seminario: { dia_semana: "Thursday", inicio: "08:30", fin: "10:00" }
+
+    "Sección 4": # Caroll Cuellar
+      teorica:   { dia_semana: "Tuesday", inicio: "10:15", fin: "11:45" }
+      seminario: { dia_semana: "Friday", inicio: "16:45", fin: "18:15" }
+
+  profesores_base:
+    - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "AR" }
+    - { seccion: "Sección 1", actividad: "Seminario", profesores: "JCS" }
+
+    - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "AR" }
+    - { seccion: "Sección 2", actividad: "Seminario", profesores: "JCS" }
+
+    - { seccion: "Sección 3", actividad: "Clase teórica", profesores: "AR" }
+    - { seccion: "Sección 3", actividad: "Seminario", profesores: "JCS" }
+
+    - { seccion: "Sección 4", actividad: "Clase teórica", profesores: "AR" }
+    - { seccion: "Sección 4", actividad: "Seminario", profesores: "JCS" }
+
+  temas_por_semana:
+    1: "Lógica 1"
+    2: "Lógica 2"
+    3: "Lógica 3"
+    4: "Repaso (semana mechona)"
+    5: "Modelos y Derivadas 1"
+    6: "Modelos y Derivadas 2"
+    7: "Certamen 1"
+    8: "Modelos y Derivadas 3"
+    9: "Modelos y Derivadas 4"
+    10: "Semana Receso"
+    11: "Modelos y Derivadas 5"
+    12: "Linealización de modelos"
+    13: "Trigonometría y Vectores 1"
+    14: "Trigonometría y Vectores 2"
+    15: "Trigonometría y Vectores 3"
+    16: "Certamen 2"
+    17: "Trabajo Autónomo"
+    18: "Examen Primera Oportunidad"
+    19: "Examen Segunda Oportunidad"
+
+  evaluaciones:
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Taller Unidad 3" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+
+  pausas_academicas: []
+  semanas_trabajo_autonomo: [17]
+
+  bloques:
+    definicion:
+      "3": { inicio: "12:00", fin: "13:30" }
+      "4": { inicio: "15:00", fin: "16:30" }
+    protegidos:
+      - { fecha: "2026-04-01", bloque: "3" }
+      - { fecha: "2026-05-04", bloque: "4" }
+      - { fecha: "2026-06-11", bloque: "3" }
+      - { fecha: "2026-06-23", bloque: "4" }
+
+  feriados:
+    usar_automaticos_chile: true
+    manuales: []
+
+misiones:
+  aleatoriedad:
+    semilla: 42
+
+  secciones:
+    - "Sección 1"
+    - "Sección 2"
+    - "Sección 3"
+    - "Sección 4"
+
+  profesores:
+    - { codigo: "p1", horas_contrato: 10 }
+    - { codigo: "p2", horas_contrato: 10 }
+    - { codigo: "p3", horas_contrato: 10 }
+    - { codigo: "p4", horas_contrato: 10 }
+
+  alias_seccion:
+    "Sección 1": "Sección 1 (JCS)"
+    "Sección 2": "Sección 2 (AR)"
+    "Sección 3": "Sección 3 (IG)"
+    "Sección 4": "Sección 4 (CC)"
+
+  protocolos:
+    Control:
+      construir_control:
+        responsables: "Asignar"
+        detalle: "Construcción del control."
+        offset_dias: -6
+      pauta_prueba:
+        responsables: "Asignar"
+        detalle: "Pauta del control."
+        offset_dias: -5
+      escanear:
+        responsables: "Asignar"
+        detalle: "Escanear control y subir a carpeta."
+        offset_dias: 2
+      corregir_y_notas:
+        responsables: "Asignar"
+        detalle: "Corregir control y subir notas."
+        offset_dias: 13
+
+    Certamen:
+      pedir_preguntas:
+        responsables: "Todos"
+        detalle: "Cada profesor propone preguntas para el certamen."
+        offset_dias: -14
+      construir_control:
+        responsables: "Asignar"
+        detalle: "Construcción del certamen."
+        offset_dias: -7
+      pauta_prueba:
+        responsables: "Asignar"
+        detalle: "Pauta del certamen."
+        offset_dias: -5
+      revisar_prueba:
+        responsables: "Asignar"
+        detalle: "Revisión final del certamen."
+        offset_dias: -3
+      escanear:
+        responsables: "Asignar"
+        detalle: "Escanear certamen y subir a carpeta."
+        offset_dias: 2
+      corregir_y_notas:
+        responsables: "Asignar"
+        detalle: "Corregir certamen y subir notas."
+        offset_dias: 14
+
+    Trabajo práctico:
+      revisar_tp:
+        responsables: "Todos"
+        detalle: "Revisar TP y subir nota."
+        offset_dias: 14
+
+    Examen:
+      pedir_preguntas:
+        responsables: "Todos"
+        detalle: "Preguntas para examen."
+        offset_dias: -21
+      construir_examen:
+        responsables: "Asignar"
+        detalle: "Construcción del examen."
+        offset_dias: -14
+      pauta_examen:
+        responsables: "Asignar"
+        detalle: "Pauta del examen."
+        offset_dias: -7
+      corregir_examen:
+        responsables: "Asignar"
+        detalle: "Corregir examen."
+        offset_dias: 14

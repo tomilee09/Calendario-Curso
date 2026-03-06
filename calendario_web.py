@@ -28,6 +28,12 @@ CURSOS = {
         "carpeta": "medicina",
         "emoji": "🏥",
     },
+    
+    "enobnu": {
+    "label": "Enobnu",
+    "carpeta": "enobnu",   # debe existir: data/enobnu/calendario.xlsx y data/enobnu/misiones.xlsx
+    "emoji": "🍇",         # cambia el emoji si quieres
+    },
 }
 
 # ============================================================
@@ -208,6 +214,90 @@ def cargar_datos_misiones_base(excel_misiones_path):
 
     return df
 
+
+
+def tabla_misiones_por_profesor_y_mes(df_misiones: pd.DataFrame):
+    """
+    UI: tabs por profesor (p1..pN) y selector de mes.
+    Muestra una tabla con misiones (fecha_limite, paso, evento, sección, detalle).
+    """
+    if df_misiones.empty:
+        st.info("No hay misiones para mostrar.")
+        return
+
+    df2 = df_misiones.copy()
+
+    # Asegurar datetime
+    df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+    df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+    # Columnas seguras
+    for c in ["evento", "paso", "sección", "responsables", "detalle", "estado"]:
+        if c in df2.columns:
+            df2[c] = df2[c].fillna("").astype(str)
+        else:
+            df2[c] = ""
+
+    # Obtener lista de profes desde responsables
+    profs = set()
+    for s in df2["responsables"].dropna().unique():
+        for p in split_profes(s):
+            profs.add(p)
+
+    # Si quieres SOLO p1..p6:
+    profs = [p for p in sorted(profs) if p.startswith("p")]
+    if not profs:
+        st.info("No hay responsables tipo p1, p2, ... en el archivo de misiones.")
+        return
+
+    st.markdown("### 👤 Misiones por persona y por mes")
+    tabs = st.tabs(profs)
+
+    for i, prof in enumerate(profs):
+        with tabs[i]:
+            # Filtrar por prof
+            dfp = df2[df2["responsables"].apply(lambda x: prof in split_profes(x))].copy()
+            if dfp.empty:
+                st.info(f"{prof}: no tiene misiones asignadas.")
+                continue
+
+            # Meses disponibles para ese prof
+            dfp["mes"] = dfp["fecha_limite"].dt.to_period("M").astype(str)
+            meses = sorted(dfp["mes"].unique())
+
+            mes_sel = st.selectbox(
+                "Selecciona mes:",
+                options=meses,
+                index=len(meses) - 1,
+                key=f"mes_sel_{prof}"
+            )
+
+            dfm = dfp[dfp["mes"] == mes_sel].copy()
+            dfm = dfm.sort_values(["fecha_limite", "evento", "paso", "sección"])
+
+            # Tabla bonita
+            df_show = dfm[["fecha_limite", "evento", "paso", "sección", "detalle", "estado"]].copy()
+
+            # Formato fecha
+            df_show["fecha_limite"] = df_show["fecha_limite"].dt.strftime("%d/%m/%Y")
+
+            # Labels más humanos si tienes PASO_LABELS
+            if "PASO_LABELS" in globals():
+                df_show["paso"] = df_show["paso"].apply(lambda x: PASO_LABELS.get(str(x).strip(), str(x).strip()))
+
+            st.dataframe(
+                df_show,
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "fecha_limite": st.column_config.TextColumn("Vence"),
+                    "evento": st.column_config.TextColumn("Evaluación"),
+                    "paso": st.column_config.TextColumn("Misión"),
+                    "sección": st.column_config.TextColumn("Sección"),
+                    "detalle": st.column_config.TextColumn("Detalle"),
+                    "estado": st.column_config.TextColumn("Estado"),
+                }
+            )
 
 # ============================================================
 # TAB 2: COLORES WEB PARA CALENDARIO
@@ -1461,7 +1551,21 @@ with c2:
 
 st.markdown("### Selección de curso")
 
-b1, b2, b3 = st.columns(3)
+# b1, b2, b3 = st.columns(3)
+
+# with b1:
+#     if st.button("🧮 Fokito", use_container_width=True):
+#         st.session_state.curso_seleccionado = "fokito"
+
+# with b2:
+#     if st.button("🩺 Tecnología Médica", use_container_width=True):
+#         st.session_state.curso_seleccionado = "tecnologia_medica"
+
+# with b3:
+#     if st.button("🏥 Medicina", use_container_width=True):
+#         st.session_state.curso_seleccionado = "medicina"
+
+b1, b2, b3, b4 = st.columns(4)
 
 with b1:
     if st.button("🧮 Fokito", use_container_width=True):
@@ -1474,6 +1578,10 @@ with b2:
 with b3:
     if st.button("🏥 Medicina", use_container_width=True):
         st.session_state.curso_seleccionado = "medicina"
+
+with b4:
+    if st.button("🍇 Enobnu", use_container_width=True):
+        st.session_state.curso_seleccionado = "enobnu"
 
 curso_actual = st.session_state.curso_seleccionado
 curso_info = CURSOS[curso_actual]
@@ -1683,11 +1791,11 @@ with tab1:
         events=events,
         initial_date=initial_date,
         tz=TIMEZONE,
-        height_px=780
+        height_px=1100
     )
 
     # Render del calendario
-    components.html(html_cal, height=840, scrolling=False)
+    components.html(html_cal, height=1160, scrolling=False)
 
     st.divider()
 
@@ -1766,6 +1874,9 @@ with tab2:
 with tab3:
     st.subheader(f"🧭 Misiones y protocolo docente — {curso_info['label']}")
     st.caption("Vista ordenada para profesores: matriz rápida con todas las misiones y plan detallado.")
+
+    # ✅ NUEVO: misiones por persona/mes
+    tabla_misiones_por_profesor_y_mes(df_misiones)
 
     if df_plan.empty and df_misiones.empty:
         st.info("No se encontró 'misiones.xlsx' o no tiene las hojas esperadas.")
