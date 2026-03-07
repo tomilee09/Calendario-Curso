@@ -4,7 +4,7 @@ on:
   schedule:
     # 12:00 UTC = 09:00 en Chile (CLT, UTC-3) normalmente.
     # Si Chile cambiara a horario de verano/invierno, ajusta esta hora.
-    - cron: "0 12 * * *"
+    - cron: "0 12 * * 5"
   workflow_dispatch: {}
 
 permissions:

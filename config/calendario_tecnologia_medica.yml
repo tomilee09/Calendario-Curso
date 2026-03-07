@@ -153,3 +153,38 @@ misiones:
         responsables: "Asignar"
         detalle: "Corregir examen."
         offset_dias: 14
+
+
+emails:
+  profesor_a_email:
+    p1: "correo1@ejemplo.cl"
+    p2: "correo2@ejemplo.cl"
+    p3: "correo3@ejemplo.cl"
+    p4: "correo4@ejemplo.cl"
+    p5: "correo5@ejemplo.cl"
+    p6: "correo6@ejemplo.cl"
+
+    TY: "ty@ejemplo.cl"
+    IG: "ig@ejemplo.cl"
+    CC: "cc@ejemplo.cl"
+    AR: "ar@ejemplo.cl"
+    JCS: "jcs@ejemplo.cl"
+
+  from_name: "Calendario del Curso"
+
+  cc: []
+
+  estado_envios_path: "data/email_log.json"
+
+  resumen_semanal:
+    dia_envio: "Friday"
+    hora_envio: "09:00"
+    asunto: "[{curso}] Misiones para la semana del {fecha_inicio_semana}"
+    cuerpo: |
+      Hola {nombre_prof}:
+
+      Estas son tus misiones para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+
+      {lista_misiones}
+
+      — {from_name}
