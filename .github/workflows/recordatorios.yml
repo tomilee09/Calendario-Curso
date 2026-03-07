@@ -46,7 +46,7 @@ jobs:
           GMAIL_TOKEN_JSON: ${{ secrets.token }}
           GMAIL_CREDENTIALS_JSON: ${{ secrets.credentials }}
         run: |
-          python enviar_recordatorios.py --config calendario_config.yml
+          python enviar_recordatorios.py --curso todos
 
       - name: Commit updated email log (if changed)
         run: |
