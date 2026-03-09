@@ -71,23 +71,40 @@ def construir_df(config: dict) -> pd.DataFrame:
                     "observaciones": ""
                 })
 
-            if cfg.get("laboratorios", {}).get("frecuencia") == "cada_2_semanas":
-                if cfg.get("laboratorios", {}).get("semanas") == "pares" and (semana % 2 == 0) and ("lab" in scfg):
-                    dia_semana = scfg["lab"]["dia_semana"]
-                    fecha = fecha_de_dia_en_semana(lunes, dia_semana)
+            # if cfg.get("laboratorios", {}).get("frecuencia") == "cada_2_semanas":
+            #     if cfg.get("laboratorios", {}).get("semanas") == "pares" and (semana % 2 == 0) and ("lab" in scfg):
+            #         dia_semana = scfg["lab"]["dia_semana"]
+            #         fecha = fecha_de_dia_en_semana(lunes, dia_semana)
 
-                    filas.append({
-                        "semana": semana,
-                        "fecha": fecha.date(),
-                        "día": DIAS_ES[dia_semana],
-                        "horario": rango_horario_str(scfg["lab"]["inicio"], scfg["lab"]["fin"]),
-                        "sección": seccion,
-                        "actividad": "Laboratorio",
-                        "tema": "",
-                        "evaluación": "",
-                        "profesores": "",
-                        "observaciones": "Cada 2 semanas"
-                    })
+            #         filas.append({
+            #             "semana": semana,
+            #             "fecha": fecha.date(),
+            #             "día": DIAS_ES[dia_semana],
+            #             "horario": rango_horario_str(scfg["lab"]["inicio"], scfg["lab"]["fin"]),
+            #             "sección": seccion,
+            #             "actividad": "Laboratorio",
+            #             "tema": "",
+            #             "evaluación": "",
+            #             "profesores": "",
+            #             "observaciones": "Cada 2 semanas"
+            #         })
+            
+            if "lab" in scfg:
+                dia_semana = scfg["lab"]["dia_semana"]
+                fecha = fecha_de_dia_en_semana(lunes, dia_semana)
+
+                filas.append({
+                    "semana": semana,
+                    "fecha": fecha.date(),
+                    "día": DIAS_ES[dia_semana],
+                    "horario": rango_horario_str(scfg["lab"]["inicio"], scfg["lab"]["fin"]),
+                    "sección": seccion,
+                    "actividad": "Laboratorio",
+                    "tema": "",
+                    "evaluación": "",
+                    "profesores": "",
+                    "observaciones": ""
+                })
 
     df = pd.DataFrame(filas)
 
@@ -130,16 +147,76 @@ def construir_df(config: dict) -> pd.DataFrame:
         df.loc[mask, "tema"] = df.loc[mask, "semana"].map(temas_laboratorios).fillna("")
 
 
+    # # ------------------------------------------------------------
+    # # Excepciones de tema
+    # # ------------------------------------------------------------
+    # for ex in cfg.get("excepciones_tema", []) or []:
+    #     mask = (
+    #         (df["sección"] == ex.get("seccion", "")) &
+    #         (df["semana"] == int(ex.get("semana"))) &
+    #         (df["actividad"] == ex.get("actividad", ""))
+    #     )
+    #     df.loc[mask, "tema"] = str(ex.get("tema", "")).strip()
+
     # ------------------------------------------------------------
-    # Excepciones de tema
+    # Excepciones de evento
+    # Permite cambiar semana, fecha, día, horario, tema, actividad, etc.
     # ------------------------------------------------------------
-    for ex in cfg.get("excepciones_tema", []) or []:
+    for ex in cfg.get("excepciones_evento", []) or []:
+        seccion_ex = ex.get("seccion", "")
+        semana_ex = int(ex.get("semana"))
+        actividad_ex = ex.get("actividad", "")
+
         mask = (
-            (df["sección"] == ex.get("seccion", "")) &
-            (df["semana"] == int(ex.get("semana"))) &
-            (df["actividad"] == ex.get("actividad", ""))
+            (df["sección"] == seccion_ex) &
+            (df["semana"] == semana_ex) &
+            (df["actividad"] == actividad_ex)
         )
-        df.loc[mask, "tema"] = str(ex.get("tema", "")).strip()
+
+        if not mask.any():
+            continue
+
+        # semana base a usar para recalcular fecha
+        semana_destino = int(ex.get("semana_nueva", semana_ex))
+        df.loc[mask, "semana"] = semana_destino
+
+        lunes_semana_destino = inicio + pd.Timedelta(days=7 * (semana_destino - 1))
+
+        # día de la semana original o nuevo
+        if "dia_semana" in ex:
+            dia_semana_usar = str(ex["dia_semana"]).strip()
+        else:
+            dia_actual_es = df.loc[mask, "día"].iloc[0]
+            mapa_es_a_en = {v: k for k, v in DIAS_ES.items()}
+            dia_semana_usar = mapa_es_a_en.get(dia_actual_es, "Monday")
+
+        fecha_nueva = fecha_de_dia_en_semana(lunes_semana_destino, dia_semana_usar)
+        df.loc[mask, "fecha"] = fecha_nueva.date()
+        df.loc[mask, "día"] = DIAS_ES[dia_semana_usar]
+
+        # horario
+        if "inicio" in ex and "fin" in ex:
+            df.loc[mask, "horario"] = rango_horario_str(str(ex["inicio"]).strip(), str(ex["fin"]).strip())
+
+        # tema
+        if "tema" in ex:
+            df.loc[mask, "tema"] = str(ex.get("tema", "")).strip()
+
+        # actividad nueva
+        if "actividad_nueva" in ex:
+            df.loc[mask, "actividad"] = str(ex.get("actividad_nueva", "")).strip()
+
+        # profesores
+        if "profesores" in ex:
+            df.loc[mask, "profesores"] = str(ex.get("profesores", "")).strip()
+
+        # observaciones
+        if "observaciones" in ex:
+            df.loc[mask, "observaciones"] = str(ex.get("observaciones", "")).strip()
+
+        # evaluación
+        if "evaluacion" in ex:
+            df.loc[mask, "evaluación"] = str(ex.get("evaluacion", "")).strip()
 
     for r in cfg.get("profesores_base", []) or []:
         secc = r.get("seccion")

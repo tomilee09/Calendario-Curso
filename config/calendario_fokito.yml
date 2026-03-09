@@ -28,10 +28,6 @@ calendario:
       seminario: { dia_semana: "Friday",    inicio: "10:15", fin: "11:45" }
       lab:       { dia_semana: "Friday",    inicio: "8:30", fin: "10:00" }
 
-  laboratorios:
-    frecuencia: "cada_2_semanas"
-    semanas: "pares"
-
   profesores_base:
     - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "TY" }
     - { seccion: "Sección 1", actividad: "Seminario",    profesores: "IG" }
@@ -49,27 +45,211 @@ calendario:
     - { seccion: "Sección 4", actividad: "Seminario",    profesores: "CC" }
     - { seccion: "Sección 4", actividad: "Laboratorio",  profesores: "JCS" }
 
-  temas_por_semana:
+  # temas_por_semana:
+  #   1: "Lógica 1"
+  #   2: "Lógica 2"
+  #   3: "Lógica 3"
+  #   4: "Repaso (semana mechona)"
+  #   5: "Certamen 1"
+  #   6: "Modelos y Derivadas 1"
+  #   7: "Modelos y Derivadas 2"
+  #   8: "Modelos y Derivadas 3"
+  #   9: "Modelos y Derivadas 4"
+  #   10: "Semana Receso"
+  #   11: "Certamen 2"
+  #   12: "Linealización de modelos"
+  #   13: "Trigonometría y Vectores 1"
+  #   14: "Trigonometría y Vectores 2"
+  #   15: "Trigonometría y Vectores 3"
+  #   16: "Certamen 3"
+  #   17: "Trabajo Autónomo"
+  #   18: "Examen Primera Oportunidad"
+  #   19: "Examen Segunda Oportunidad"
+
+  temas_teoricos:
     1: "Lógica 1"
     2: "Lógica 2"
-    3: "Lógica 3"
-    4: "Repaso (semana mechona)"
-    5: "Certamen 1"
-    6: "Modelos y Derivadas 1"
-    7: "Modelos y Derivadas 2"
-    8: "Modelos y Derivadas 3"
-    9: "Modelos y Derivadas 4"
+    3: "Lógica 3 teórico-práctico" 
+    4: "Modelos y Derivadas 1 teórico-práctico" 
+    5: "Modelos y Derivadas 2"
+    6: "Modelos y Derivadas 3"
+    7: "Certamen 1" 
+    8: "Modelos y Derivadas 4"
+    9: "Actividad Autónoma Portafolio"
     10: "Semana Receso"
-    11: "Certamen 2"
+    11: "Modelos y Derivadas 5"
     12: "Linealización de modelos"
     13: "Trigonometría y Vectores 1"
     14: "Trigonometría y Vectores 2"
     15: "Trigonometría y Vectores 3"
-    16: "Certamen 3"
+    16: "Certamen 2"
     17: "Trabajo Autónomo"
     18: "Examen Primera Oportunidad"
     19: "Examen Segunda Oportunidad"
 
+# tablas de frecuancia o estadoisticas
+# tipos de varaibles
+
+  temas_seminarios:
+    1: "Lógica 1"
+    2: "Lógica 2"
+    3: "Sin Seminario" 
+    4: "Sin Seminario (semana mechona)" 
+    5: "Modelos y Derivadas 2"
+    6: "Modelos y Derivadas 3"
+    7: "Sin Seminario" 
+    8: "Revisión Certamen 1"
+    9: "Modelos y Derivadas 4"
+    10: "Semana Receso"
+    11: "Modelos y Derivadas 5"
+    12: "Linealización de modelos"
+    13: "Trigonometría y Vectores 1"
+    14: "Trigonometría y Vectores 2"
+    15: "Trigonometría y Vectores 3"
+    16: "Revisión Certamen 2"
+    17: "Trabajo Autónomo"
+    18: "Examen Primera Oportunidad"
+    19: "Examen Segunda Oportunidad"
+
+  # temas_laboratorios:
+  #   1: "Tablas"
+  #   2: "graficos"
+  #   3: "Trabajo Autónomo" 
+  #   4: "Sin Laboratorio (semana mechona)" 
+  #   5: "medidas de resumen"
+  #   6: "Trabajo Autónomo"
+  #   7: "Trabajo Exploratorio 1" 
+  #   8: "Trabajo Autónomo"
+  #   9: "laboratorio 5"
+  #   10: "Semana Receso"
+  #   11: "laboratorio 6"
+  #   12: "Trabajo Autónomo"
+  #   13: "laboratorio 7"
+  #   14: "Trabajo Autónomo"
+  #   15: "Trabajo Exploratorio 2"
+  #   16: "Sin Laboratorio"
+  #   17: "Sin Laboratorio"
+  #   18: "Sin Laboratorio"
+  #   19: "Sin Laboratorio"
+
+  # temas_laboratorios:
+  #   1: "Tablas"
+  #   2: "Gráficos"
+  #   3: "Sin Laboratorio"
+  #   4: "Sin Laboratorio (semana mechona)"
+  #   5: "Medidas de resumen"
+  #   6: "Sin Laboratorio"
+  #   7: "Sin Laboratorio"
+  #   8: "Trabajo Exploratorio 1"
+  #   9: "Laboratorio 5"
+  #   10: "Semana Receso"
+  #   11: "Laboratorio 6"
+  #   12: "Sin Laboratorio"
+  #   13: "Laboratorio 7"
+  #   14: "Sin Laboratorio"
+  #   15: "Trabajo Exploratorio 2"
+  #   16: "Sin Laboratorio"
+  #   17: "Sin Laboratorio"
+  #   18: "Sin Laboratorio"
+  #   19: "Sin Laboratorio"
+
+  temas_laboratorios:
+    1: "Sin Laboratorio"
+    2: "Sin Laboratorio"
+    3: "Sin Laboratorio"
+    4: "Sin Laboratorio (semana mechona)"
+    5: "Sin Laboratorio"
+    6: "Sin Laboratorio"
+    7: "Sin Laboratorio"
+    8: "Sin Laboratorio"
+    9: "Sin Laboratorio"
+    10: "Semana Receso"
+    11: "Sin Laboratorio"
+    12: "Sin Laboratorio"
+    13: "Sin Laboratorio"
+    14: "Sin Laboratorio"
+    15: "Sin Laboratorio"
+    16: "Sin Laboratorio"
+    17: "Sin Laboratorio"
+    18: "Sin Laboratorio"
+    19: "Sin Laboratorio"
+
+
+  excepciones_evento:
+    # ======================================================
+    # AJUSTES DE SALAS ESPECIALES / OBSERVACIONES
+    # ======================================================
+    - { seccion: "Sección 1", semana: 1, actividad: "Clase teórica", observaciones: "Sala: CAMPUS NORTE AUDITORIO ZULEMA DE BARBIERI MONICA 4" }
+
+    - { seccion: "Sección 2", semana: 1, actividad: "Clase teórica", observaciones: "Sala: CAMPUS NORTE AUDITORIO MONICA SUAREZ 1" }
+    - { seccion: "Sección 2", semana: 1, actividad: "Laboratorio", tema: "Sin Laboratorio", observaciones: "No hay laboratorio: la sala asignada es CAMPUS NORTE T.O AUDITORIO BRIGIDA FLORES, no sala de computación." }
+
+    - { seccion: "Sección 4", semana: 1, actividad: "Clase teórica", observaciones: "Sala: CAMPUS NORTE SALA CANCINO" }
+    - { seccion: "Sección 4", semana: 1, actividad: "Seminario", observaciones: "Salas: CAMPUS NORTE SALA FISIOLOGÍA 1 / 2 / 4" }
+
+    # ======================================================
+    # SECCIÓN 1
+    # Labs oficiales: 1, 3, 5, 7, 9, 11, 13, 15
+    # ======================================================
+    - { seccion: "Sección 1", semana: 1,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 3,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+
+    # ======================================================
+    # SECCIÓN 2
+    # Labs oficiales: 2, 3, 5, 6, 7, 8, 9, 11, 14, 15
+    # Semana 1 NO tiene lab válido
+    # ======================================================
+    - { seccion: "Sección 2", semana: 2,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 3,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 6,  actividad: "Laboratorio", tema: "Trabajo Autónomo", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Autónomo", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 8,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 14, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+
+    # ======================================================
+    # SECCIÓN 3
+    # Labs oficiales: 1, 2, 5, 8, 9, 11, 13, 15
+    # ======================================================
+    - { seccion: "Sección 3", semana: 1,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 2,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 8,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+
+    # ======================================================
+    # SECCIÓN 4
+    # Labs oficiales: 1, 2, 4, 6, 8, 9, 11, 13
+    # ======================================================
+    - { seccion: "Sección 4", semana: 1,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 4", semana: 2,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 4", semana: 4,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ" }
+    - { seccion: "Sección 4", semana: 6,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ" }
+    - { seccion: "Sección 4", semana: 8,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 4", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 4", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
+    - { seccion: "Sección 4", semana: 13, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
+
+  # excepciones_evento:
+    # - { seccion: "Sección 4", semana: 6, actividad: "Laboratorio", dia_semana: "Thursday", inicio: "18:30", fin: "20:00", tema: "Lab especial en otra sala", observaciones: "Sala 203" }
+    # - { seccion: "Sección 4", semana: 8, actividad: "Laboratorio", dia_semana: "Monday", inicio: "10:15", fin: "11:45", tema: "Recuperativo", observaciones: "Cambio excepcional por sala" }
+    # - { seccion: "Sección 4", semana: 3, actividad: "Laboratorio", semana_nueva: 4 }
+    # - { seccion: "Sección 4", semana: 4, actividad: "Laboratorio", semana_nueva: 5 }
+    # - { seccion: "Sección 2", semana: 2, actividad: "Laboratorio", semana_nueva: 3 }
+    # - { seccion: "Sección 2", semana: 1, actividad: "Laboratorio", semana_nueva: 2 }
+    # - { seccion: "Sección 2", semana: 1, actividad: "clase teórica", inicio: "15:00", fin: "16:30" }
   evaluaciones:
     # Examenes
     - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
