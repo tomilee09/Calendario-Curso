@@ -25,8 +25,8 @@ calendario:
 
     "Sección 4":
       teorica:   { dia_semana: "Wednesday", inicio: "15:00", fin: "16:30" }
-      seminario: { dia_semana: "Friday",    inicio: "08:30", fin: "10:00" }
-      lab:       { dia_semana: "Friday",    inicio: "10:15", fin: "11:45" }
+      seminario: { dia_semana: "Friday",    inicio: "10:15", fin: "11:45" }
+      lab:       { dia_semana: "Friday",    inicio: "8:30", fin: "10:00" }
 
   laboratorios:
     frecuencia: "cada_2_semanas"
