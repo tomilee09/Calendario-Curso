@@ -23,19 +23,19 @@ calendario:
     - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "AR" }
     - { seccion: "Sección 2", actividad: "Seminario", profesores: "JCS" }
 
-  temas_por_semana:
+  temas_teoricos:
     1: "Lógica 1"
     2: "Lógica 2"
     3: "Lógica 3"
-    4: "Repaso (semana mechona)"
+    4: "Modelos y Derivadas 1"
     5: "Certamen 1"
-    6: "Modelos y Derivadas 1"
-    7: "Modelos y Derivadas 2"
-    8: "Modelos y Derivadas 3"
-    9: "Modelos y Derivadas 4"
+    6: "Modelos y Derivadas 2"
+    7: "Modelos y Derivadas 3"
+    8: "Modelos y Derivadas 4"
+    9: "Modelos y Derivadas 5"
     10: "Semana Receso"
     11: "Certamen 2"
-    12: "Linealización de modelos"
+    12: "Revisión Certamen 2"
     13: "Trigonometría y Vectores 1"
     14: "Trigonometría y Vectores 2"
     15: "Trigonometría y Vectores 3"
@@ -43,6 +43,28 @@ calendario:
     17: "Trabajo Autónomo"
     18: "Examen Primera Oportunidad"
     19: "Examen Segunda Oportunidad"
+
+  temas_seminarios:
+    1: "Lógica 1"
+    2: "Lógica 2"
+    3: "Lógica 3"
+    4: "Sin Seminario (semana mechona)"
+    5: "Modelos y Derivadas 1 y Revisión Certamen 1"
+    6: "Modelos y Derivadas 2"
+    7: "Modelos y Derivadas 3"
+    8: "Modelos y Derivadas 4"
+    9: "Modelos y Derivadas 5"
+    10: "Semana Receso"
+    11: "Teórico Linealización de Modelos"
+    12: "Linealización de modelos"
+    13: "Trigonometría y Vectores 1"
+    14: "Trigonometría y Vectores 2"
+    15: "Trigonometría y Vectores 3"
+    16: "Sin Actividad (semana de certamen 3)"
+    17: "Revisión Certamen 3"
+    18: "Examen Primera Oportunidad"
+    19: "Examen Segunda Oportunidad"
+
 
   evaluaciones:
     - { modo: "por_filtro", seccion: "Sección 2", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2" }
@@ -52,12 +74,12 @@ calendario:
     - { modo: "por_filtro", seccion: "Sección 2", semana: 9, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 4" }
     - { modo: "por_filtro", seccion: "Sección 2", semana: 14, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 2" }
     - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 3" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 1" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 11, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 2" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Seminario", tipo: "Certamen", observaciones: "Certamen 3" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 11, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 3" }
     - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 1" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Seminario", tipo: "Examen", observaciones: "Examen 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
 
 
     - { modo: "por_filtro", seccion: "Sección 1", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2" }
@@ -179,36 +201,94 @@ misiones:
         offset_dias: 14
 
 
+# emails:
+#   profesor_a_email:
+#     MB: "maximiliano.bernal@ug.uchile.cl"
+#     JM: "jose.mondaca.r@ug.uchile.cl"
+#     GM: "gabriela.martinez1e@gmail.com"
+#     VB: "valeria.brancacho@ug.uchile.cl"
+#     NV: "varasnaty@hotmail.com"
+#     EG: "eaguerra0@gmail.com"
+#     RL: "rosaluciladelcarmen@gmail.com"
+#     DH: "dmhidalgo@uc.cl"
+#     SM: "s.sandoval.marconi91@gmail.com"
+#     TY: "joriv.yanez@ug.uchile.cl"
+#     IG: "igalaz2009@uchile.cl"
+#     CC: "cacuellar@uchile.cl"
+#     AR: "alexander.riquelme@uchile.cl"
+#     JCS: "juan.salas.g@uchile.cl"
+
 emails:
-  profesor_a_email:
-    p1: "correo1@ejemplo.cl"
-    p2: "correo2@ejemplo.cl"
-    p3: "correo3@ejemplo.cl"
-    p4: "correo4@ejemplo.cl"
-    p5: "correo5@ejemplo.cl"
-    p6: "correo6@ejemplo.cl"
+  profesores:
+    MB:
+      nombre: "Maximiliano"
+      email: "maximiliano.bernal@ug.uchile.cl"
+    JM:
+      nombre: "José"
+      email: "jose.mondaca.r@ug.uchile.cl"
+    GM:
+      nombre: "Gabriela"
+      email: "gabriela.martinez1e@gmail.com"
+    VB:
+      nombre: "Valeria"
+      email: "valeria.brancacho@ug.uchile.cl"
+    NV:
+      nombre: "Naty"
+      email: "varasnaty@hotmail.com"
+    EG:
+      nombre: "Eduardo"
+      email: "eaguerra0@gmail.com"
+    RL:
+      nombre: "Rosa"
+      email: "rosaluciladelcarmen@gmail.com"
+    DH:
+      nombre: "Diego"
+      email: "dmhidalgo@uc.cl"
+    SM:
+      nombre: "Sebastián"
+      email: "s.sandoval.marconi91@gmail.com"
+    TY:
+      nombre: "Tomás"
+      email: "joriv.yanez@ug.uchile.cl"
+    IG:
+      nombre: "Ingrid"
+      email: "igalaz2009@uchile.cl"
+    CC:
+      nombre: "Caroll"
+      email: "cacuellar@uchile.cl"
+    AR:
+      nombre: "Alexander"
+      email: "alexander.riquelme@uchile.cl"
+    JCS:
+      nombre: "Juan"
+      email: "juan.salas.g@uchile.cl"
 
-    TY: "ty@ejemplo.cl"
-    IG: "ig@ejemplo.cl"
-    CC: "cc@ejemplo.cl"
-    AR: "ar@ejemplo.cl"
-    JCS: "jcs@ejemplo.cl"
+  pec_por_seccion:
+    "Sección 1": "TY"
+    "Sección 2": "IG"
 
-  from_name: "Calendario del Curso"
+  from_name: "J. Tomás Yáñez"
 
   cc: []
 
   estado_envios_path: "data/email_log.json"
 
-  resumen_semanal:
-    dia_envio: "Friday"
-    hora_envio: "09:00"
-    asunto: "[{curso}] Misiones para la semana del {fecha_inicio_semana}"
-    cuerpo: |
-      Hola {nombre_prof}:
+resumen_semanal:
+  dia_envio: "Friday"
+  hora_envio: "09:00"
+  asunto: "[{curso}] Misiones para la semana del {fecha_inicio_semana}"
+  cuerpo: |
+    Buen día {nombre_prof}!,
 
-      Estas son tus misiones para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+    Estas son tus misiones planificadas para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
 
-      {lista_misiones}
+    {lista_misiones}
 
-      — {from_name}
+    Si no aparece ninguna misión, eso significa que no tienes tareas planificadas originalmente para esa semana.
+    De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+
+    Puedes revisar el calendario completo aquí:
+    https://calendario-curso.streamlit.app
+
+    Que te vaya excelente esta semana,
+    {from_name}

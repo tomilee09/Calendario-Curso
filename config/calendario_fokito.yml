@@ -205,15 +205,23 @@ calendario:
     # Labs oficiales: 2, 3, 5, 6, 7, 8, 9, 11, 14, 15
     # Semana 1 NO tiene lab válido
     # ======================================================
+# 20/4 sí tiene lab
+# 274 sí hay
+# 25/5 sí hay (semana 11)
+# 1/6 no hay
+# 8/6 no hay
+
+# 20/4 eliminar (se libera)
+# 4/5 se elimina por bloque protegido
     - { seccion: "Sección 2", semana: 2,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
     - { seccion: "Sección 2", semana: 3,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
     - { seccion: "Sección 2", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 6,  actividad: "Laboratorio", tema: "Trabajo Autónomo", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Autónomo", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 8,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 6,  actividad: "Laboratorio", tema: "no hay", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 8,  actividad: "Laboratorio", tema: "no hay", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
     - { seccion: "Sección 2", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 14, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 11, actividad: "Laboratorio", tema: "laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 14, actividad: "Laboratorio", tema: "laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
     - { seccion: "Sección 2", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
 
     # ======================================================
@@ -373,35 +381,76 @@ salida:
 
 
 emails:
-  profesor_a_email:
-    p1: "correo1@ejemplo.cl"
-    p2: "correo2@ejemplo.cl"
-    p3: "correo3@ejemplo.cl"
-    p4: "correo4@ejemplo.cl"
-    p5: "correo5@ejemplo.cl"
-    p6: "correo6@ejemplo.cl"
+  profesores:
+    MB:
+      nombre: "Maximiliano"
+      email: "maximiliano.bernal@ug.uchile.cl"
+    JM:
+      nombre: "José"
+      email: "jose.mondaca.r@ug.uchile.cl"
+    GM:
+      nombre: "Gabriela"
+      email: "gabriela.martinez1e@gmail.com"
+    VB:
+      nombre: "Valeria"
+      email: "valeria.brancacho@ug.uchile.cl"
+    NV:
+      nombre: "Naty"
+      email: "varasnaty@hotmail.com"
+    EG:
+      nombre: "Eduardo"
+      email: "eaguerra0@gmail.com"
+    RL:
+      nombre: "Rosa"
+      email: "rosaluciladelcarmen@gmail.com"
+    DH:
+      nombre: "Diego"
+      email: "dmhidalgo@uc.cl"
+    SM:
+      nombre: "Sebastián"
+      email: "s.sandoval.marconi91@gmail.com"
+    TY:
+      nombre: "Tomás"
+      email: "joriv.yanez@ug.uchile.cl"
+    IG:
+      nombre: "Ingrid"
+      email: "igalaz2009@uchile.cl"
+    CC:
+      nombre: "Caroll"
+      email: "cacuellar@uchile.cl"
+    AR:
+      nombre: "Alexander"
+      email: "alexander.riquelme@uchile.cl"
+    JCS:
+      nombre: "Juan"
+      email: "juan.salas.g@uchile.cl"
 
-    TY: "ty@ejemplo.cl"
-    IG: "ig@ejemplo.cl"
-    CC: "cc@ejemplo.cl"
-    AR: "ar@ejemplo.cl"
-    JCS: "jcs@ejemplo.cl"
+  pec_por_seccion:
+    "Sección 1": "TY"
+    "Sección 2": "IG"
 
-  from_name: "Calendario del Curso"
+  from_name: "J. Tomás Yáñez"
 
   cc: []
 
   estado_envios_path: "data/email_log.json"
 
-  resumen_semanal:
-    dia_envio: "Friday"
-    hora_envio: "09:00"
-    asunto: "[{curso}] Misiones para la semana del {fecha_inicio_semana}"
-    cuerpo: |
-      Hola {nombre_prof}:
+resumen_semanal:
+  dia_envio: "Friday"
+  hora_envio: "09:00"
+  asunto: "[{curso}] Misiones para la semana del {fecha_inicio_semana}"
+  cuerpo: |
+    Buen día {nombre_prof}!,
 
-      Estas son tus misiones para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+    Estas son tus misiones planificadas para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
 
-      {lista_misiones}
+    {lista_misiones}
 
-      — {from_name}
+    Si no aparece ninguna misión, eso significa que no tienes tareas planificadas originalmente para esa semana.
+    De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+
+    Puedes revisar el calendario completo aquí:
+    https://calendario-curso.streamlit.app
+
+    Que te vaya excelente esta semana,
+    {from_name}
