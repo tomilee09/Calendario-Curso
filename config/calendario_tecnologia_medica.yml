@@ -1,5 +1,5 @@
 curso:
-  nombre: "Calendario Curso"
+  nombre: "Tecnología Médica"
   timezone: "America/Santiago"
 
 calendario:
@@ -13,8 +13,8 @@ calendario:
       seminario: { dia_semana: "Thursday", inicio: "15:00", fin: "16:30" }
 
   profesores_base:
-    - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "AR" }
-    - { seccion: "Sección 1", actividad: "Seminario", profesores: "JCS" }
+    - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "CC" }
+    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["TY", "MB", "GM", "XX"] }
 
   # temas_por_semana:
   #   1: "Lógica 1"
@@ -199,49 +199,49 @@ misiones:
 
 
 emails:
-  profesores:
-    MB:
-      nombre: "Maximiliano"
-      email: "maximiliano.bernal@ug.uchile.cl"
-    JM:
-      nombre: "José"
-      email: "jose.mondaca.r@ug.uchile.cl"
-    GM:
-      nombre: "Gabriela"
-      email: "gabriela.martinez1e@gmail.com"
-    VB:
-      nombre: "Valeria"
-      email: "valeria.brancacho@ug.uchile.cl"
-    NV:
-      nombre: "Naty"
-      email: "varasnaty@hotmail.com"
-    EG:
-      nombre: "Eduardo"
-      email: "eaguerra0@gmail.com"
-    RL:
-      nombre: "Rosa"
-      email: "rosaluciladelcarmen@gmail.com"
-    DH:
-      nombre: "Diego"
-      email: "dmhidalgo@uc.cl"
-    SM:
-      nombre: "Sebastián"
-      email: "s.sandoval.marconi91@gmail.com"
-    TY:
-      nombre: "Tomás"
-      email: "joriv.yanez@ug.uchile.cl"
-    IG:
-      nombre: "Ingrid"
-      email: "igalaz2009@uchile.cl"
-    CC:
-      nombre: "Caroll"
-      email: "cacuellar@uchile.cl"
-    AR:
-      nombre: "Alexander"
-      email: "alexander.riquelme@uchile.cl"
-    JCS:
-      nombre: "Juan"
-      email: "juan.salas.g@uchile.cl"
+  # profesores:
+  #   MB:
+  #     nombre: "Maximiliano"
+  #     email: "maximiliano.bernal@ug.uchile.cl"
+  #   JM:
+  #     nombre: "José"
+  #     email: "jose.mondaca.r@ug.uchile.cl"
+  #   GM:
+  #     nombre: "Gabriela"
+  #     email: "gabriela.martinez1e@gmail.com"
+  #   VB:
+  #     nombre: "Valeria"
+  #     email: "valeria.brancacho@ug.uchile.cl"
+  #   NV:
+  #     nombre: "Naty"
+  #     email: "varasnaty@hotmail.com"
+  #   EG:
+  #     nombre: "Eduardo"
+  #     email: "eaguerra0@gmail.com"
+  #   RL:
+  #     nombre: "Rosa"
+  #     email: "rosaluciladelcarmen@gmail.com"
+  #   DH:
+  #     nombre: "Diego"
+  #     email: "dmhidalgo@uc.cl"
+  #   SM:
+  #     nombre: "Sebastián"
+  #     email: "s.sandoval.marconi91@gmail.com"
+  #   TY:
+  #     nombre: "Tomás"
+  #     email: "joriv.yanez@ug.uchile.cl"
+  #   IG:
+  #     nombre: "Ingrid"
+  #     email: "igalaz2009@uchile.cl"
+  #   CC:
+  #     nombre: "Caroll"
+  #     email: "cacuellar@uchile.cl"
+  #   AR:
+  #     nombre: "Alexander"
+  #     email: "alexander.riquelme@uchile.cl"
+  #   JCS:
+  #     nombre: "Juan"
+  #     email: "juan.salas.g@uchile.cl"
 
   pec_por_seccion:
     "Sección 1": "TY"
@@ -253,22 +253,32 @@ emails:
 
   estado_envios_path: "data/email_log.json"
 
-resumen_semanal:
-  dia_envio: "Friday"
-  hora_envio: "09:00"
-  asunto: "[{curso}] Misiones para la semana del {fecha_inicio_semana}"
-  cuerpo: |
-    Buen día {nombre_prof}!,
+  resumen_semanal:
+    dia_envio: "Friday"
+    hora_envio: "09:00"
+    asunto: "[{curso}] Resumen semanal {fecha_inicio_semana}–{fecha_fin_semana}"
+    cuerpo: |
+      Buen día {nombre_prof},
 
-    Estas son tus misiones planificadas para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+      Este es tu resumen para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
 
-    {lista_misiones}
+      ====================
+      MISIONES
+      ====================
 
-    Si no aparece ninguna misión, eso significa que no tienes tareas planificadas originalmente para esa semana.
-    De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+      {lista_misiones}
 
-    Puedes revisar el calendario completo aquí:
-    https://calendario-curso.streamlit.app
+      ====================
+      CLASES DE LA SEMANA
+      ====================
 
-    Que te vaya excelente esta semana,
-    {from_name}
+      {lista_clases}
+
+      Si no aparece ninguna misión, eso significa que no tienes misiones planificadas originalmente para esta semana.
+      De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+
+      Puedes revisar el calendario completo aquí:
+      https://calendario-curso.streamlit.app
+
+      Saludos,
+      {from_name}

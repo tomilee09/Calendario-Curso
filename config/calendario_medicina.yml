@@ -1,5 +1,5 @@
 curso:
-  nombre: "Calendario Curso"
+  nombre: "Medicina"
   timezone: "America/Santiago"
 
 calendario:
@@ -17,11 +17,11 @@ calendario:
       seminario: { dia_semana: "Thursday", inicio: "08:30", fin: "10:00" }
 
   profesores_base:
-    - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "AR" }
-    - { seccion: "Sección 1", actividad: "Seminario", profesores: "JCS" }
+    - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "IG" }
+    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["AR", "JCS", "TY", "XX"] }
 
-    - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "AR" }
-    - { seccion: "Sección 2", actividad: "Seminario", profesores: "JCS" }
+    - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "IG" }
+    - { seccion: "Sección 2", actividad: "Seminario", profesores: ["AR", "JCS", "TY", "XX"] }
 
   temas_teoricos:
     1: "Lógica 1"
@@ -122,10 +122,19 @@ misiones:
     - "Sección 2"
 
   profesores:
-    - { codigo: "p1", horas_contrato: 10 }
-    - { codigo: "p2", horas_contrato: 10 }
-    - { codigo: "p3", horas_contrato: 10 }
-    - { codigo: "p4", horas_contrato: 10 }
+    - { codigo: "AR", horas_contrato: 10 }
+    - { codigo: "JCS", horas_contrato: 10 }
+    - { codigo: "GM", horas_contrato: 10 }
+    - { codigo: "VB", horas_contrato: 10 }
+    - { codigo: "NV", horas_contrato: 10 }
+    - { codigo: "CC", horas_contrato: 10 }
+    - { codigo: "IG", horas_contrato: 10 }
+    - { codigo: "TY", horas_contrato: 10 }
+    - { codigo: "JM", horas_contrato: 10 }
+    - { codigo: "EG", horas_contrato: 10 }
+    - { codigo: "RL", horas_contrato: 10 }
+    - { codigo: "DH", horas_contrato: 10 }
+    - { codigo: "SM", horas_contrato: 10 }
 
   alias_seccion:
     "Sección 1": "Sección 1 (Miercoles)"
@@ -200,69 +209,7 @@ misiones:
         detalle: "Corregir examen."
         offset_dias: 14
 
-
-# emails:
-#   profesor_a_email:
-#     MB: "maximiliano.bernal@ug.uchile.cl"
-#     JM: "jose.mondaca.r@ug.uchile.cl"
-#     GM: "gabriela.martinez1e@gmail.com"
-#     VB: "valeria.brancacho@ug.uchile.cl"
-#     NV: "varasnaty@hotmail.com"
-#     EG: "eaguerra0@gmail.com"
-#     RL: "rosaluciladelcarmen@gmail.com"
-#     DH: "dmhidalgo@uc.cl"
-#     SM: "s.sandoval.marconi91@gmail.com"
-#     TY: "joriv.yanez@ug.uchile.cl"
-#     IG: "igalaz2009@uchile.cl"
-#     CC: "cacuellar@uchile.cl"
-#     AR: "alexander.riquelme@uchile.cl"
-#     JCS: "juan.salas.g@uchile.cl"
-
 emails:
-  profesores:
-    MB:
-      nombre: "Maximiliano"
-      email: "maximiliano.bernal@ug.uchile.cl"
-    JM:
-      nombre: "José"
-      email: "jose.mondaca.r@ug.uchile.cl"
-    GM:
-      nombre: "Gabriela"
-      email: "gabriela.martinez1e@gmail.com"
-    VB:
-      nombre: "Valeria"
-      email: "valeria.brancacho@ug.uchile.cl"
-    NV:
-      nombre: "Naty"
-      email: "varasnaty@hotmail.com"
-    EG:
-      nombre: "Eduardo"
-      email: "eaguerra0@gmail.com"
-    RL:
-      nombre: "Rosa"
-      email: "rosaluciladelcarmen@gmail.com"
-    DH:
-      nombre: "Diego"
-      email: "dmhidalgo@uc.cl"
-    SM:
-      nombre: "Sebastián"
-      email: "s.sandoval.marconi91@gmail.com"
-    TY:
-      nombre: "Tomás"
-      email: "joriv.yanez@ug.uchile.cl"
-    IG:
-      nombre: "Ingrid"
-      email: "igalaz2009@uchile.cl"
-    CC:
-      nombre: "Caroll"
-      email: "cacuellar@uchile.cl"
-    AR:
-      nombre: "Alexander"
-      email: "alexander.riquelme@uchile.cl"
-    JCS:
-      nombre: "Juan"
-      email: "juan.salas.g@uchile.cl"
-
   pec_por_seccion:
     "Sección 1": "TY"
     "Sección 2": "IG"
@@ -273,22 +220,29 @@ emails:
 
   estado_envios_path: "data/email_log.json"
 
-resumen_semanal:
-  dia_envio: "Friday"
-  hora_envio: "09:00"
-  asunto: "[{curso}] Misiones para la semana del {fecha_inicio_semana}"
-  cuerpo: |
-    Buen día {nombre_prof}!,
+  resumen_semanal:
+    dia_envio: "Friday"
+    hora_envio: "09:00"
+    asunto: "[{curso}] Resumen semanal {fecha_inicio_semana}–{fecha_fin_semana}"
+    cuerpo: |
+      Buen día {nombre_prof},
 
-    Estas son tus misiones planificadas para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+      Este es tu resumen para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
 
-    {lista_misiones}
+      ====================
+      MISIONES
+      ====================
 
-    Si no aparece ninguna misión, eso significa que no tienes tareas planificadas originalmente para esa semana.
-    De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+      {lista_misiones}
 
-    Puedes revisar el calendario completo aquí:
-    https://calendario-curso.streamlit.app
+      ====================
+      CLASES DE LA SEMANA
+      ====================
 
-    Que te vaya excelente esta semana,
-    {from_name}
+      {lista_clases}
+
+      Puedes revisar el calendario completo aquí:
+      https://calendario-curso.streamlit.app
+
+      Saludos,
+      {from_name}

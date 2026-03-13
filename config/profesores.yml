@@ -1,0 +1,56 @@
+profesores:
+  MB:
+    nombre: "Maximiliano"
+    email: "maximiliano.bernal@ug.uchile.cl"
+
+  JM:
+    nombre: "José"
+    email: "jose.mondaca.r@ug.uchile.cl"
+
+  GM:
+    nombre: "Gabriela"
+    email: "gabriela.martinez1e@gmail.com"
+
+  VB:
+    nombre: "Valeria"
+    email: "valeria.brancacho@ug.uchile.cl"
+
+  NV:
+    nombre: "Naty"
+    email: "varasnaty@hotmail.com"
+
+  EG:
+    nombre: "Eduardo"
+    email: "eaguerra0@gmail.com"
+
+  RL:
+    nombre: "Rosa"
+    email: "rosaluciladelcarmen@gmail.com"
+
+  DH:
+    nombre: "Diego"
+    email: "dmhidalgo@uc.cl"
+
+  SM:
+    nombre: "Sebastián"
+    email: "s.sandoval.marconi91@gmail.com"
+
+  TY:
+    nombre: "Tomás"
+    email: "joriv.yanez@ug.uchile.cl"
+
+  IG:
+    nombre: "Ingrid"
+    email: "igalaz2009@uchile.cl"
+
+  CC:
+    nombre: "Caroll"
+    email: "cacuellar@uchile.cl"
+
+  AR:
+    nombre: "Alexander"
+    email: "alexander.riquelme@uchile.cl"
+
+  JCS:
+    nombre: "Juan Carlos"
+    email: "juan.salas.g@uchile.cl"

@@ -39,6 +39,22 @@ def fecha_de_dia_en_semana(lunes_semana: pd.Timestamp, dia_semana: str) -> pd.Ti
     idx = ORDEN_DIAS.index(dia_semana)
     return pd.Timestamp(lunes_semana.date()) + pd.Timedelta(days=idx)
 
+def normalizar_profesores(valor):
+    """
+    Acepta:
+    - "JCS, TY, AR"
+    - ["JCS", "TY", "AR"]
+    - None
+    y devuelve siempre un string: "JCS, TY, AR"
+    """
+    if valor is None:
+        return ""
+
+    if isinstance(valor, list):
+        return ", ".join([str(x).strip() for x in valor if str(x).strip()])
+
+    return str(valor).strip()
+
 def construir_df(config: dict) -> pd.DataFrame:
     cfg = config["calendario"]
 
@@ -218,10 +234,17 @@ def construir_df(config: dict) -> pd.DataFrame:
         if "evaluacion" in ex:
             df.loc[mask, "evaluación"] = str(ex.get("evaluacion", "")).strip()
 
+    # for r in cfg.get("profesores_base", []) or []:
+    #     secc = r.get("seccion")
+    #     act = r.get("actividad")
+    #     prof = r.get("profesores", "")
+    #     mask = (df["sección"] == secc) & (df["actividad"] == act)
+    #     df.loc[mask, "profesores"] = prof
+
     for r in cfg.get("profesores_base", []) or []:
         secc = r.get("seccion")
         act = r.get("actividad")
-        prof = r.get("profesores", "")
+        prof = normalizar_profesores(r.get("profesores", ""))
         mask = (df["sección"] == secc) & (df["actividad"] == act)
         df.loc[mask, "profesores"] = prof
 
