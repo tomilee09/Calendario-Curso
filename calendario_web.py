@@ -1,9 +1,3963 @@
+# import os
+# import html
+# import pandas as pd
+# import streamlit as st
+# import streamlit.components.v1 as components
+# from streamlit_calendar import calendar
+# import plotly.express as px
+
+# # ============================================================
+# # CONFIG FIJA
+# # ============================================================
+# TIMEZONE = "America/Santiago"
+# LOGO_PATH = "assets/logo.png"
+# DATA_DIR = "data"
+
+# CURSOS = {
+#     "fokito": {
+#         "label": "Fokito",
+#         "carpeta": "fokito",
+#         "emoji": "🧮",
+#     },
+#     "tecnologia_medica": {
+#         "label": "Tecnología Médica",
+#         "carpeta": "tecnologia_medica",
+#         "emoji": "🩺",
+#     },
+#     "medicina": {
+#         "label": "Medicina",
+#         "carpeta": "medicina",
+#         "emoji": "🏥",
+#     },
+    
+#     "enobnu": {
+#     "label": "Enobnu",
+#     "carpeta": "enobnu",   # debe existir: data/enobnu/calendario.xlsx y data/enobnu/misiones.xlsx
+#     "emoji": "🍇",         # cambia el emoji si quieres
+#     },
+# }
+
+# # ============================================================
+# # UTILIDADES Y ESTILOS
+# # ============================================================
+# # PROF_PALETTE = {
+# #     "TY": "#1f77b4", "IG": "#2ca02c", "CC": "#ff7f0e",
+# #     "AR": "#9467bd", "JCS": "#8c564b",
+# #     "p1": "#1f77b4", "p2": "#2ca02c", "p3": "#ff7f0e",
+# #     "p4": "#9467bd", "p5": "#8c564b", "p6": "#e377c2",
+# #     "Todos": "#374151"
+# # }
+
+
+# # PROF_PALETTE = {
+# #     "TY": "#1f77b4",
+# #     "IG": "#2ca02c",
+# #     "CC": "#ff7f0e",
+# #     "AR": "#9467bd",
+# #     "JCS": "#8c564b",
+# #     "MB": "#e377c2",
+# #     "GM": "#17becf",
+# #     "VB": "#bcbd22",
+# #     "NV": "#d62728",
+# #     "JM": "#7f7f7f",
+# #     "EG": "#8c564b",
+# #     "RL": "#6b7280",
+# #     "DH": "#14b8a6",
+# #     "SM": "#ef4444",
+# #     "RM": "#f59e0b",
+# #     "XX": "#64748b",
+# #     "Todos": "#374151"
+# # }
+
+# # PALETA_FALLBACK = [
+# #     "#1f77b4", "#2ca02c", "#ff7f0e", "#9467bd", "#8c564b",
+# #     "#e377c2", "#17becf", "#bcbd22", "#d62728", "#14b8a6",
+# #     "#f59e0b", "#6366f1", "#ec4899", "#22c55e", "#0ea5e9",
+# # ]
+
+# # def color_profesor(codigo: str) -> str:
+# #     codigo = str(codigo).strip()
+# #     if not codigo:
+# #         return "#6b7280"
+# #     if codigo in PROF_PALETTE:
+# #         return PROF_PALETTE[codigo]
+
+# #     # color determinista para cualquier código nuevo
+# #     idx = sum(ord(ch) for ch in codigo) % len(PALETA_FALLBACK)
+# #     return PALETA_FALLBACK[idx]
+
+
+# PROF_PALETTE = {
+#     "TY": "#1f77b4",
+#     "IG": "#2ca02c",
+#     "CC": "#ff7f0e",
+#     "AR": "#9467bd",
+#     "JCS": "#8c564b",
+#     "MB": "#e377c2",
+#     "GM": "#17becf",
+#     "VB": "#bcbd22",
+#     "NV": "#d62728",
+#     "JM": "#7f7f7f",
+#     "EG": "#8c564b",
+#     "RL": "#6b7280",
+#     "DH": "#14b8a6",
+#     "SM": "#ef4444",
+#     "RM": "#f59e0b",
+#     "XX": "#64748b",
+#     "Todos": "#374151"
+# }
+
+# PALETA_FALLBACK = [
+#     "#1f77b4", "#2ca02c", "#ff7f0e", "#9467bd", "#8c564b",
+#     "#e377c2", "#17becf", "#bcbd22", "#d62728", "#14b8a6",
+#     "#f59e0b", "#6366f1", "#ec4899", "#22c55e", "#0ea5e9",
+# ]
+
+# def color_profesor(codigo: str) -> str:
+#     codigo = str(codigo).strip()
+#     if not codigo:
+#         return "#6b7280"
+#     if codigo in PROF_PALETTE:
+#         return PROF_PALETTE[codigo]
+#     idx = sum(ord(ch) for ch in codigo) % len(PALETA_FALLBACK)
+#     return PALETA_FALLBACK[idx]
+
+
+# EVAL_ICON = {
+#     "Trabajo práctico": "📝",
+#     "Control": "⭐",          # o "🧾" si prefieres
+#     "Certamen": "🧠",         # opcional
+#     "Examen": "🎓",           # opcional
+# }
+
+# ACT_COLORS = {
+#     "Clase teórica": "#1f77b4",
+#     "Seminario": "#2ca02c",
+#     "Laboratorio": "#ff7f0e",
+#     "Trabajo autónomo": "#9467bd",
+#     "Sin clases (Feriado)": "#d62728",
+#     "Sin clases (Pausa académica)": "#d62728",
+#     "Examen": "#111111",
+#     "Misión": "#8c564b",
+# }
+
+# SECTION_COLORS = {
+#     "Sección 1": "rgba(59, 130, 246, 0.18)",   # azul suave
+#     "Sección 2": "rgba(34, 197, 94, 0.18)",    # verde suave
+#     "Sección 3": "rgba(249, 115, 22, 0.18)",   # naranjo suave
+#     "Sección 4": "rgba(168, 85, 247, 0.18)",   # violeta suave
+# }
+
+# BORDER_BY_ACTIVIDAD = {
+#     "Clase teórica": "#111827",    # gris/negro
+#     "Seminario": "#2563eb",        # azul
+#     "Laboratorio": "#f59e0b",      # ámbar
+#     "Trabajo autónomo": "#6b7280", # gris
+#     "Examen": "#111827",           # negro
+#     "Misión": "#991b1b",           # rojo oscuro
+# }
+
+# PESOS_MISION = {
+#     "pedir_preguntas": 1.0,
+#     "construir_control": 1.0,
+#     "pauta_prueba": 1.0,
+#     "revisar_prueba": 1.0,
+#     "escanear": 1.0,
+#     "corregir_y_notas": 1.0,
+#     "revisar_tp": 1.0,
+#     "construir_examen": 1.0,
+#     "pauta_examen": 1.0,
+#     "corregir_examen": 1.0,
+#     "construir_taller_AB": 1.0,
+#     "construir_taller_CD": 1.0,
+#     "corregir_taller_A": 1.0,
+#     "corregir_taller_B": 1.0,
+#     "corregir_taller_C": 1.0,
+#     "corregir_taller_D": 1.0,
+# }
+
+# PASO_LABELS = {
+#     "pedir_preguntas": "Proponer preguntas",
+#     "construir_control": "Construcción evaluación",
+#     "pauta_prueba": "Construcción pauta",
+#     "revisar_prueba": "Revisar evaluación",
+#     "escanear": "Escanear evaluación",
+#     "corregir_y_notas": "Corregir y poner notas",
+#     "revisar_tp": "Revisar TP y poner nota",
+#     "revision_guia": "Revisión de guía",
+#     "subir_pauta_controles": "Subir pauta controles",
+#     "pauta_seminario": "Pauta seminario",
+#     "presentacion_grupal": "Presentación grupal seminario",
+#     "construir_examen": "Construcción examen",
+#     "pauta_examen": "Pauta examen",
+#     "corregir_examen": "Corregir examen",
+#     "revision_actividad_autonoma": "Revisión actividad autónoma",
+#     "revision_controles_y_nota": "Revisión controles y poner nota",
+#     "revisar_pruebas": "Revisar pruebas",
+#     "construir_taller": "Construcción de taller",
+#     "construir_taller_AB": "Construcción taller versiones A y B",
+#     "construir_taller_CD": "Construcción taller versiones C y D",
+#     "corregir_taller": "Corrección de taller",
+#     "corregir_taller_A": "Corregir taller versión A",
+#     "corregir_taller_B": "Corregir taller versión B",
+#     "corregir_taller_C": "Corregir taller versión C",
+#     "corregir_taller_D": "Corregir taller versión D",
+#     "preparar_material_previo": "Preparar material previo",
+#     "grabar_video_solucion": "Grabar video solución",
+#     "corregir_informe_laboratorio": "Corregir informe de laboratorio",
+# }
+
+# ORDEN_PASOS = [
+#     "pedir_preguntas",
+#     "construir_control",
+#     "pauta_prueba",
+#     "revisar_prueba",
+#     "revision_guia",
+#     "subir_pauta_controles",
+#     "pauta_seminario",
+#     "presentacion_grupal",
+#     "escanear",
+#     "corregir_y_notas",
+#     "revisar_tp",
+#     "construir_examen",
+#     "pauta_examen",
+#     "corregir_examen",
+#     "revision_actividad_autonoma",
+#     "revision_controles_y_nota",
+#     "revisar_pruebas",
+#     "construir_taller_AB",
+#     "construir_taller_CD",
+#     "corregir_taller_A",
+#     "corregir_taller_B",
+#     "corregir_taller_C",
+#     "corregir_taller_D",
+#     "preparar_material_previo",
+#     "grabar_video_solucion",
+#     "corregir_informe_laboratorio",
+# ]
+
+
+# def obtener_paths_curso(curso_key: str):
+#     carpeta = CURSOS[curso_key]["carpeta"]
+#     base_dir = os.path.join(DATA_DIR, carpeta)
+
+#     return {
+#         "base_dir": base_dir,
+#         "excel_calendario": os.path.join(base_dir, "calendario.xlsx"),
+#         "excel_misiones": os.path.join(base_dir, "misiones.xlsx"),
+#     }
+
+
+# def split_profes(s: str):
+#     if not s or pd.isna(s):
+#         return []
+#     return [x.strip() for x in str(s).split(",") if x.strip()]
+
+
+# def row_has_prof(row_prof: str, selected_set: set) -> bool:
+#     profs = set(split_profes(row_prof))
+#     if not profs:
+#         return False
+#     return len(profs.intersection(selected_set)) > 0
+
+
+# def escape_texto(x):
+#     if x is None or pd.isna(x):
+#         return ""
+#     return html.escape(str(x))
+
+
+# # def semana_actual_desde_df(df):
+# #     if df.empty or "fecha" not in df.columns or "semana" not in df.columns:
+# #         return 1
+
+# #     hoy = pd.Timestamp.now(tz=TIMEZONE).tz_localize(None).normalize()
+# #     df2 = df.copy()
+# #     df2["fecha"] = pd.to_datetime(df2["fecha"], errors="coerce")
+# #     df2 = df2.dropna(subset=["fecha"]).copy()
+
+# #     if df2.empty:
+# #         return 1
+
+# #     sem_hoy = df2.loc[df2["fecha"].dt.normalize() <= hoy, "semana"]
+# #     if not sem_hoy.empty:
+# #         return int(sem_hoy.max())
+
+# #     return int(df2["semana"].min())
+
+# def semana_actual_desde_df(df):
+#     if df.empty or "fecha" not in df.columns or "semana" not in df.columns:
+#         return 1
+
+#     df2 = df.copy()
+#     df2["fecha"] = pd.to_datetime(df2["fecha"], errors="coerce")
+#     df2["semana"] = pd.to_numeric(df2["semana"], errors="coerce")
+#     df2 = df2.dropna(subset=["fecha", "semana"]).copy()
+
+#     if df2.empty:
+#         return 1
+
+#     hoy = pd.Timestamp.now(tz=TIMEZONE).tz_localize(None).normalize()
+
+#     resumen = (
+#         df2.groupby("semana", as_index=False)
+#         .agg(
+#             fecha_min=("fecha", "min"),
+#             fecha_max=("fecha", "max")
+#         )
+#         .sort_values("semana")
+#         .reset_index(drop=True)
+#     )
+
+#     # Si hoy cae dentro de una semana del calendario, usar esa
+#     mask = (resumen["fecha_min"].dt.normalize() <= hoy) & (resumen["fecha_max"].dt.normalize() >= hoy)
+#     if mask.any():
+#         return int(resumen.loc[mask, "semana"].iloc[0])
+
+#     # Si hoy es antes del curso
+#     if hoy < resumen["fecha_min"].min().normalize():
+#         return int(resumen["semana"].min())
+
+#     # Si hoy es después del curso
+#     if hoy > resumen["fecha_max"].max().normalize():
+#         return int(resumen["semana"].max())
+
+#     # Si quedó entre semanas por alguna rareza, tomar la primera semana futura
+#     futuras = resumen[resumen["fecha_min"].dt.normalize() > hoy]
+#     if not futuras.empty:
+#         return int(futuras["semana"].iloc[0])
+
+#     return int(resumen["semana"].max())
+
+
+# def inicializar_widgets_filtros(curso_actual, all_secciones, all_prof_codes):
+#     for s in all_secciones:
+#         key = f"sec_{curso_actual}_{s}"
+#         if key not in st.session_state:
+#             st.session_state[key] = st.session_state.sel_secciones.get(s, True)
+
+#     for p in all_prof_codes:
+#         key = f"prof_{curso_actual}_{p}"
+#         if key not in st.session_state:
+#             st.session_state[key] = st.session_state.sel_profes.get(p, True)
+
+
+# def sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes):
+#     st.session_state.sel_secciones = {
+#         s: bool(st.session_state.get(f"sec_{curso_actual}_{s}", True))
+#         for s in all_secciones
+#     }
+#     st.session_state.sel_profes = {
+#         p: bool(st.session_state.get(f"prof_{curso_actual}_{p}", True))
+#         for p in all_prof_codes
+#     }
+
+
+# def color_paso(paso: str) -> str:
+#     paso = str(paso).strip()
+#     if paso in ["pedir_preguntas", "construir_control", "pauta_prueba", "construir_examen", "pauta_examen"]:
+#         return "#dbeafe"
+#     if paso in ["revisar_prueba", "revision_guia", "revisar_pruebas"]:
+#         return "#fef3c7"
+#     if paso in ["escanear", "subir_pauta_controles"]:
+#         return "#ede9fe"
+#     if paso in ["corregir_y_notas", "revisar_tp", "corregir_examen", "revision_controles_y_nota"]:
+#         return "#dcfce7"
+#     if paso in ["pauta_seminario", "presentacion_grupal"]:
+#         return "#ffe4e6"
+#     return "#f3f4f6"
+
+
+# # ============================================================
+# # CARGA DE DATOS
+# # ============================================================
+# def cargar_datos_calendario_excel(excel_calendario_path):
+#     if not os.path.exists(excel_calendario_path):
+#         st.error(f"⚠️ No se encontró el archivo: {excel_calendario_path}")
+#         st.warning("Genera primero el Excel correspondiente al curso seleccionado.")
+#         st.stop()
+
+#     df = pd.read_excel(excel_calendario_path, sheet_name="Calendario")
+#     df["fecha"] = pd.to_datetime(df["fecha"], errors="coerce")
+
+#     cols_str = [
+#         "horario", "sección", "actividad", "tema",
+#         "evaluación", "profesores", "observaciones"
+#     ]
+#     for c in cols_str:
+#         if c in df.columns:
+#             df[c] = df[c].fillna("").astype(str)
+
+#     return df
+
+
+# def cargar_sheet_excel(path, sheet):
+#     if not os.path.exists(path):
+#         return pd.DataFrame()
+#     try:
+#         return pd.read_excel(path, sheet_name=sheet)
+#     except Exception:
+#         return pd.DataFrame()
+
+
+# def cargar_datos_misiones_base(excel_misiones_path):
+#     df = cargar_sheet_excel(excel_misiones_path, "Misiones")
+#     if df.empty:
+#         return df
+
+#     for c in ["fecha_limite", "fecha_evento", "fecha"]:
+#         if c in df.columns:
+#             df[c] = pd.to_datetime(df[c], errors="coerce")
+
+#     for c in ["evento", "paso", "sección", "responsables", "detalle", "estado"]:
+#         if c in df.columns:
+#             df[c] = df[c].fillna("").astype(str)
+
+#     return df
+
+
+
+# # def tabla_misiones_por_profesor_y_mes(df_misiones: pd.DataFrame):
+# #     """
+# #     UI: tabs por profesor (p1..pN) y selector de mes.
+# #     Muestra una tabla con misiones (fecha_limite, paso, evento, sección, detalle).
+# #     """
+# #     if df_misiones.empty:
+# #         st.info("No hay misiones para mostrar.")
+# #         return
+
+# #     df2 = df_misiones.copy()
+
+# #     # Asegurar datetime
+# #     df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+# #     df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+# #     # Columnas seguras
+# #     for c in ["evento", "paso", "sección", "responsables", "detalle", "estado"]:
+# #         if c in df2.columns:
+# #             df2[c] = df2[c].fillna("").astype(str)
+# #         else:
+# #             df2[c] = ""
+
+# #     # Obtener lista de profes desde responsables
+# #     profs = set()
+# #     for s in df2["responsables"].dropna().unique():
+# #         for p in split_profes(s):
+# #             profs.add(p)
+
+# #     # Si quieres SOLO p1..p6:
+# #     profs = [p for p in sorted(profs) if p.startswith("p")]
+# #     if not profs:
+# #         st.info("No hay responsables tipo p1, p2, ... en el archivo de misiones.")
+# #         return
+
+# #     st.markdown("### 👤 Misiones por persona y por mes")
+# #     tabs = st.tabs(profs)
+
+# #     for i, prof in enumerate(profs):
+# #         with tabs[i]:
+# #             # Filtrar por prof
+# #             dfp = df2[df2["responsables"].apply(lambda x: prof in split_profes(x))].copy()
+# #             if dfp.empty:
+# #                 st.info(f"{prof}: no tiene misiones asignadas.")
+# #                 continue
+
+# #             # Meses disponibles para ese prof
+# #             dfp["mes"] = dfp["fecha_limite"].dt.to_period("M").astype(str)
+# #             meses = sorted(dfp["mes"].unique())
+
+# #             mes_sel = st.selectbox(
+# #                 "Selecciona mes:",
+# #                 options=meses,
+# #                 index=len(meses) - 1,
+# #                 key=f"mes_sel_{prof}"
+# #             )
+
+# #             dfm = dfp[dfp["mes"] == mes_sel].copy()
+# #             dfm = dfm.sort_values(["fecha_limite", "evento", "paso", "sección"])
+
+# #             # Tabla bonita
+# #             df_show = dfm[["fecha_limite", "evento", "paso", "sección", "detalle", "estado"]].copy()
+
+# #             # Formato fecha
+# #             df_show["fecha_limite"] = df_show["fecha_limite"].dt.strftime("%d/%m/%Y")
+
+# #             # Labels más humanos si tienes PASO_LABELS
+# #             if "PASO_LABELS" in globals():
+# #                 df_show["paso"] = df_show["paso"].apply(lambda x: PASO_LABELS.get(str(x).strip(), str(x).strip()))
+
+# #             st.dataframe(
+# #                 df_show,
+# #                 use_container_width=True,
+# #                 hide_index=True,
+# #                 column_config={
+# #                     "fecha_limite": st.column_config.TextColumn("Vence"),
+# #                     "evento": st.column_config.TextColumn("Evaluación"),
+# #                     "paso": st.column_config.TextColumn("Misión"),
+# #                     "sección": st.column_config.TextColumn("Sección"),
+# #                     "detalle": st.column_config.TextColumn("Detalle"),
+# #                     "estado": st.column_config.TextColumn("Estado"),
+# #                 }
+# #             )
+
+# # def tabla_misiones_por_profesor_y_mes(df_misiones: pd.DataFrame):
+# #     """
+# #     UI: tabs por profesor y selector de mes.
+# #     Muestra una tabla con misiones (fecha_limite, paso, evento, sección, detalle).
+# #     """
+# #     if df_misiones.empty:
+# #         st.info("No hay misiones para mostrar.")
+# #         return
+
+# #     df2 = df_misiones.copy()
+
+# #     # Asegurar datetime
+# #     df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+# #     df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+# #     # Columnas seguras
+# #     for c in ["evento", "paso", "sección", "responsables", "detalle", "estado"]:
+# #         if c in df2.columns:
+# #             df2[c] = df2[c].fillna("").astype(str)
+# #         else:
+# #             df2[c] = ""
+
+# #     # Obtener lista de profes desde responsables
+# #     profs = set()
+# #     for s in df2["responsables"].dropna().unique():
+# #         for p in split_profes(s):
+# #             profs.add(p.strip())
+
+# #     # ✅ Ya no filtramos por p1, p2, ...
+# #     profs = sorted([p for p in profs if p])
+
+# #     if not profs:
+# #         st.info("No hay responsables en el archivo de misiones.")
+# #         return
+
+# #     st.markdown("### 👤 Misiones por persona y por mes")
+# #     tabs = st.tabs(profs)
+
+# #     for i, prof in enumerate(profs):
+# #         with tabs[i]:
+# #             # Filtrar por profesor
+# #             dfp = df2[df2["responsables"].apply(lambda x: prof in split_profes(x))].copy()
+
+# #             if dfp.empty:
+# #                 st.info(f"{prof}: no tiene misiones asignadas.")
+# #                 continue
+
+# #             # Meses disponibles para ese prof
+# #             dfp["mes"] = dfp["fecha_limite"].dt.to_period("M").astype(str)
+# #             meses = sorted(dfp["mes"].unique())
+
+# #             mes_sel = st.selectbox(
+# #                 "Selecciona mes:",
+# #                 options=meses,
+# #                 index=len(meses) - 1,
+# #                 key=f"mes_sel_{prof}"
+# #             )
+
+# #             dfm = dfp[dfp["mes"] == mes_sel].copy()
+# #             dfm = dfm.sort_values(["fecha_limite", "evento", "paso", "sección"])
+
+# #             # Tabla bonita
+# #             df_show = dfm[["fecha_limite", "evento", "paso", "sección", "detalle", "estado"]].copy()
+
+# #             # Formato fecha
+# #             df_show["fecha_limite"] = df_show["fecha_limite"].dt.strftime("%d/%m/%Y")
+
+# #             # Labels más humanos
+# #             df_show["paso"] = df_show["paso"].apply(
+# #                 lambda x: PASO_LABELS.get(str(x).strip(), str(x).strip())
+# #             )
+
+# #             st.dataframe(
+# #                 df_show,
+# #                 use_container_width=True,
+# #                 hide_index=True,
+# #                 column_config={
+# #                     "fecha_limite": st.column_config.TextColumn("Vence"),
+# #                     "evento": st.column_config.TextColumn("Evaluación"),
+# #                     "paso": st.column_config.TextColumn("Misión"),
+# #                     "sección": st.column_config.TextColumn("Sección"),
+# #                     "detalle": st.column_config.TextColumn("Detalle"),
+# #                     "estado": st.column_config.TextColumn("Estado"),
+# #                 }
+# #             )
+
+# def es_mision_laboratorio(row) -> bool:
+#     tipo_evento = str(row.get("tipo_evento", "")).strip().lower()
+#     evento = str(row.get("evento", "")).strip().lower()
+#     paso = str(row.get("paso", "")).strip().lower()
+#     detalle = str(row.get("detalle", "")).strip().lower()
+
+#     return (
+#         "laboratorio" in tipo_evento
+#         or "informe laboratorio" in tipo_evento
+#         or "laboratorio" in evento
+#         or "informe laboratorio" in evento
+#         or "corregir_informe_laboratorio" == paso
+#         or "laboratorio" in detalle
+#     )
+
+
+# def contar_slots_seminario_primera_semana(df_cal: pd.DataFrame) -> pd.DataFrame:
+#     """
+#     Cuenta cuántas veces aparece cada profesor en seminario durante la semana 1.
+#     Si un profesor aparece repetido en la lista de una sección, cuenta repetido.
+#     """
+#     if df_cal.empty:
+#         return pd.DataFrame(columns=["profesor", "slots_seminario_semana1"])
+
+#     df2 = df_cal.copy()
+#     df2["semana"] = pd.to_numeric(df2["semana"], errors="coerce")
+
+#     df2 = df2[
+#         (df2["semana"] == 1) &
+#         (df2["actividad"].astype(str).str.strip() == "Seminario")
+#     ].copy()
+
+#     filas = []
+#     for _, r in df2.iterrows():
+#         for p in split_profes(r.get("profesores", "")):
+#             filas.append({"profesor": p})
+
+#     if not filas:
+#         return pd.DataFrame(columns=["profesor", "slots_seminario_semana1"])
+
+#     out = pd.DataFrame(filas).groupby("profesor").size().reset_index(name="slots_seminario_semana1")
+#     return out
+
+
+# # def construir_tabla_carga_seminario(df_cal: pd.DataFrame, df_misiones: pd.DataFrame, excluir_pec_del_numerador=False) -> pd.DataFrame:
+# #     """
+# #     Numerador:
+# #       - todas las misiones NO laboratorio
+# #       - opcional: excluye misiones de coordinación PEC/PCC del numerador,
+# #         dejando solo la carga "seminario-participante"
+# #     Denominador:
+# #       - slots de seminario en semana 1 * 17
+# #     """
+
+# #     # -------------------------
+# #     # Denominador
+# #     # -------------------------
+# #     df_slots = contar_slots_seminario_primera_semana(df_cal)
+# #     if df_slots.empty:
+# #         return pd.DataFrame(columns=[
+# #             "profesor", "misiones_no_lab", "slots_seminario_semana1",
+# #             "seminarios_equivalentes", "ratio"
+# #         ])
+
+# #     df_slots["seminarios_equivalentes"] = df_slots["slots_seminario_semana1"] * 17
+
+# #     # -------------------------
+# #     # Numerador
+# #     # -------------------------
+# #     filas_misiones = []
+
+# #     if not df_misiones.empty:
+# #         dfm = df_misiones.copy()
+
+# #         # asegurar columnas
+# #         for c in ["tipo_evento", "evento", "paso", "responsables", "detalle"]:
+# #             if c not in dfm.columns:
+# #                 dfm[c] = ""
+# #             dfm[c] = dfm[c].fillna("").astype(str)
+
+# #         # filtrar NO laboratorio
+# #         dfm = dfm[~dfm.apply(es_mision_laboratorio, axis=1)].copy()
+
+# #         # opcional: excluir misiones "PEC puras"
+# #         pasos_pec = {
+# #             "construir_control",
+# #             "pauta_prueba",
+# #             "construir_examen",
+# #             "pauta_examen",
+# #         }
+
+# #         if excluir_pec_del_numerador:
+# #             def es_mision_pec_pura(r):
+# #                 paso = str(r.get("paso", "")).strip()
+# #                 responsables = split_profes(r.get("responsables", ""))
+# #                 return paso in pasos_pec and len(responsables) == 1
+
+# #             dfm = dfm[~dfm.apply(es_mision_pec_pura, axis=1)].copy()
+
+# #         for _, r in dfm.iterrows():
+# #             for p in split_profes(r.get("responsables", "")):
+# #                 filas_misiones.append({"profesor": p})
+
+# #     if filas_misiones:
+# #         df_num = pd.DataFrame(filas_misiones).groupby("profesor").size().reset_index(name="misiones_no_lab")
+# #     else:
+# #         df_num = pd.DataFrame(columns=["profesor", "misiones_no_lab"])
+
+# #     # -------------------------
+# #     # Merge final
+# #     # -------------------------
+# #     df_out = df_slots.merge(df_num, on="profesor", how="left")
+# #     df_out["misiones_no_lab"] = df_out["misiones_no_lab"].fillna(0).astype(int)
+
+# #     df_out["ratio"] = df_out.apply(
+# #         lambda r: (r["misiones_no_lab"] / r["seminarios_equivalentes"]) if r["seminarios_equivalentes"] > 0 else 0,
+# #         axis=1
+# #     )
+
+# #     df_out = df_out.sort_values(["ratio", "misiones_no_lab", "profesor"], ascending=[False, False, True]).reset_index(drop=True)
+# #     return df_out
+
+
+# # def construir_tabla_carga_seminario(df_cal, df_misiones, pesos=None, excluir_laboratorio=True):
+# #     """
+# #     Retorna dataframe con:
+# #     profesor | cupos_semana_1 | clases_estimadas | misiones_ponderadas | ratio
+# #     """
+# #     if pesos is None:
+# #         pesos = {}
+
+# #     # -------------------------
+# #     # DENOMINADOR
+# #     # cupos de seminario en semana 1 * 17
+# #     # (manteniendo duplicados)
+# #     # -------------------------
+# #     df_sem1 = df_cal.copy()
+# #     df_sem1["semana"] = pd.to_numeric(df_sem1["semana"], errors="coerce")
+
+# #     df_sem1 = df_sem1[
+# #         (df_sem1["actividad"].astype(str).str.strip() == "Seminario") &
+# #         (df_sem1["semana"] == 1)
+# #     ].copy()
+
+# #     conteo_cupos = {}
+
+# #     for _, r in df_sem1.iterrows():
+# #         for p in split_profes(r.get("profesores", "")):   # OJO: NO usar set()
+# #             conteo_cupos[p] = conteo_cupos.get(p, 0) + 1
+
+# #     # 17 semanas efectivas
+# #     clases_estimadas = {p: n * 17 for p, n in conteo_cupos.items()}
+
+# #     # -------------------------
+# #     # NUMERADOR
+# #     # misiones ponderadas, excluyendo laboratorio si corresponde
+# #     # -------------------------
+# #     df_mis = df_misiones.copy()
+
+# #     # if excluir_laboratorio and "tipo_evento" in df_mis.columns:
+# #     #     df_mis = df_mis[df_mis["tipo_evento"].astype(str).str.strip() != "Laboratorio"].copy()
+# #     if excluir_laboratorio:
+# #         df_mis = df_mis[~df_mis.apply(es_mision_laboratorio, axis=1)].copy()
+
+
+# #     carga = {}
+
+# #     for _, r in df_mis.iterrows():
+# #         paso = str(r.get("paso", "")).strip()
+# #         peso = float(pesos.get(paso, 1.0))
+
+# #         for p in split_profes(r.get("responsables", "")):
+# #             carga[p] = carga.get(p, 0.0) + peso
+
+# #     profes = sorted(set(list(conteo_cupos.keys()) + list(carga.keys())))
+
+# #     filas = []
+# #     for p in profes:
+# #         cupos = conteo_cupos.get(p, 0)
+# #         clases = clases_estimadas.get(p, 0)
+# #         mis = carga.get(p, 0.0)
+# #         ratio = (mis / clases) if clases > 0 else 0.0
+
+# #         filas.append({
+# #             "profesor": p,
+# #             "cupos_semana_1": cupos,
+# #             "clases_estimadas": clases,
+# #             "misiones_ponderadas": mis,
+# #             "ratio": ratio,
+# #         })
+
+# #     return pd.DataFrame(filas).sort_values("ratio", ascending=False).reset_index(drop=True)
+
+
+# def construir_tabla_carga_seminario(df_cal, df_misiones, pesos=None, incluir_pec=True):
+#     """
+#     profesor | cupos_semana_1 | clases_estimadas | misiones_ponderadas | ratio
+
+#     - El denominador usa seminarios de la semana 1, manteniendo duplicados.
+#     - El numerador cuenta solo misiones NO laboratorio.
+#     - incluir_pec=True permite que TY cuente en TM y Medicina si también está en seminario.
+#     """
+#     if pesos is None:
+#         pesos = {}
+
+#     # --------------------------------------------------------
+#     # DENOMINADOR: cupos de seminario semana 1 * 17
+#     # --------------------------------------------------------
+#     df_sem1 = df_cal.copy()
+#     df_sem1["semana"] = pd.to_numeric(df_sem1["semana"], errors="coerce")
+
+#     df_sem1 = df_sem1[
+#         (df_sem1["actividad"].astype(str).str.strip() == "Seminario") &
+#         (df_sem1["semana"] == 1)
+#     ].copy()
+
+#     conteo_cupos = {}
+
+#     for _, r in df_sem1.iterrows():
+#         for p in split_profes(r.get("profesores", "")):   # mantiene duplicados
+#             conteo_cupos[p] = conteo_cupos.get(p, 0) + 1
+
+#     clases_estimadas = {p: n * 17 for p, n in conteo_cupos.items()}
+
+#     # Profesores de seminario válidos
+#     profes_seminario = set(conteo_cupos.keys())
+
+#     # --------------------------------------------------------
+#     # NUMERADOR
+#     # --------------------------------------------------------
+#     df_mis = df_misiones.copy()
+
+#     for c in ["tipo_evento", "evento", "paso", "responsables", "detalle"]:
+#         if c not in df_mis.columns:
+#             df_mis[c] = ""
+#         df_mis[c] = df_mis[c].fillna("").astype(str)
+
+#     # excluir laboratorio
+#     df_mis = df_mis[~df_mis.apply(es_mision_laboratorio, axis=1)].copy()
+
+#     carga = {}
+
+#     for _, r in df_mis.iterrows():
+#         paso = str(r.get("paso", "")).strip()
+#         peso = float(pesos.get(paso, 1.0))
+
+#         for p in split_profes(r.get("responsables", "")):
+#             # regla importante:
+#             # si no está en seminario, no entra al gráfico de carga de seminario
+#             if p not in profes_seminario:
+#                 continue
+
+#             carga[p] = carga.get(p, 0.0) + peso
+
+#     profes = sorted(profes_seminario)
+
+#     filas = []
+#     for p in profes:
+#         cupos = conteo_cupos.get(p, 0)
+#         clases = clases_estimadas.get(p, 0)
+#         mis = carga.get(p, 0.0)
+#         ratio = (mis / clases) if clases > 0 else 0.0
+
+#         filas.append({
+#             "profesor": p,
+#             "cupos_semana_1": cupos,
+#             "clases_estimadas": clases,
+#             "misiones_ponderadas": mis,
+#             "ratio": ratio,
+#         })
+
+#     return pd.DataFrame(filas).sort_values(
+#         ["ratio", "misiones_ponderadas", "profesor"],
+#         ascending=[False, False, True]
+#     ).reset_index(drop=True)
+
+
+
+# def tabla_misiones_por_profesor_y_mes(df_misiones: pd.DataFrame):
+#     """
+#     Tabs por profesor + navegación por mes con flechas.
+#     Muestra las misiones del mes seleccionado.
+#     """
+#     if df_misiones.empty:
+#         st.info("No hay misiones para mostrar.")
+#         return
+
+#     df2 = df_misiones.copy()
+#     df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+#     df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+#     for c in ["evento", "paso", "sección", "responsables", "detalle", "estado"]:
+#         if c in df2.columns:
+#             df2[c] = df2[c].fillna("").astype(str)
+#         else:
+#             df2[c] = ""
+
+#     profs = set()
+#     for s in df2["responsables"].dropna().unique():
+#         for p in split_profes(s):
+#             profs.add(p.strip())
+
+#     profs = sorted([p for p in profs if p])
+
+#     if not profs:
+#         st.info("No hay responsables en el archivo de misiones.")
+#         return
+
+#     st.markdown("### 👤 Misiones por persona")
+#     tabs = st.tabs(profs)
+
+#     for i, prof in enumerate(profs):
+#         with tabs[i]:
+#             dfp = df2[df2["responsables"].apply(lambda x: prof in split_profes(x))].copy()
+
+#             if dfp.empty:
+#                 st.info(f"{prof}: no tiene misiones asignadas.")
+#                 continue
+
+#             dfp = dfp.sort_values(["fecha_limite", "evento", "paso", "sección"]).copy()
+
+#             primer_mes = dfp["fecha_limite"].min().to_period("M").to_timestamp()
+#             ultimo_mes = dfp["fecha_limite"].max().to_period("M").to_timestamp()
+
+#             clave_offset = f"offset_mes_{prof}"
+#             if clave_offset not in st.session_state:
+#                 st.session_state[clave_offset] = 0
+
+#             mes_actual = pd.Timestamp.today().to_period("M").to_timestamp()
+#             mes_base = max(primer_mes, mes_actual)
+#             mes_sel = (mes_base + pd.DateOffset(months=st.session_state[clave_offset])).to_period("M").to_timestamp()
+
+#             if mes_sel < primer_mes:
+#                 mes_sel = primer_mes
+#                 st.session_state[clave_offset] = (primer_mes.to_period("M") - mes_base.to_period("M")).n
+
+#             if mes_sel > ultimo_mes:
+#                 mes_sel = ultimo_mes
+#                 st.session_state[clave_offset] = (ultimo_mes.to_period("M") - mes_base.to_period("M")).n
+
+#             c1, c2, c3 = st.columns([1, 3, 1])
+
+#             with c1:
+#                 if st.button("⬅️", key=f"prev_mes_{prof}", use_container_width=True):
+#                     st.session_state[clave_offset] -= 1
+#                     st.rerun()
+
+#             with c2:
+#                 st.markdown(
+#                     f"<div style='text-align:center; font-weight:700; font-size:18px; margin-top:6px;'>"
+#                     f"{mes_sel.strftime('%B %Y').capitalize()}</div>",
+#                     unsafe_allow_html=True
+#                 )
+
+#             with c3:
+#                 if st.button("➡️", key=f"next_mes_{prof}", use_container_width=True):
+#                     st.session_state[clave_offset] += 1
+#                     st.rerun()
+
+#             inicio_mes = mes_sel
+#             fin_mes = (mes_sel + pd.DateOffset(months=1))
+
+#             dfm = dfp[
+#                 (dfp["fecha_limite"] >= inicio_mes) &
+#                 (dfp["fecha_limite"] < fin_mes)
+#             ].copy()
+
+#             if dfm.empty:
+#                 st.info("No hay misiones para este mes.")
+#                 continue
+
+#             st.markdown("---")
+
+#             for _, r in dfm.iterrows():
+#                 fecha_limite = r["fecha_limite"].strftime("%d/%m/%Y") if pd.notna(r["fecha_limite"]) else "—"
+#                 evento = str(r.get("evento", "")).strip()
+#                 paso = PASO_LABELS.get(str(r.get("paso", "")).strip(), str(r.get("paso", "")).strip())
+#                 seccion = str(r.get("sección", "")).strip()
+#                 detalle = str(r.get("detalle", "")).strip()
+#                 estado = str(r.get("estado", "")).strip()
+
+#                 color_estado = "#dcfce7" if estado.lower() in ["completado", "completada", "listo", "ok", "done"] else "#fee2e2"
+
+#                 st.markdown(f"""
+#                 <div style="
+#                     border:1px solid #d1d5db;
+#                     border-left:6px solid #2563eb;
+#                     border-radius:10px;
+#                     padding:12px 14px;
+#                     margin-bottom:10px;
+#                     background:white;
+#                 ">
+#                     <div style="font-weight:800; font-size:15px;">{paso}</div>
+#                     <div style="margin-top:4px; color:#374151;"><b>Vence:</b> {fecha_limite}</div>
+#                     <div style="color:#374151;"><b>Evaluación:</b> {evento or '—'}</div>
+#                     <div style="color:#374151;"><b>Sección:</b> {seccion or '—'}</div>
+#                     <div style="color:#374151;"><b>Detalle:</b> {detalle or '—'}</div>
+#                     <div style="
+#                         display:inline-block;
+#                         margin-top:8px;
+#                         padding:4px 10px;
+#                         border-radius:999px;
+#                         background:{color_estado};
+#                         font-weight:700;
+#                         font-size:12px;
+#                     ">
+#                         {estado or 'Pendiente'}
+#                     </div>
+#                 </div>
+#                 """, unsafe_allow_html=True)
+
+# # ============================================================
+# # TAB 2: COLORES WEB PARA CALENDARIO
+# # ============================================================
+# def color_fila_calendario(row):
+#     actividad = str(row.get("actividad", "")).strip()
+#     evaluacion = str(row.get("evaluación", "")).strip()
+
+#     mapa = {
+#         "Clase teórica": "#dbeafe",
+#         "Seminario": "#dcfce7",
+#         "Laboratorio": "#ffedd5",
+#         "Trabajo autónomo": "#ede9fe",
+#         "Sin clases (Feriado)": "#fee2e2",
+#         "Sin clases (Pausa académica)": "#fecaca",
+#         "Examen": "#e5e7eb",
+#     }
+
+#     color = mapa.get(actividad, "#ffffff")
+#     estilos = [f"background-color: {color};" for _ in row.index]
+
+#     if evaluacion:
+#         for i, col in enumerate(row.index):
+#             if col == "evaluación":
+#                 estilos[i] = "background-color: #fde68a; font-weight: bold;"
+#             elif col == "observaciones":
+#                 estilos[i] = estilos[i] + " font-style: italic;"
+
+#     return estilos
+
+
+# def estilo_tabla_calendario(df_tabla: pd.DataFrame):
+#     df2 = df_tabla.copy()
+
+#     if "fecha" in df2.columns:
+#         df2["fecha"] = pd.to_datetime(df2["fecha"], errors="coerce")
+
+#     styler = (
+#         df2.style
+#         .apply(color_fila_calendario, axis=1)
+#         .format({"fecha": lambda x: x.strftime("%d/%m/%Y") if pd.notna(x) else ""})
+#         .set_properties(**{
+#             "text-align": "left",
+#             "font-size": "13px",
+#             "border-color": "#d1d5db"
+#         })
+#         .set_properties(subset=[c for c in ["fecha", "semana", "horario"] if c in df2.columns], **{
+#             "text-align": "center"
+#         })
+#         .set_properties(subset=[c for c in ["evaluación"] if c in df2.columns], **{
+#             "text-align": "center"
+#         })
+#     )
+
+#     return styler
+
+
+# def tabla_resumen_colores():
+#     html_leyenda = """
+#     <div style="display:flex; flex-wrap:wrap; gap:10px; margin:8px 0 14px 0; font-size:13px;">
+#         <span style="background:#dbeafe; padding:6px 10px; border-radius:8px;">Clase teórica</span>
+#         <span style="background:#dcfce7; padding:6px 10px; border-radius:8px;">Seminario</span>
+#         <span style="background:#ffedd5; padding:6px 10px; border-radius:8px;">Laboratorio</span>
+#         <span style="background:#ede9fe; padding:6px 10px; border-radius:8px;">Trabajo autónomo</span>
+#         <span style="background:#fee2e2; padding:6px 10px; border-radius:8px;">Feriado</span>
+#         <span style="background:#fecaca; padding:6px 10px; border-radius:8px;">Pausa académica</span>
+#         <span style="background:#e5e7eb; padding:6px 10px; border-radius:8px;">Examen</span>
+#         <span style="background:#fde68a; padding:6px 10px; border-radius:8px; font-weight:700;">Evaluación</span>
+#     </div>
+#     """
+#     st.markdown(html_leyenda, unsafe_allow_html=True)
+
+
+# # ============================================================
+# # RENDER HTML MISIONES
+# # ============================================================
+# def render_badges_profes(responsables: str) -> str:
+#     lista = split_profes(responsables)
+#     if not lista:
+#         return "<span style='color:#999;'>—</span>"
+
+#     badges = []
+#     for p in lista:
+#         # color = PROF_PALETTE.get(p, "#6b7280")
+#         color = color_profesor(p)
+#         badges.append(
+#             f"<span style='display:inline-block; margin:2px 4px 2px 0; "
+#             f"padding:4px 9px; border-radius:999px; background:{color}; color:white; "
+#             f"font-size:12px; font-weight:600;'>{escape_texto(p)}</span>"
+#         )
+#     return "".join(badges)
+
+
+# def render_matriz_misiones_html(df_mis: pd.DataFrame) -> str:
+#     if df_mis.empty:
+#         return "<p>No hay misiones disponibles.</p>"
+
+#     df2 = df_mis.copy()
+
+#     for c in ["evento", "paso", "sección", "responsables", "detalle"]:
+#         if c in df2.columns:
+#             df2[c] = df2[c].fillna("").astype(str)
+
+#     df2["_orden_paso"] = df2["paso"].apply(
+#         lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999
+#     )
+
+#     secciones_fijas = ["Sección 1", "Sección 2", "Sección 3", "Sección 4"]
+#     secciones_presentes = [s for s in secciones_fijas if s in df2["sección"].unique()]
+#     if not secciones_presentes:
+#         secciones_presentes = sorted(df2["sección"].unique())
+
+#     df_pivot = df2.pivot_table(
+#         index=["evento", "paso", "detalle", "_orden_paso"],
+#         columns="sección",
+#         values="responsables",
+#         aggfunc=lambda x: " | ".join(sorted(set([str(v).strip() for v in x if str(v).strip()]))),
+#         fill_value=""
+#     ).reset_index()
+
+#     df_pivot = df_pivot.sort_values(["evento", "_orden_paso", "detalle"]).reset_index(drop=True)
+
+#     rows_html = ""
+#     ultimo_evento = None
+
+#     for _, row in df_pivot.iterrows():
+#         evento = str(row.get("evento", "")).strip()
+#         paso = str(row.get("paso", "")).strip()
+#         detalle = str(row.get("detalle", "")).strip()
+
+#         paso_label = PASO_LABELS.get(paso, paso if paso else "—")
+#         color_fila = color_paso(paso)
+
+#         if evento == ultimo_evento:
+#             evento_html = "<span style='color:#bbb;'>↳</span>"
+#         else:
+#             evento_html = f"<div style='font-weight:800;'>{escape_texto(evento)}</div>"
+#             ultimo_evento = evento
+
+#         detalle_html = f"""
+#         <div style="font-weight:700; color:#111827;">{escape_texto(paso_label)}</div>
+#         <div style="font-size:12px; color:#6b7280; margin-top:3px;">{escape_texto(detalle) if detalle else "—"}</div>
+#         """
+
+#         celdas_secciones = ""
+#         for sec in secciones_presentes:
+#             val = str(row.get(sec, "")).strip()
+#             if val:
+#                 contenido = render_badges_profes(val)
+#             else:
+#                 contenido = "<span style='color:#bbb;'>—</span>"
+
+#             celdas_secciones += f"""
+#             <td style="padding:10px; border:1px solid #d1d5db; vertical-align:top; background:white;">
+#                 {contenido}
+#             </td>
+#             """
+
+#         rows_html += f"""
+#         <tr>
+#             <td style="padding:10px; border:1px solid #d1d5db; vertical-align:top; background:#f9fafb; min-width:180px;">
+#                 {evento_html}
+#             </td>
+#             <td style="padding:10px; border:1px solid #d1d5db; vertical-align:top; background:{color_fila}; min-width:320px;">
+#                 {detalle_html}
+#             </td>
+#             {celdas_secciones}
+#         </tr>
+#         """
+
+#     headers_sec = "".join([
+#         f'<th style="padding:10px; border:1px solid #9ca3af; background:#9ca3af; color:black; text-align:center; font-weight:800;">{escape_texto(sec)}</th>'
+#         for sec in secciones_presentes
+#     ])
+
+#     return f"""
+#     <style>
+#         .tabla-matriz-wrap {{ width:100%; overflow-x:auto; }}
+#         .tabla-matriz {{
+#             width:100%;
+#             min-width:1400px;
+#             border-collapse:collapse;
+#             font-family:Arial, sans-serif;
+#             font-size:14px;
+#         }}
+#         .tabla-matriz tr:hover td {{ filter:brightness(0.99); }}
+#     </style>
+#     <div class="tabla-matriz-wrap">
+#         <table class="tabla-matriz">
+#             <thead>
+#                 <tr>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#9ca3af; color:black; text-align:center; font-weight:800;">Evaluación</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#9ca3af; color:black; text-align:center; font-weight:800;">Misión / Detalle</th>
+#                     {headers_sec}
+#                 </tr>
+#             </thead>
+#             <tbody>
+#                 {rows_html}
+#             </tbody>
+#         </table>
+#     </div>
+#     """
+
+
+# def render_plan_html(df_plan: pd.DataFrame) -> str:
+#     if df_plan.empty:
+#         return "<p>No hay plan disponible.</p>"
+
+#     df2 = df_plan.copy()
+
+#     if "fecha_limite" in df2.columns:
+#         df2["fecha_limite"] = pd.to_datetime(df2["fecha_limite"], errors="coerce")
+#     if "fecha_evento" in df2.columns:
+#         df2["fecha_evento"] = pd.to_datetime(df2["fecha_evento"], errors="coerce")
+
+#     if "paso" in df2.columns:
+#         df2["_orden"] = df2["paso"].apply(lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999)
+#     else:
+#         df2["_orden"] = 999
+
+#     ordenar_cols = [c for c in ["evento", "_orden", "sección", "fecha_limite"] if c in df2.columns]
+#     if ordenar_cols:
+#         df2 = df2.sort_values(ordenar_cols)
+
+#     rows_html = ""
+#     for _, row in df2.iterrows():
+#         evento = escape_texto(row.get("evento", ""))
+#         paso = str(row.get("paso", "")).strip()
+#         paso_label = PASO_LABELS.get(paso, paso if paso else "—")
+#         seccion = escape_texto(row.get("sección", ""))
+#         fecha_limite = row.get("fecha_limite", pd.NaT)
+#         fecha_evento = row.get("fecha_evento", pd.NaT)
+#         detalle = escape_texto(row.get("detalle", ""))
+#         responsables = str(row.get("responsables", "")).strip()
+#         estado = str(row.get("estado", "Pendiente")).strip()
+
+#         fecha_limite_str = fecha_limite.strftime("%d/%m/%Y") if pd.notna(fecha_limite) else "—"
+#         fecha_evento_str = fecha_evento.strftime("%d/%m/%Y") if pd.notna(fecha_evento) else "—"
+
+#         color_fila = color_paso(paso)
+#         color_estado = "#dcfce7" if estado.lower() in ["listo", "ok", "done", "completado", "completada"] else "#fee2e2"
+
+#         rows_html += f"""
+#         <tr>
+#             <td style="padding:10px; border:1px solid #d1d5db; background:{color_fila}; font-weight:700;">{evento}</td>
+#             <td style="padding:10px; border:1px solid #d1d5db; background:{color_fila};">{escape_texto(paso_label)}</td>
+#             <td style="padding:10px; border:1px solid #d1d5db;">{seccion}</td>
+#             <td style="padding:10px; border:1px solid #d1d5db; background:#fecaca; font-weight:700; text-align:center;">{fecha_limite_str}</td>
+#             <td style="padding:10px; border:1px solid #d1d5db; text-align:center;">{fecha_evento_str}</td>
+#             <td style="padding:10px; border:1px solid #d1d5db;">{render_badges_profes(responsables)}</td>
+#             <td style="padding:10px; border:1px solid #d1d5db;">{detalle if detalle else "—"}</td>
+#             <td style="padding:10px; border:1px solid #d1d5db; background:{color_estado}; font-weight:700; text-align:center;">{escape_texto(estado)}</td>
+#         </tr>
+#         """
+
+#     return f"""
+#     <style>
+#         .tabla-plan-wrap {{ width:100%; overflow-x:auto; }}
+#         .tabla-plan {{
+#             width:100%;
+#             min-width:1400px;
+#             border-collapse:collapse;
+#             font-family:Arial, sans-serif;
+#             font-size:14px;
+#         }}
+#         .tabla-plan tr:hover td {{ filter:brightness(0.99); }}
+#     </style>
+#     <div class="tabla-plan-wrap">
+#         <table class="tabla-plan">
+#             <thead>
+#                 <tr>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Evaluación</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Paso</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Sección</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Fecha límite</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Fecha evaluación</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Responsables</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Detalle</th>
+#                     <th style="padding:10px; border:1px solid #9ca3af; background:#374151; color:white;">Estado</th>
+#                 </tr>
+#             </thead>
+#             <tbody>
+#                 {rows_html}
+#             </tbody>
+#         </table>
+#     </div>
+#     """
+
+
+# # ============================================================
+# # CALENDARIO
+# # ============================================================
+# def df_calendario_a_fullcalendar_events(df: pd.DataFrame):
+#     events = []
+
+#     for _, r in df.iterrows():
+#         fecha = r["fecha"]
+#         horario = r.get("horario", "").strip()
+#         tema = r.get("tema", "").strip()
+#         evaluacion = r.get("evaluación", "").strip()
+#         profs = r.get("profesores", "").strip()
+#         obs = r.get("observaciones", "").strip()
+#         actividad = r.get("actividad", "").strip()
+
+#         eval_ic = EVAL_ICON.get(evaluacion, "")
+#         prefix = (eval_ic + " ") if eval_ic else ""
+
+#         all_day = False
+#         start_iso, end_iso = "", ""
+
+#         if "–" in horario or "-" in horario:
+#             try:
+#                 h_clean = horario.replace("-", "–")
+#                 a, b = h_clean.split("–")
+#                 hi = pd.to_datetime(a.strip(), format="%H:%M").time()
+#                 hf = pd.to_datetime(b.strip(), format="%H:%M").time()
+
+#                 start_dt = fecha + pd.Timedelta(hours=hi.hour, minutes=hi.minute)
+#                 end_dt = fecha + pd.Timedelta(hours=hf.hour, minutes=hf.minute)
+
+#                 start_iso = start_dt.isoformat()
+#                 end_iso = end_dt.isoformat()
+#             except Exception:
+#                 all_day = True
+#                 start_iso = fecha.date().isoformat()
+#                 end_iso = (fecha + pd.Timedelta(days=1)).date().isoformat()
+#         else:
+#             all_day = True
+#             start_iso = fecha.date().isoformat()
+#             end_iso = (fecha + pd.Timedelta(days=1)).date().isoformat()
+
+#         # title = f"{prefix}{actividad} · {tema}" if tema else f"{prefix}{actividad}"
+        
+#         title = f"{prefix}{actividad} · {tema}" if tema else f"{prefix}{actividad}"
+#         if evaluacion:
+#             title = f"{prefix}{evaluacion} · {actividad}" + (f" · {tema}" if tema else "")
+
+#         # # color = ACT_COLORS.get(actividad, "#888888")
+#         # # if "Feriado" in actividad or "Pausa" in actividad:
+#         # #     color = ACT_COLORS.get("Sin clases (Feriado)")
+#         # color = ACT_COLORS.get(actividad, "#888888")
+#         # if "Feriado" in actividad or "Pausa" in actividad:
+#         #     color = ACT_COLORS.get("Sin clases (Feriado)")
+
+#         # # 🔥 Resaltar evaluaciones (control/prueba/tp) con un color fuerte
+#         # if evaluacion:
+#         #     color = "#f59e0b"   # ámbar (muy visible)
+        
+#         seccion = r.get("sección", "").strip()
+#         actividad = r.get("actividad", "").strip()
+#         evaluacion = r.get("evaluación", "").strip()
+
+#         bg = SECTION_COLORS.get(seccion, "rgba(148,163,184,0.14)")  # fallback suave
+#         border = BORDER_BY_ACTIVIDAD.get(actividad, "#64748b")
+
+#         # Si es evaluación, puedes reforzar un poco el borde (opcional)
+#         if evaluacion:
+#             border = "#b45309"  # ámbar oscuro
+
+#         events.append({            
+#             "title": title,
+#             "start": start_iso,
+#             "end": end_iso,
+#             "allDay": all_day,
+#             "backgroundColor": bg,
+#             "borderColor": border,
+#             "textColor": "#111827",
+#             "extendedProps": {
+#                 "tipo": "clase",
+#                 "semana": r.get("semana", ""),
+#                 "día": r.get("día", ""),
+#                 "horario": horario,
+#                 "sección": r.get("sección", ""),
+#                 "actividad": actividad,
+#                 "tema": tema,
+#                 "evaluación": evaluacion,
+#                 "profesores": profs,
+#                 "observaciones": obs,
+#             }
+#         })
+
+#     return events
+
+
+# # def df_misiones_a_fullcalendar_events(df_mis: pd.DataFrame):
+# #     events = []
+
+# #     if df_mis.empty:
+# #         return events
+
+# #     for _, r in df_mis.iterrows():
+# #         fecha = r.get("fecha_limite", pd.NaT)
+# #         if pd.isna(fecha):
+# #             continue
+
+# #         evento = str(r.get("evento", "")).strip()
+# #         paso = str(r.get("paso", "")).strip()
+# #         paso_label = PASO_LABELS.get(paso, paso)
+# #         responsables = str(r.get("responsables", "")).strip()
+# #         seccion = str(r.get("sección", "")).strip()
+# #         detalle = str(r.get("detalle", "")).strip()
+# #         estado = str(r.get("estado", "Pendiente")).strip()
+
+# #         title = f"🚩 {evento} · {paso_label}"
+
+# #         events.append({
+# #             "title": title,
+# #             "start": fecha.date().isoformat(),
+# #             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
+# #             "allDay": True,
+# #             "color": ACT_COLORS.get("Misión", "#8c564b"),
+# #             "extendedProps": {
+# #                 "tipo": "mision",
+# #                 "actividad": "Misión",
+# #                 "tema": evento,
+# #                 "horario": "",
+# #                 "sección": seccion,
+# #                 "evaluación": paso_label,
+# #                 "profesores": responsables,
+# #                 "observaciones": f"{detalle} | Estado: {estado}" if detalle else f"Estado: {estado}",
+# #             }
+# #         })
+
+# #     return events
+
+# # def df_misiones_a_fullcalendar_events(df_mis: pd.DataFrame):
+# #     events = []
+
+# #     if df_mis.empty:
+# #         return events
+
+# #     for _, r in df_mis.iterrows():
+# #         fecha = r.get("fecha_limite", pd.NaT)
+# #         if pd.isna(fecha):
+# #             continue
+
+# #         evento = str(r.get("evento", "")).strip()
+# #         paso = str(r.get("paso", "")).strip()
+# #         paso_label = PASO_LABELS.get(paso, paso)
+# #         responsables = str(r.get("responsables", "")).strip()
+# #         seccion = str(r.get("sección", "")).strip()
+# #         detalle = str(r.get("detalle", "")).strip()
+# #         estado = str(r.get("estado", "Pendiente")).strip()
+
+# #         fecha_evento = r.get("fecha_evento", pd.NaT)
+# #         if pd.notna(fecha_evento):
+# #             fecha_evento_str = pd.to_datetime(fecha_evento).strftime("%d/%m/%Y")
+# #         else:
+# #             fecha_evento_str = ""
+
+# #         # Título mucho más explicativo
+# #         titulo = f"🚩 Fin de plazo: {paso_label}"
+# #         if evento:
+# #             titulo += f" — {evento}"
+# #         if seccion:
+# #             titulo += f" — {seccion}"
+
+# #         # Observaciones completas para el modal
+# #         obs_partes = []
+# #         if detalle:
+# #             obs_partes.append(detalle)
+# #         if fecha_evento_str:
+# #             obs_partes.append(f"Evaluación asociada: {fecha_evento_str}")
+# #         if estado:
+# #             obs_partes.append(f"Estado: {estado}")
+
+# #         obs = " | ".join(obs_partes)
+
+# #         events.append({
+# #             "title": titulo,
+# #             "start": fecha.date().isoformat(),
+# #             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
+# #             "allDay": True,
+# #             "color": "#b91c1c",  # rojo más fuerte para que destaque
+# #             "extendedProps": {
+# #                 "tipo": "mision",
+# #                 "actividad": "Misión",
+# #                 "tema": titulo,
+# #                 "horario": "Todo el día",
+# #                 "sección": seccion,
+# #                 "evaluación": paso_label,
+# #                 "profesores": responsables,
+# #                 "observaciones": obs,
+# #             }
+# #         })
+
+# #     return events
+
+# def df_misiones_a_fullcalendar_events(df_mis: pd.DataFrame):
+#     """
+#     Renderiza los plazos de misiones como eventos CON HORA (no allDay),
+#     dividiendo el día en N segmentos para que SIEMPRE se vean todos.
+#     """
+#     events = []
+#     if df_mis.empty:
+#         return events
+
+#     df2 = df_mis.copy()
+#     df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+#     df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+#     # Agrupamos por día para asignar slots (1/N del día por misión)
+#     df2["dia"] = df2["fecha_limite"].dt.date
+
+#     # Orden lógico (si no está en ORDEN_PASOS, va al final)
+#     def rank_paso(p):
+#         p = str(p).strip()
+#         return ORDEN_PASOS.index(p) if p in ORDEN_PASOS else 999
+
+#     df2["_rank"] = df2["paso"].apply(rank_paso)
+#     df2 = df2.sort_values(["dia", "_rank", "evento", "sección"]).reset_index(drop=True)
+
+#     for dia, sub in df2.groupby("dia"):
+#         sub = sub.reset_index(drop=True)
+#         n = len(sub)
+#         if n <= 0:
+#             continue
+
+#         for i in range(n):
+#             r = sub.loc[i]
+
+#             fecha = pd.Timestamp(dia)
+
+#             # Segmento horario del día (divide 24h en n partes)
+#             start_dt = fecha + pd.Timedelta(hours=(24 * i) / n)
+#             end_dt   = fecha + pd.Timedelta(hours=(24 * (i + 1)) / n)
+
+#             evento = str(r.get("evento", "")).strip()
+#             paso = str(r.get("paso", "")).strip()
+#             paso_label = PASO_LABELS.get(paso, paso)
+#             seccion = str(r.get("sección", "")).strip()
+#             responsables = str(r.get("responsables", "")).strip()
+#             detalle = str(r.get("detalle", "")).strip()
+#             estado = str(r.get("estado", "Pendiente")).strip()
+
+#             # Título MUY explicativo (y usa observaciones porque ya vienen metidas en detalle)
+#             titulo = f"🚩 Vence: {paso_label}"
+#             if evento:
+#                 titulo += f" — {evento}"
+#             if seccion:
+#                 titulo += f" — {seccion}"
+
+#             # Observaciones completas para modal
+#             obs_partes = []
+#             if detalle:
+#                 obs_partes.append(detalle)
+#             if estado:
+#                 obs_partes.append(f"Estado: {estado}")
+#             obs = " | ".join(obs_partes)
+
+#             # Color por tipo de paso (más informativo que rojo único)
+#             color = "#b91c1c"  # default rojo
+#             if paso in ["construir_control", "pauta_prueba", "construir_examen", "pauta_examen", "pedir_preguntas"]:
+#                 color = "#2563eb"  # azul
+#             if paso in ["revisar_prueba", "revision_guia", "revisar_pruebas"]:
+#                 color = "#f59e0b"  # ámbar
+#             if paso in ["escanear", "subir_pauta_controles"]:
+#                 color = "#7c3aed"  # violeta
+#             if paso in ["corregir_y_notas", "revisar_tp", "corregir_examen", "revision_controles_y_nota"]:
+#                 color = "#16a34a"  # verde
+
+#             events.append({
+#                 "title": titulo,
+#                 "start": start_dt.isoformat(),
+#                 "end": end_dt.isoformat(),
+#                 "allDay": False,  # CLAVE: así no se colapsan
+#                 # "color": color,
+#                 "backgroundColor": "rgba(239, 68, 68, 0.20)",  # rojo con transparencia
+#                 "borderColor": "#991b1b",
+#                 "textColor": "#7f1d1d",
+#                 "extendedProps": {
+#                     "tipo": "mision",
+#                     "actividad": "Misión",
+#                     "tema": titulo,
+#                     "horario": f"{start_dt.strftime('%H:%M')}–{end_dt.strftime('%H:%M')}",
+#                     "sección": seccion,
+#                     "evaluación": paso_label,
+#                     "profesores": responsables,
+#                     "observaciones": obs,
+#                 }
+#             })
+
+#     return events
+
+
+# # def df_misiones_deadlines_background_events(df_mis: pd.DataFrame):
+# #     events = []
+
+# #     if df_mis.empty:
+# #         return events
+
+# #     fechas_agregadas = set()
+
+# #     for _, r in df_mis.iterrows():
+# #         fecha = r.get("fecha_limite", pd.NaT)
+# #         if pd.isna(fecha):
+# #             continue
+
+# #         fecha_str = fecha.date().isoformat()
+
+# #         # un solo fondo rojo por día
+# #         if fecha_str in fechas_agregadas:
+# #             continue
+
+# #         fechas_agregadas.add(fecha_str)
+
+# #         events.append({
+# #             "title": "Vencimiento de misión",
+# #             "start": fecha_str,
+# #             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
+# #             "allDay": True,
+# #             "display": "background",
+# #             "color": "#fecaca",   # rojo suave visible
+# #         })
+
+# #     return events
+
+# def df_misiones_deadlines_background_events(df_mis: pd.DataFrame):
+#     """
+#     Crea background events por cada fecha con misiones venciendo.
+#     Si hay N misiones ese día, divide el día en N franjas (vertical en timeGridWeek).
+#     """
+#     events = []
+#     if df_mis.empty:
+#         return events
+
+#     df2 = df_mis.copy()
+#     df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+#     df2["paso"] = df2.get("paso", "").fillna("").astype(str)
+
+#     # Agrupar por día
+#     df2 = df2.dropna(subset=["fecha_limite"]).copy()
+#     df2["dia"] = df2["fecha_limite"].dt.date
+
+#     # paleta (rotativa) para distinguir visualmente
+#     # palette = [
+#     #     "#fecaca",  # rojo suave
+#     #     "#fde68a",  # amarillo suave
+#     #     "#bfdbfe",  # azul suave
+#     #     "#bbf7d0",  # verde suave
+#     #     "#e9d5ff",  # violeta suave
+#     #     "#fed7aa",  # naranjo suave
+#     # ]
+    
+#     palette = [
+#     "rgba(239, 68, 68, 0.10)",   # rojo suave
+#     "rgba(244, 63, 94, 0.08)",   # rosado suave
+#     "rgba(251, 113, 133, 0.08)", # rosado más claro
+#     "rgba(185, 28, 28, 0.06)",   # rojo oscuro muy suave
+#     ]
+
+#     for dia, sub in df2.groupby("dia"):
+#         sub = sub.sort_values(["paso"]).copy()
+#         n = len(sub)
+#         if n <= 0:
+#             continue
+
+#         # división del día en n segmentos
+#         # (timeGridWeek: se verá como franjas verticales por día)
+#         for i, (_, r) in enumerate(sub.iterrows()):
+#             # color = palette[i % len(palette)]
+#             paso = str(r.get("paso", "")).strip()
+#             color = color_paso(paso)
+#             start = pd.Timestamp(dia) + pd.Timedelta(hours=(24 * i) / n)
+#             end = pd.Timestamp(dia) + pd.Timedelta(hours=(24 * (i + 1)) / n)
+
+#             paso = str(r.get("paso", "")).strip()
+#             paso_label = PASO_LABELS.get(paso, paso) if paso else "Misión"
+
+#             events.append({
+#                 "title": f"Vence: {paso_label}",     # no siempre se ve, pero sirve para hover/tooltip
+#                 "start": start.isoformat(),
+#                 "end": end.isoformat(),
+#                 "allDay": False,
+#                 "display": "background",
+#                 "color": color,
+#             })
+
+#     return events
+
+
+
+# import json
+
+# def build_events_calendario_para_html(df: pd.DataFrame):
+#     """
+#     Convierte tu df_f (calendario) en eventos FullCalendar, respetando:
+#     - color de fondo por sección (SECTION_COLORS)
+#     - borde por actividad (BORDER_BY_ACTIVIDAD)
+#     - títulos con evaluación visible
+#     """
+#     events = []
+
+#     for _, r in df.iterrows():
+#         fecha = r.get("fecha", pd.NaT)
+#         if pd.isna(fecha):
+#             continue
+
+#         horario = str(r.get("horario", "")).strip()
+#         tema = str(r.get("tema", "")).strip()
+#         evaluacion = str(r.get("evaluación", "")).strip()
+#         profs = str(r.get("profesores", "")).strip()
+#         obs = str(r.get("observaciones", "")).strip()
+#         actividad = str(r.get("actividad", "")).strip()
+#         seccion = str(r.get("sección", "")).strip()
+
+#         # Parse horario
+#         all_day = False
+#         if ("–" in horario) or ("-" in horario):
+#             try:
+#                 h_clean = horario.replace("-", "–")
+#                 a, b = h_clean.split("–")
+#                 hi = pd.to_datetime(a.strip(), format="%H:%M").time()
+#                 hf = pd.to_datetime(b.strip(), format="%H:%M").time()
+#                 start_dt = fecha + pd.Timedelta(hours=hi.hour, minutes=hi.minute)
+#                 end_dt = fecha + pd.Timedelta(hours=hf.hour, minutes=hf.minute)
+#                 start = start_dt.isoformat()
+#                 end = end_dt.isoformat()
+#             except Exception:
+#                 all_day = True
+#                 start = fecha.date().isoformat()
+#                 end = (fecha + pd.Timedelta(days=1)).date().isoformat()
+#         else:
+#             all_day = True
+#             start = fecha.date().isoformat()
+#             end = (fecha + pd.Timedelta(days=1)).date().isoformat()
+
+#         # Título
+#         # prefix = (EVAL_ICON.get(evaluacion, "") + " ") if evaluacion else ""
+#         # if evaluacion:
+#         #     title = f"{prefix}{evaluacion} · {actividad}" + (f" · {tema}" if tema else "")
+#         # else:
+#         #     title = f"{prefix}{actividad}" + (f" · {tema}" if tema else "")
+
+#         prefix = (EVAL_ICON.get(evaluacion, "") + " ") if evaluacion else ""
+
+#         partes_titulo = []
+
+#         if evaluacion:
+#             partes_titulo.append(f"{prefix}{evaluacion}")
+#             if actividad:
+#                 partes_titulo.append(actividad)
+#         else:
+#             if actividad:
+#                 partes_titulo.append(f"{prefix}{actividad}".strip())
+
+#         if tema:
+#             partes_titulo.append(tema)
+
+#         if seccion:
+#             partes_titulo.append(seccion)
+
+#         if profs:
+#             partes_titulo.append(profs)
+
+#         title = " · ".join([x for x in partes_titulo if x])
+
+#         # Estilo
+#         bg = SECTION_COLORS.get(seccion, "rgba(148,163,184,0.14)")
+#         border = BORDER_BY_ACTIVIDAD.get(actividad, "#64748b")
+#         # Evaluación: borde más fuerte
+#         if evaluacion:
+#             border = "#b45309"
+
+#         # feriado/pausa: rojo suave
+#         if "Feriado" in actividad or "Pausa" in actividad:
+#             bg = "rgba(239,68,68,0.12)"
+#             border = "#991b1b"
+
+#         events.append({
+#             "title": title,
+#             "start": start,
+#             "end": end,
+#             "allDay": all_day,
+#             "backgroundColor": bg,
+#             "borderColor": border,
+#             "textColor": "#111827",
+#             "extendedProps": {
+#                 "tipo": "clase",
+#                 "actividad": actividad,
+#                 "sección": seccion,
+#                 "horario": horario if horario else ("Todo el día" if all_day else ""),
+#                 "evaluación": evaluacion,
+#                 "profesores": profs,
+#                 "observaciones": obs,
+#                 "tema": tema,
+#             }
+#         })
+
+#     return events
+
+
+# def build_events_misiones_allday_para_html(df_misiones: pd.DataFrame):
+#     """
+#     Misiones como ALL-DAY (arriba), apiladas (stack) y con texto completo.
+#     """
+#     events = []
+#     if df_misiones.empty:
+#         return events
+
+#     df2 = df_misiones.copy()
+#     df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+#     df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+#     # Orden por día y por paso
+#     def rank_paso(p):
+#         p = str(p).strip()
+#         return ORDEN_PASOS.index(p) if p in ORDEN_PASOS else 999
+
+#     df2["_rank"] = df2["paso"].apply(rank_paso)
+#     df2 = df2.sort_values(["fecha_limite", "_rank", "evento", "sección"]).reset_index(drop=True)
+
+#     for _, r in df2.iterrows():
+#         fecha = r.get("fecha_limite", pd.NaT)
+#         if pd.isna(fecha):
+#             continue
+
+#         evento = str(r.get("evento", "")).strip()
+#         paso = str(r.get("paso", "")).strip()
+#         paso_label = PASO_LABELS.get(paso, paso)
+#         seccion = str(r.get("sección", "")).strip()
+#         responsables = str(r.get("responsables", "")).strip()
+#         detalle = str(r.get("detalle", "")).strip()
+#         estado = str(r.get("estado", "Pendiente")).strip()
+
+#         # Título EXPLICATIVO y largo (all-day lo permite mejor)
+#         # title = f"🚩 Vence: {paso_label}"
+#         # if evento:
+#         #     title += f" — {evento}"
+#         # if seccion:
+#         #     title += f" — {seccion}"
+#         title = f"🚩 {paso_label}"
+#         if evento:
+#             title += f" — {evento}"
+#         if seccion:
+#             title += f" — {seccion}"
+#         if responsables:
+#             title += f" — {responsables}"
+
+#         # Observaciones para modal
+#         obs = " | ".join([x for x in [detalle, f"Estado: {estado}" if estado else ""] if x])
+
+#         # Estilo misión: rojizo TRANSPARENTE (no fuerte)
+#         bg = "rgba(239, 68, 68, 0.10)"
+#         border = "#991b1b"
+#         text = "#7f1d1d"
+
+#         events.append({
+#             "title": title,
+#             "start": fecha.date().isoformat(),
+#             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
+#             "allDay": True,
+#             "backgroundColor": bg,
+#             "borderColor": border,
+#             "textColor": text,
+#             "extendedProps": {
+#                 "tipo": "mision",
+#                 "actividad": "Misión",
+#                 "sección": seccion,
+#                 "horario": "Todo el día",
+#                 "evaluación": paso_label,
+#                 "profesores": responsables,
+#                 "observaciones": obs,
+#                 "tema": title,
+#             }
+#         })
+
+#     return events
+
+
+# def altura_misiones_allday(df_mis_sem):
+#     if df_mis_sem.empty or "fecha_limite" not in df_mis_sem.columns:
+#         return 220
+
+#     df2 = df_mis_sem.copy()
+#     df2["fecha_limite"] = pd.to_datetime(df2["fecha_limite"], errors="coerce")
+#     df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+#     if df2.empty:
+#         return 220
+
+#     max_por_dia = df2.groupby(df2["fecha_limite"].dt.date).size().max()
+#     max_por_dia = int(max_por_dia) if pd.notna(max_por_dia) else 1
+
+#     return max(220, min(520, 130 + 34 * max_por_dia))
+
+# # def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Santiago", height_px=780):
+# #     """
+# #     FullCalendar embebido con:
+# #     - all-day expandible (misiones arriba)
+# #     - stack vertical (una encima de otra)
+# #     - NO solapamiento raro
+# #     - wrap de texto + auto-fit simple
+# #     """
+# #     events_json = json.dumps(events, ensure_ascii=False)
+
+# #     return f"""
+# # <!DOCTYPE html>
+# # <html>
+# # <head>
+# #   <meta charset="utf-8" />
+# #   <meta name="viewport" content="width=device-width, initial-scale=1" />
+# #   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet"/>
+# #   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+# #   <style>
+# #     html, body {{
+# #       margin:0; padding:0;
+# #       font-family: Arial, sans-serif;
+# #       background: white;
+# #     }}
+# #     #calendar {{ padding: 0 6px; }}
+
+# #     /* Bordes grilla más visibles */
+# #     .fc .fc-scrollgrid, .fc .fc-scrollgrid td, .fc .fc-scrollgrid th {{
+# #       border-width: 2px !important;
+# #       border-color: rgba(0,0,0,0.22) !important;
+# #     }}
+
+# #     /* Eventos: borde más grueso */
+# #     .fc .fc-event {{
+# #       border-width: 3px !important;
+# #       border-style: solid !important;
+# #       border-radius: 10px !important;
+# #     }}
+
+# #     /* Texto WRAP real */
+# #     .fc .fc-event-title {{
+# #       white-space: normal !important;
+# #       font-size: 13px !important;
+# #       line-height: 1.15 !important;
+# #       font-weight: 700 !important;
+# #     }}
+# #     .fc .fc-event-main {{
+# #       padding: 6px 10px !important;
+# #     }}
+
+# #     /* ====== all-day: expandible y alto ====== */
+# #     .fc .fc-timegrid-allday {{
+# #       min-height: 180px !important;  /* base grande */
+# #     }}
+
+# #     /* En all-day, que la fila crezca en vez de cortar */
+# #     .fc .fc-timegrid-axis-frame,
+# #     .fc .fc-timegrid-col-frame {{
+# #       overflow: visible !important;
+# #     }}
+
+# #     /* Evita que se escape texto a otra columna */
+# #     .fc .fc-timegrid-col-frame {{
+# #       overflow: hidden !important;
+# #     }}
+
+# #     /* Subir un poco el alto de slots */
+# #     .fc .fc-timegrid-slot {{
+# #       height: 2.0em !important;
+# #     }}
+
+# #     /* ===== Modal simple ===== */
+# #     .modal-overlay {{
+# #       position: fixed;
+# #       inset: 0;
+# #       background: rgba(0,0,0,0.35);
+# #       display: none;
+# #       align-items: center;
+# #       justify-content: center;
+# #       z-index: 9999;
+# #     }}
+# #     .modal {{
+# #       width: min(720px, 92vw);
+# #       background: white;
+# #       border-radius: 14px;
+# #       padding: 16px;
+# #       box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+# #     }}
+# #     .modal h3 {{ margin: 0 0 10px 0; font-size: 18px; }}
+# #     .row {{ margin: 6px 0; font-size: 14px; }}
+# #     .label {{ font-weight: 800; }}
+# #     .close {{
+# #       float: right; cursor: pointer;
+# #       padding: 6px 10px;
+# #       border-radius: 10px;
+# #       background: #f3f4f6;
+# #       font-weight: 800;
+# #     }}
+# #     .close:hover {{ background: #e5e7eb; }}
+# #   </style>
+# # </head>
+
+# # <body>
+# #   <div id="calendar"></div>
+
+# #   <div class="modal-overlay" id="modalOverlay">
+# #     <div class="modal">
+# #       <div class="close" id="modalClose">Cerrar ✕</div>
+# #       <h3 id="mTitle"></h3>
+# #       <div class="row"><span class="label">Actividad:</span> <span id="mActividad"></span></div>
+# #       <div class="row"><span class="label">Sección:</span> <span id="mSeccion"></span></div>
+# #       <div class="row"><span class="label">Horario:</span> <span id="mHorario"></span></div>
+# #       <div class="row"><span class="label">Evaluación/Paso:</span> <span id="mEval"></span></div>
+# #       <div class="row"><span class="label">Profesores:</span> <span id="mProf"></span></div>
+# #       <div class="row"><span class="label">Observaciones:</span> <span id="mObs"></span></div>
+# #     </div>
+# #   </div>
+
+# #   <script>
+# #     const events = {events_json};
+
+# #     const overlay = document.getElementById('modalOverlay');
+# #     const closeBtn = document.getElementById('modalClose');
+
+# #     function openModal(info) {{
+# #       const p = info.event.extendedProps || {{}};
+# #       document.getElementById('mTitle').textContent = info.event.title || '';
+# #       document.getElementById('mActividad').textContent = p.actividad || '';
+# #       document.getElementById('mSeccion').textContent = p['sección'] || p.sección || '';
+# #       document.getElementById('mHorario').textContent = p.horario || '';
+# #       document.getElementById('mEval').textContent = p['evaluación'] || p.evaluación || '';
+# #       document.getElementById('mProf').textContent = p.profesores || '';
+# #       document.getElementById('mObs').textContent = p.observaciones || '';
+# #       overlay.style.display = 'flex';
+# #     }}
+
+# #     function closeModal() {{
+# #       overlay.style.display = 'none';
+# #     }}
+
+# #     closeBtn.addEventListener('click', closeModal);
+# #     overlay.addEventListener('click', (e) => {{
+# #       if (e.target === overlay) closeModal();
+# #     }});
+
+# #     document.addEventListener('DOMContentLoaded', function() {{
+# #       const calendarEl = document.getElementById('calendar');
+
+# #       const calendar = new FullCalendar.Calendar(calendarEl, {{
+# #         timeZone: {json.dumps(tz)},
+# #         initialView: 'timeGridWeek',
+# #         initialDate: {json.dumps(initial_date)},
+# #         height: {height_px},
+# #         nowIndicator: true,
+
+# #         headerToolbar: {{
+# #           left: 'prev,next today',
+# #           center: 'title',
+# #           right: 'dayGridMonth,timeGridWeek,listWeek'
+# #         }},
+
+# #         slotMinTime: '08:00:00',
+# #         slotMaxTime: '21:00:00',
+# #         expandRows: true,
+# #         stickyHeaderDates: true,
+# #         weekNumbers: true,
+# #         allDaySlot: true,
+        
+# #         /* 👇👇 FIX eventos simultáneos */
+# #         slotEventOverlap: false,
+# #         eventOverlap: false,
+# #         eventMaxStack: 50,
+
+# #         dayMaxEvents: false,
+# #         dayMaxEventRows: false,
+# #         eventDisplay: "block",
+
+# #         /* ====== clave para all-day apilado ====== */
+# #         dayMaxEvents: false,
+# #         dayMaxEventRows: false,
+
+# #         /* IMPORTANTÍSIMO: en all-day, NO “inline”, sino “block” */
+# #         eventDisplay: 'block',
+
+# #         events: events,
+
+# #         eventClick: function(info) {{
+# #           openModal(info);
+# #         }},
+
+# #         eventDidMount: function(arg) {{
+# #           // Solo para asegurar wrap en all-day
+# #           const titleEl = arg.el.querySelector('.fc-event-title');
+# #           if (titleEl) {{
+# #             titleEl.style.whiteSpace = 'normal';
+# #           }}
+# #         }},
+# #       }});
+
+# #       calendar.render();
+# #     }});
+# #   </script>
+# # </body>
+# # </html>
+# # """
+
+# # def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_date, tz="America/Santiago", height_px=820):
+# #     events_cal_json = json.dumps(events_cal, ensure_ascii=False)
+# #     events_mis_json = json.dumps(events_mis, ensure_ascii=False)
+
+# #     return f"""
+# # <!DOCTYPE html>
+# # <html>
+# # <head>
+# #   <meta charset="utf-8" />
+# #   <meta name="viewport" content="width=device-width, initial-scale=1" />
+# #   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet"/>
+# #   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+# #   <style>
+# #     html, body {{
+# #       margin: 0;
+# #       padding: 0;
+# #       font-family: Arial, sans-serif;
+# #       background: white;
+# #     }}
+
+# #     #calendar-main {{
+# #       padding: 0 6px;
+# #       margin-bottom: 12px;
+# #     }}
+
+# #     #calendar-misiones {{
+# #       padding: 0 6px;
+# #       margin-top: 8px;
+# #     }}
+
+# #     .titulo-misiones {{
+# #       padding: 0 10px;
+# #       margin: 8px 0 6px 0;
+# #       font-size: 15px;
+# #       font-weight: 800;
+# #       color: #374151;
+# #     }}
+
+# #     .fc .fc-scrollgrid, .fc .fc-scrollgrid td, .fc .fc-scrollgrid th {{
+# #       border-width: 2px !important;
+# #       border-color: rgba(0,0,0,0.22) !important;
+# #     }}
+
+# #     .fc .fc-event {{
+# #       border-width: 3px !important;
+# #       border-style: solid !important;
+# #       border-radius: 10px !important;
+# #     }}
+
+# #     .fc .fc-event-title {{
+# #       white-space: normal !important;
+# #       font-size: 13px !important;
+# #       line-height: 1.15 !important;
+# #       font-weight: 700 !important;
+# #     }}
+
+# #     .fc .fc-event-main {{
+# #       padding: 6px 10px !important;
+# #     }}
+
+# #     .fc .fc-timegrid-slot {{
+# #       height: 2.0em !important;
+# #     }}
+
+# #     /* día actual */
+# #     .fc .fc-day-today {{
+# #       background: rgba(250, 204, 21, 0.10) !important;
+# #     }}
+
+# #     .fc .fc-daygrid-day.fc-day-today,
+# #     .fc .fc-timegrid-col.fc-day-today {{
+# #       box-shadow: inset 0 0 0 2px rgba(245, 158, 11, 0.45);
+# #     }}
+
+# #     .fc-theme-standard td, .fc-theme-standard th {{
+# #       border-color: rgba(0,0,0,0.22) !important;
+# #     }}
+
+# #     .modal-overlay {{
+# #       position: fixed;
+# #       inset: 0;
+# #       background: rgba(0,0,0,0.35);
+# #       display: none;
+# #       align-items: center;
+# #       justify-content: center;
+# #       z-index: 9999;
+# #     }}
+
+# #     .modal {{
+# #       width: min(720px, 92vw);
+# #       background: white;
+# #       border-radius: 14px;
+# #       padding: 16px;
+# #       box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+# #     }}
+
+# #     .modal h3 {{
+# #       margin: 0 0 10px 0;
+# #       font-size: 18px;
+# #     }}
+
+# #     .row {{
+# #       margin: 6px 0;
+# #       font-size: 14px;
+# #     }}
+
+# #     .label {{
+# #       font-weight: 800;
+# #     }}
+
+# #     .close {{
+# #       float: right;
+# #       cursor: pointer;
+# #       padding: 6px 10px;
+# #       border-radius: 10px;
+# #       background: #f3f4f6;
+# #       font-weight: 800;
+# #     }}
+
+# #     .close:hover {{
+# #       background: #e5e7eb;
+# #     }}
+# #   </style>
+# # </head>
+
+# # <body>
+# #   <div id="calendar-main"></div>
+
+# #   <div class="titulo-misiones">Misiones (plazos all-day de la semana)</div>
+# #   <div id="calendar-misiones"></div>
+
+# #   <div class="modal-overlay" id="modalOverlay">
+# #     <div class="modal">
+# #       <div class="close" id="modalClose">Cerrar ✕</div>
+# #       <h3 id="mTitle"></h3>
+# #       <div class="row"><span class="label">Actividad:</span> <span id="mActividad"></span></div>
+# #       <div class="row"><span class="label">Sección:</span> <span id="mSeccion"></span></div>
+# #       <div class="row"><span class="label">Horario:</span> <span id="mHorario"></span></div>
+# #       <div class="row"><span class="label">Evaluación/Paso:</span> <span id="mEval"></span></div>
+# #       <div class="row"><span class="label">Profesores:</span> <span id="mProf"></span></div>
+# #       <div class="row"><span class="label">Observaciones:</span> <span id="mObs"></span></div>
+# #     </div>
+# #   </div>
+
+# #   <script>
+# #     const eventsCal = {events_cal_json};
+# #     const eventsMis = {events_mis_json};
+
+# #     const overlay = document.getElementById('modalOverlay');
+# #     const closeBtn = document.getElementById('modalClose');
+
+# #     function openModal(info) {{
+# #       const p = info.event.extendedProps || {{}};
+# #       document.getElementById('mTitle').textContent = info.event.title || '';
+# #       document.getElementById('mActividad').textContent = p.actividad || '';
+# #       document.getElementById('mSeccion').textContent = p['sección'] || p.sección || '';
+# #       document.getElementById('mHorario').textContent = p.horario || '';
+# #       document.getElementById('mEval').textContent = p['evaluación'] || p.evaluación || '';
+# #       document.getElementById('mProf').textContent = p.profesores || '';
+# #       document.getElementById('mObs').textContent = p.observaciones || '';
+# #       overlay.style.display = 'flex';
+# #     }}
+
+# #     function closeModal() {{
+# #       overlay.style.display = 'none';
+# #     }}
+
+# #     closeBtn.addEventListener('click', closeModal);
+# #     overlay.addEventListener('click', (e) => {{
+# #       if (e.target === overlay) closeModal();
+# #     }});
+
+# #     document.addEventListener('DOMContentLoaded', function() {{
+# #       const calendarMainEl = document.getElementById('calendar-main');
+# #       const calendarMisEl = document.getElementById('calendar-misiones');
+
+# #       const calMain = new FullCalendar.Calendar(calendarMainEl, {{
+# #         timeZone: {json.dumps(tz)},
+# #         initialView: 'timeGridWeek',
+# #         initialDate: {json.dumps(initial_date)},
+# #         height: {height_px},
+# #         nowIndicator: true,
+# #         allDaySlot: false,
+# #         slotMinTime: '08:00:00',
+# #         slotMaxTime: '21:00:00',
+# #         expandRows: true,
+# #         stickyHeaderDates: true,
+# #         weekNumbers: true,
+# #         headerToolbar: {{
+# #           left: 'prev,next today',
+# #           center: 'title',
+# #           right: 'dayGridMonth,timeGridWeek,listWeek'
+# #         }},
+# #         slotEventOverlap: false,
+# #         eventOverlap: false,
+# #         eventMaxStack: 50,
+# #         dayMaxEvents: false,
+# #         dayMaxEventRows: false,
+# #         eventDisplay: 'block',
+# #         events: eventsCal,
+# #         eventClick: function(info) {{
+# #           openModal(info);
+# #         }},
+# #         datesSet: function(info) {{
+# #           calMis.gotoDate(info.start);
+# #         }},
+# #         eventDidMount: function(arg) {{
+# #           const titleEl = arg.el.querySelector('.fc-event-title');
+# #           if (titleEl) {{
+# #             titleEl.style.whiteSpace = 'normal';
+# #           }}
+# #         }},
+# #       }});
+
+# #       const calMis = new FullCalendar.Calendar(calendarMisEl, {{
+# #         timeZone: {json.dumps(tz)},
+# #         initialView: 'dayGridWeek',
+# #         initialDate: {json.dumps(initial_date)},
+# #         height: 210,
+# #         headerToolbar: false,
+# #         weekNumbers: false,
+# #         fixedWeekCount: false,
+# #         dayMaxEvents: false,
+# #         dayMaxEventRows: false,
+# #         displayEventTime: false,
+# #         events: eventsMis,
+# #         eventClick: function(info) {{
+# #           openModal(info);
+# #         }},
+# #         eventDidMount: function(arg) {{
+# #           const titleEl = arg.el.querySelector('.fc-event-title');
+# #           if (titleEl) {{
+# #             titleEl.style.whiteSpace = 'normal';
+# #           }}
+# #         }},
+# #       }});
+
+# #       calMain.render();
+# #       calMis.render();
+# #     }});
+# #   </script>
+# # </body>
+# # </html>
+# # """
+
+
+# def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_date, tz="America/Santiago", height_px=820, height_misiones_px=260):
+#     events_cal_json = json.dumps(events_cal, ensure_ascii=False)
+#     events_mis_json = json.dumps(events_mis, ensure_ascii=False)
+
+#     return f"""
+# <!DOCTYPE html>
+# <html>
+# <head>
+#   <meta charset="utf-8" />
+#   <meta name="viewport" content="width=device-width, initial-scale=1" />
+#   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet"/>
+#   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+#   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/locales-all.global.min.js"></script>
+
+#   <style>
+#     html, body {{
+#       margin: 0;
+#       padding: 0;
+#       font-family: Arial, sans-serif;
+#       background: white;
+#     }}
+
+#     #calendar-main {{
+#       padding: 0 6px;
+#       margin-bottom: 12px;
+#     }}
+
+#     .titulo-misiones {{
+#       padding: 0 10px;
+#       margin: 8px 0 6px 0;
+#       font-size: 15px;
+#       font-weight: 800;
+#       color: #374151;
+#     }}
+
+#     /* pequeño corrimiento para alinear con grilla principal */
+#     #calendar-misiones-wrap {{
+#       margin-left: 54px;
+#       width: calc(100% - 54px);
+#     }}
+
+#     #calendar-misiones {{
+#       padding: 0 6px;
+#       margin-top: 4px;
+#     }}
+
+#     .fc .fc-scrollgrid, .fc .fc-scrollgrid td, .fc .fc-scrollgrid th {{
+#       border-width: 2px !important;
+#       border-color: rgba(0,0,0,0.22) !important;
+#     }}
+
+#     .fc .fc-event {{
+#       border-width: 3px !important;
+#       border-style: solid !important;
+#       border-radius: 10px !important;
+#     }}
+
+#     .fc .fc-event-title {{
+#       white-space: normal !important;
+#       font-size: 13px !important;
+#       line-height: 1.15 !important;
+#       font-weight: 700 !important;
+#     }}
+
+#     .fc .fc-event-main {{
+#       padding: 6px 10px !important;
+#     }}
+
+#     .fc .fc-timegrid-slot {{
+#       height: 2.0em !important;
+#     }}
+
+#     .fc .fc-day-today {{
+#       background: rgba(250, 204, 21, 0.10) !important;
+#     }}
+
+#     .fc .fc-daygrid-day.fc-day-today,
+#     .fc .fc-timegrid-col.fc-day-today {{
+#       box-shadow: inset 0 0 0 2px rgba(245, 158, 11, 0.45);
+#     }}
+
+#     .fc-theme-standard td, .fc-theme-standard th {{
+#       border-color: rgba(0,0,0,0.22) !important;
+#     }}
+
+#     .modal-overlay {{
+#       position: fixed;
+#       inset: 0;
+#       background: rgba(0,0,0,0.35);
+#       display: none;
+#       align-items: center;
+#       justify-content: center;
+#       z-index: 9999;
+#     }}
+
+#     .modal {{
+#       width: min(720px, 92vw);
+#       background: white;
+#       border-radius: 14px;
+#       padding: 16px;
+#       box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+#     }}
+
+#     .modal h3 {{
+#       margin: 0 0 10px 0;
+#       font-size: 18px;
+#     }}
+
+#     .row {{
+#       margin: 6px 0;
+#       font-size: 14px;
+#     }}
+
+#     .label {{
+#       font-weight: 800;
+#     }}
+
+#     .close {{
+#       float: right;
+#       cursor: pointer;
+#       padding: 6px 10px;
+#       border-radius: 10px;
+#       background: #f3f4f6;
+#       font-weight: 800;
+#     }}
+
+#     .close:hover {{
+#       background: #e5e7eb;
+#     }}
+#   </style>
+# </head>
+
+# <body>
+#   <div id="calendar-main"></div>
+
+#   <div class="titulo-misiones">Misiones (plazos all-day de la semana)</div>
+#   <div id="calendar-misiones-wrap">
+#     <div id="calendar-misiones"></div>
+#   </div>
+
+#   <div class="modal-overlay" id="modalOverlay">
+#     <div class="modal">
+#       <div class="close" id="modalClose">Cerrar ✕</div>
+#       <h3 id="mTitle"></h3>
+#       <div class="row"><span class="label">Actividad:</span> <span id="mActividad"></span></div>
+#       <div class="row"><span class="label">Sección:</span> <span id="mSeccion"></span></div>
+#       <div class="row"><span class="label">Horario:</span> <span id="mHorario"></span></div>
+#       <div class="row"><span class="label">Evaluación/Paso:</span> <span id="mEval"></span></div>
+#       <div class="row"><span class="label">Profesores:</span> <span id="mProf"></span></div>
+#       <div class="row"><span class="label">Observaciones:</span> <span id="mObs"></span></div>
+#     </div>
+#   </div>
+
+#   <script>
+#     const eventsCal = {events_cal_json};
+#     const eventsMis = {events_mis_json};
+
+#     const overlay = document.getElementById('modalOverlay');
+#     const closeBtn = document.getElementById('modalClose');
+
+#     function openModal(info) {{
+#       const p = info.event.extendedProps || {{}};
+#       document.getElementById('mTitle').textContent = info.event.title || '';
+#       document.getElementById('mActividad').textContent = p.actividad || '';
+#       document.getElementById('mSeccion').textContent = p['sección'] || p.sección || '';
+#       document.getElementById('mHorario').textContent = p.horario || '';
+#       document.getElementById('mEval').textContent = p['evaluación'] || p.evaluación || '';
+#       document.getElementById('mProf').textContent = p.profesores || '';
+#       document.getElementById('mObs').textContent = p.observaciones || '';
+#       overlay.style.display = 'flex';
+#     }}
+
+#     function closeModal() {{
+#       overlay.style.display = 'none';
+#     }}
+
+#     closeBtn.addEventListener('click', closeModal);
+#     overlay.addEventListener('click', (e) => {{
+#       if (e.target === overlay) closeModal();
+#     }});
+
+#     document.addEventListener('DOMContentLoaded', function() {{
+#       const calendarMainEl = document.getElementById('calendar-main');
+#       const calendarMisEl = document.getElementById('calendar-misiones');
+
+#       const calMain = new FullCalendar.Calendar(calendarMainEl, {{
+#         locale: 'es',
+#         timeZone: {json.dumps(tz)},
+#         firstDay: 1,
+#         initialView: 'timeGridWeek',
+#         initialDate: {json.dumps(initial_date)},
+#         height: {height_px},
+#         nowIndicator: true,
+#         allDaySlot: false,
+#         slotMinTime: '08:00:00',
+#         slotMaxTime: '21:00:00',
+#         expandRows: true,
+#         stickyHeaderDates: true,
+#         weekNumbers: true,
+#         dayHeaderFormat: {{ weekday: 'short', day: '2-digit', month: '2-digit' }},
+#         titleFormat: {{ year: 'numeric', month: 'long' }},
+#         headerToolbar: {{
+#           left: 'prev,next today',
+#           center: 'title',
+#           right: 'dayGridMonth,timeGridWeek,listWeek'
+#         }},
+#         slotEventOverlap: false,
+#         eventOverlap: false,
+#         eventMaxStack: 50,
+#         dayMaxEvents: false,
+#         dayMaxEventRows: false,
+#         eventDisplay: 'block',
+#         events: eventsCal,
+#         eventClick: function(info) {{
+#           openModal(info);
+#         }},
+#         datesSet: function(info) {{
+#           calMis.gotoDate(info.start);
+#         }},
+#         eventDidMount: function(arg) {{
+#           const titleEl = arg.el.querySelector('.fc-event-title');
+#           if (titleEl) {{
+#             titleEl.style.whiteSpace = 'normal';
+#           }}
+#         }},
+#       }});
+
+#       const calMis = new FullCalendar.Calendar(calendarMisEl, {{
+#         locale: 'es',
+#         timeZone: {json.dumps(tz)},
+#         firstDay: 1,
+#         initialView: 'dayGridWeek',
+#         initialDate: {json.dumps(initial_date)},
+#         height: {height_misiones_px},
+#         headerToolbar: false,
+#         weekNumbers: false,
+#         fixedWeekCount: false,
+#         dayMaxEvents: false,
+#         dayMaxEventRows: false,
+#         displayEventTime: false,
+#         dayHeaderFormat: {{ weekday: 'short', day: '2-digit', month: '2-digit' }},
+#         events: eventsMis,
+#         eventClick: function(info) {{
+#           openModal(info);
+#         }},
+#         eventDidMount: function(arg) {{
+#           const titleEl = arg.el.querySelector('.fc-event-title');
+#           if (titleEl) {{
+#             titleEl.style.whiteSpace = 'normal';
+#           }}
+#         }},
+#       }});
+
+#       calMain.render();
+#       calMis.render();
+#     }});
+#   </script>
+# </body>
+# </html>
+# """
+
+
+# # ============================================================
+# # MODAL
+# # ============================================================
+# @st.dialog("Detalles del Evento")
+# def mostrar_detalle_evento(props):
+#     actividad = props.get("actividad", "Evento")
+#     tema = props.get("tema", "")
+#     color = ACT_COLORS.get(actividad, "#333333")
+
+#     st.markdown(f"""
+#     <div style="background-color:{color}; padding:10px; border-radius:8px; color:white; margin-bottom:10px;">
+#         <h3 style="margin:0;">{actividad}</h3>
+#         <p style="margin:0; font-size:0.9em; opacity:0.9;">{tema}</p>
+#     </div>
+#     """, unsafe_allow_html=True)
+
+#     data = {
+#         "Horario": props.get("horario", "Todo el día"),
+#         "Sección": props.get("sección", "-"),
+#         "Profesores": props.get("profesores", "-"),
+#         "Evaluación / Paso": props.get("evaluación", "-"),
+#         "Observaciones": props.get("observaciones", "-")
+#     }
+
+#     for k, v in data.items():
+#         if v and str(v).strip() and str(v) != "nan":
+#             st.markdown(f"**{k}:** {v}")
+
+
+# # ============================================================
+# # UI PRINCIPAL
+# # ============================================================
+# st.set_page_config(page_title="Calendario del Curso", layout="wide")
+
+# # st.markdown("""
+# # <style>
+# # div.stButton > button {
+# #     min-height: 70px;
+# #     font-size: 22px;
+# #     font-weight: 700;
+# #     border-radius: 14px;
+# # }
+# # </style>
+# # """, unsafe_allow_html=True)
+
+# # st.markdown("""
+# # <style>
+# # /* Permite que el título del evento haga wrap (no se corte con ...). */
+# # .fc .fc-event-title, 
+# # .fc .fc-event-title-container,
+# # .fc .fc-event-title-wrap {
+# #   white-space: normal !important;
+# # }
+
+# # /* Aumenta altura de la fila all-day para que quepan títulos */
+# # .fc .fc-timegrid-axis-cushion,
+# # .fc .fc-timegrid-slot-label-cushion {
+# #   white-space: nowrap;
+# # }
+# # .fc .fc-timegrid-event-harness, 
+# # .fc .fc-daygrid-event-harness {
+# #   margin-top: 2px;
+# # }
+
+# # /* En all-day, evita que quede ultra angosto */
+# # .fc .fc-timegrid-event .fc-event-main {
+# #   padding: 2px 6px;
+# # }
+# # </style>
+# # """, unsafe_allow_html=True)
+
+
+
+# # st.markdown("""
+# # <style>
+# # /* Más alto el área all-day en timeGridWeek */
+# # .fc .fc-timegrid-axis-frame,
+# # .fc .fc-timegrid-col-frame {
+# #   min-height: 120px;
+# # }
+
+# # /* Eventos: fuente un poco más chica y wrap real */
+# # .fc .fc-event-title {
+# #   font-size: 12px !important;
+# #   line-height: 1.15 !important;
+# #   white-space: normal !important;
+# # }
+
+# # /* All-day: que no quede ultra apretado */
+# # .fc .fc-timegrid-event-harness-inset .fc-event-main {
+# #   padding: 2px 6px !important;
+# # }
+# # </style>
+# # """, unsafe_allow_html=True)
+
+# st.markdown("""
+# <style>
+# /* =========================
+#    ENFOQUE 3: MÁS ESPACIO Y TEXTO
+#    ========================= */
+
+# /* Que el título NO se corte y tenga más tamaño/alto */
+# .fc .fc-event-title,
+# .fc .fc-event-title-container,
+# .fc .fc-event-title-wrap {
+#   white-space: normal !important;
+#   overflow: visible !important;
+# }
+
+# /* Más padding para que se lea mejor */
+# .fc .fc-event-main {
+#   padding: 4px 8px !important;
+# }
+
+# /* Aumentar altura mínima de los eventos (hace que quepa más texto) */
+# .fc .fc-timegrid-event,
+# .fc .fc-daygrid-event {
+#   min-height: 72px !important;
+# }
+
+# /* Aumentar tamaño de fuente (puedes ajustar 13/14) */
+# .fc .fc-event-title {
+#   font-size: 14px !important;
+#   line-height: 1.2 !important;
+#   font-weight: 700 !important;
+# }
+
+# /* Aumentar el alto de las filas horarias para que entren más eventos */
+# .fc .fc-timegrid-slot {
+#   height: 2.2em !important;   /* sube el “zoom vertical” */
+# }
+
+# /* Aumentar el área all-day (donde caen misiones si son allDay) */
+# .fc .fc-timegrid-allday {
+#   min-height: 140px !important;
+# }
+
+# /* =========================
+#    FIX SOLAPAMIENTO (TU IMAGEN)
+#    ========================= */
+
+# /* Background events SIEMPRE detrás */
+# .fc .fc-bg-event {
+#   z-index: 1 !important;
+#   opacity: 0.35 !important; /* fondo suave */
+# }
+
+# /* Eventos normales por encima del fondo */
+# .fc .fc-event {
+#   z-index: 3 !important;
+#   position: relative !important;
+# }
+
+# /* Evita que el contenido del evento se “escape” y se dibuje encima de otra columna */
+# .fc .fc-timegrid-event .fc-event-main,
+# .fc .fc-timegrid-event .fc-event-main-frame {
+#   overflow: hidden !important;
+# }
+
+# /* El contenedor de cada columna: que recorte lo que se salga */
+# .fc .fc-timegrid-col-frame {
+#   overflow: hidden !important;
+# }
+
+# /* =========================
+#    BORDES MÁS GRUESOS
+#    ========================= */
+
+# /* Bordes de los eventos (tarjetas) más gruesos */
+# .fc .fc-event {
+#   border-width: 3px !important;
+# }
+
+# /* Bordes de la grilla también más visibles */
+# .fc .fc-timegrid-slot,
+# .fc .fc-timegrid-axis,
+# .fc .fc-timegrid-col,
+# .fc .fc-scrollgrid,
+# .fc .fc-scrollgrid td,
+# .fc .fc-scrollgrid th {
+#   border-width: 2px !important;
+#   border-color: rgba(0,0,0,0.25) !important;
+# }
+
+# /* Línea del “ahora” (roja) más gruesa */
+# .fc .fc-timegrid-now-indicator-line {
+#   border-width: 3px !important;
+# }
+# </style>
+# """, unsafe_allow_html=True)
+
+
+# if "curso_seleccionado" not in st.session_state:
+#     st.session_state.curso_seleccionado = "fokito"
+
+# c1, c2 = st.columns([5, 1])
+# with c1:
+#     st.title("📅 Calendarios de Cursos")
+#     st.caption("Selecciona un curso para cargar su calendario y sus misiones.")
+# with c2:
+#     if os.path.exists(LOGO_PATH):
+#         st.image(LOGO_PATH, use_container_width=True)
+
+# st.markdown("### Selección de curso")
+
+# # b1, b2, b3 = st.columns(3)
+
+# # with b1:
+# #     if st.button("🧮 Fokito", use_container_width=True):
+# #         st.session_state.curso_seleccionado = "fokito"
+
+# # with b2:
+# #     if st.button("🩺 Tecnología Médica", use_container_width=True):
+# #         st.session_state.curso_seleccionado = "tecnologia_medica"
+
+# # with b3:
+# #     if st.button("🏥 Medicina", use_container_width=True):
+# #         st.session_state.curso_seleccionado = "medicina"
+
+# b1, b2, b3, b4 = st.columns(4)
+
+# with b1:
+#     if st.button("🧮 Fokito", use_container_width=True):
+#         st.session_state.curso_seleccionado = "fokito"
+
+# with b2:
+#     if st.button("🩺 Tecnología Médica", use_container_width=True):
+#         st.session_state.curso_seleccionado = "tecnologia_medica"
+
+# with b3:
+#     if st.button("🏥 Medicina", use_container_width=True):
+#         st.session_state.curso_seleccionado = "medicina"
+
+# with b4:
+#     if st.button("🍇 Enobnu", use_container_width=True):
+#         st.session_state.curso_seleccionado = "enobnu"
+
+# curso_actual = st.session_state.curso_seleccionado
+# curso_info = CURSOS[curso_actual]
+# paths = obtener_paths_curso(curso_actual)
+
+# EXCEL_CALENDARIO_PATH = paths["excel_calendario"]
+# EXCEL_MISIONES_PATH = paths["excel_misiones"]
+
+# st.info(f"Curso actual: **{curso_info['label']}**")
+
+# df = cargar_datos_calendario_excel(EXCEL_CALENDARIO_PATH)
+# df_misiones = cargar_datos_misiones_base(EXCEL_MISIONES_PATH)
+# df_mat = cargar_sheet_excel(EXCEL_MISIONES_PATH, "Matriz")
+# df_plan = cargar_sheet_excel(EXCEL_MISIONES_PATH, "Plan")
+
+# all_secciones = sorted(df["sección"].dropna().unique())
+
+# all_prof_codes = set()
+# for s in df["profesores"].dropna().unique():
+#     for p in split_profes(s):
+#         all_prof_codes.add(p)
+
+# if not df_misiones.empty and "responsables" in df_misiones.columns:
+#     for s in df_misiones["responsables"].dropna().unique():
+#         for p in split_profes(s):
+#             all_prof_codes.add(p)
+
+# all_prof_codes = sorted(all_prof_codes)
+
+# if "curso_anterior" not in st.session_state:
+#     st.session_state.curso_anterior = curso_actual
+
+# # if st.session_state.curso_anterior != curso_actual:
+# #     st.session_state.sel_secciones = {s: True for s in all_secciones}
+# #     st.session_state.sel_profes = {p: True for p in all_prof_codes}
+# #     st.session_state.nav_semana = 1
+# #     st.session_state.curso_anterior = curso_actual
+
+# if st.session_state.curso_anterior != curso_actual:
+#     st.session_state.sel_secciones = {s: True for s in all_secciones}
+#     st.session_state.sel_profes = {p: True for p in all_prof_codes}
+#     st.session_state.nav_semana = semana_actual_desde_df(df)
+#     st.session_state.curso_anterior = curso_actual
+
+
+# if "sel_secciones" not in st.session_state:
+#     st.session_state.sel_secciones = {s: True for s in all_secciones}
+# else:
+#     st.session_state.sel_secciones = {
+#         s: st.session_state.sel_secciones.get(s, True) for s in all_secciones
+#     }
+
+# if "sel_profes" not in st.session_state:
+#     st.session_state.sel_profes = {p: True for p in all_prof_codes}
+# else:
+#     st.session_state.sel_profes = {
+#         p: st.session_state.sel_profes.get(p, True) for p in all_prof_codes
+#     }
+
+# tab1, tab2, tab3, tab4 = st.tabs([
+#     "📆 Calendario",
+#     "📄 Excel Horarios",
+#     "🧭 Misiones",
+#     "📊 Estadísticas"
+# ])
+
+# # ============================================================
+# # TAB 1: CALENDARIO
+# # ============================================================
+# # with tab1:
+# #     if "nav_semana" not in st.session_state:
+# #         st.session_state.nav_semana = 1
+
+# #     semana_sel = st.session_state.nav_semana
+# #     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
+# #     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
+
+# #     df_f = df[df["sección"].isin(sec_selected)].copy()
+
+# #     if all_prof_codes:
+# #         df_f = df_f[
+# #             df_f["profesores"].apply(
+# #                 lambda x: row_has_prof(x, prof_selected) if prof_selected else True
+# #             )
+# #         ].copy()
+
+# #     fechas_semana = df[df["semana"] == semana_sel]["fecha"]
+# #     if not fechas_semana.empty:
+# #         initial_date = fechas_semana.min().strftime("%Y-%m-%d")
+# #     else:
+# #         min_global = df["fecha"].min()
+# #         initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
+
+# #     # events_cal = df_calendario_a_fullcalendar_events(df_f)
+# #     # events_mis = df_misiones_a_fullcalendar_events(df_misiones)
+# #     # events = events_cal + events_mis
+    
+# #     events_cal = df_calendario_a_fullcalendar_events(df_f)
+# #     events_mis = df_misiones_a_fullcalendar_events(df_misiones)
+# #     events_mis_bg = df_misiones_deadlines_background_events(df_misiones)
+
+# #     events = events_cal + events_mis_bg + events_mis
+
+# #     calendar_options = {
+# #         "initialView": "timeGridWeek",
+# #         "initialDate": initial_date,
+# #         "headerToolbar": {
+# #             "left": "prev,next today",
+# #             "center": "title",
+# #             "right": "dayGridMonth,timeGridWeek,listWeek",
+# #         },
+# #         "height": 750,
+# #         "eventMaxStack": 99,
+# #         "slotMinTime": "08:00:00",
+# #         "slotMaxTime": "21:00:00",
+# #         "allDaySlot": True,
+# #         "weekNumbers": True,
+# #         "eventDisplay": "block",
+# #         "dayMaxEventRows": False,
+# #         "expandRows": True,
+# #         "stickyHeaderDates": True,
+# #         "dayMaxEvents": False,
+# #         "eventTimeFormat": {
+# #             "hour": "2-digit",
+# #             "minute": "2-digit",
+# #             "meridiem": False
+# # },
+# #     }
+
+# #     state = calendar(events=events, options=calendar_options, key=f"cal_{curso_actual}_{semana_sel}")
+
+# #     if state.get("eventClick"):
+# #         ev = state["eventClick"]["event"]
+# #         props = ev.get("extendedProps", {})
+# #         mostrar_detalle_evento(props)
+
+# #     st.divider()
+
+# #     c_nav, c_filtros = st.columns([1, 2])
+
+# #     with c_nav:
+# #         st.subheader("Navegación")
+# #         max_sem = df["semana"].max()
+# #         if pd.isna(max_sem):
+# #             max_sem = 20
+# #         weeks = list(range(1, int(max_sem) + 1))
+
+# #         st.radio(
+# #             "Seleccionar Semana:",
+# #             options=weeks,
+# #             horizontal=True,
+# #             key="nav_semana"
+# #         )
+
+# #     with c_filtros:
+# #         st.subheader("Filtros")
+# #         fcol1, fcol2 = st.columns(2)
+
+# #         with fcol1:
+# #             st.caption("Secciones")
+# #             for s in all_secciones:
+# #                 st.checkbox(
+# #                     s,
+# #                     value=st.session_state.sel_secciones.get(s, True),
+# #                     key=f"sec_{curso_actual}_{s}"
+# #                 )
+# #                 st.session_state.sel_secciones[s] = st.session_state[f"sec_{curso_actual}_{s}"]
+
+# #         with fcol2:
+# #             st.caption("Profesores")
+# #             if not all_prof_codes:
+# #                 st.info("No hay profesores.")
+# #             for p in all_prof_codes:
+# #                 st.checkbox(
+# #                     p,
+# #                     value=st.session_state.sel_profes.get(p, True),
+# #                     key=f"prof_{curso_actual}_{p}"
+# #                 )
+# #                 st.session_state.sel_profes[p] = st.session_state[f"prof_{curso_actual}_{p}"]
+
+
+# # with tab1:
+# #     if "nav_semana" not in st.session_state:
+# #         st.session_state.nav_semana = semana_actual_desde_df(df)
+
+# #     semana_sel = st.session_state.nav_semana
+# #     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
+# #     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
+
+# #     df_f = df[df["sección"].isin(sec_selected)].copy()
+# #     if all_prof_codes:
+# #         df_f = df_f[
+# #             df_f["profesores"].apply(
+# #                 lambda x: row_has_prof(x, prof_selected) if prof_selected else True
+# #             )
+# #         ].copy()
+
+# #     # initial_date: lunes de la semana seleccionada (según tus datos)
+# #     fechas_semana = df[df["semana"] == semana_sel]["fecha"]
+# #     if not fechas_semana.empty:
+# #         initial_date = fechas_semana.min().strftime("%Y-%m-%d")
+# #     else:
+# #         min_global = df["fecha"].min()
+# #         initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
+
+# #     # ====== eventos: clases/horarios + misiones ALL-DAY ======
+# #     # events_cal = build_events_calendario_para_html(df_f)
+# #     # events_mis = build_events_misiones_allday_para_html(df_misiones)
+
+# #     # # Si quieres que misiones siempre estén “arriba”, las ponemos primero
+# #     # events = events_mis + events_cal
+# #     events_cal = build_events_calendario_para_html(df_f)
+# #     events = events_cal
+
+# #     html_cal = render_fullcalendar_html_allday_stack(
+# #         events=events,
+# #         initial_date=initial_date,
+# #         tz=TIMEZONE,
+# #         height_px=1100
+# #     )
+
+# #     # Render del calendario
+# #     components.html(html_cal, height=1160, scrolling=False)
+
+# #     st.divider()
+
+# #     # ====== (mantienes navegación + filtros igual) ======
+# #     c_nav, c_filtros = st.columns([1, 2])
+
+# #     with c_nav:
+# #         st.subheader("Navegación")
+# #         max_sem = df["semana"].max()
+# #         if pd.isna(max_sem):
+# #             max_sem = 20
+# #         weeks = list(range(1, int(max_sem) + 1))
+
+# #         st.radio(
+# #             "Seleccionar Semana:",
+# #             options=weeks,
+# #             horizontal=True,
+# #             key="nav_semana"
+# #         )
+
+# #     with c_filtros:
+# #         st.subheader("Filtros")
+# #         fcol1, fcol2 = st.columns(2)
+
+# #         with fcol1:
+# #             st.caption("Secciones")
+# #             for s in all_secciones:
+# #                 st.checkbox(
+# #                     s,
+# #                     value=st.session_state.sel_secciones.get(s, True),
+# #                     key=f"sec_{curso_actual}_{s}"
+# #                 )
+# #                 st.session_state.sel_secciones[s] = st.session_state[f"sec_{curso_actual}_{s}"]
+
+# #         with fcol2:
+# #             st.caption("Profesores")
+# #             if not all_prof_codes:
+# #                 st.info("No hay profesores.")
+# #             for p in all_prof_codes:
+# #                 st.checkbox(
+# #                     p,
+# #                     value=st.session_state.sel_profes.get(p, True),
+# #                     key=f"prof_{curso_actual}_{p}"
+# #                 )
+# #                 st.session_state.sel_profes[p] = st.session_state[f"prof_{curso_actual}_{p}"]
+
+
+
+
+
+# # with tab1:
+# #     if "nav_semana" not in st.session_state:
+# #         st.session_state.nav_semana = semana_actual_desde_df(df)
+
+# #     st.subheader("Filtros y navegación")
+
+# #     c_nav, c_filtros = st.columns([1, 2])
+
+# #     with c_nav:
+# #         max_sem = df["semana"].max()
+# #         if pd.isna(max_sem):
+# #             max_sem = 20
+# #         weeks = list(range(1, int(max_sem) + 1))
+
+# #         st.radio(
+# #             "Semana",
+# #             options=weeks,
+# #             horizontal=True,
+# #             key="nav_semana"
+# #         )
+
+# #     with c_filtros:
+# #         ftop1, ftop2 = st.columns(2)
+
+# #         with ftop1:
+# #             st.caption("Secciones")
+# #             bsec1, bsec2 = st.columns(2)
+# #             with bsec1:
+# #                 if st.button("Todas las secciones", key=f"all_sec_{curso_actual}", use_container_width=True):
+# #                     for s in all_secciones:
+# #                         st.session_state.sel_secciones[s] = True
+# #             with bsec2:
+# #                 if st.button("Ninguna sección", key=f"none_sec_{curso_actual}", use_container_width=True):
+# #                     for s in all_secciones:
+# #                         st.session_state.sel_secciones[s] = False
+
+# #             for s in all_secciones:
+# #                 val = st.checkbox(
+# #                     s,
+# #                     value=st.session_state.sel_secciones.get(s, True),
+# #                     key=f"sec_{curso_actual}_{s}"
+# #                 )
+# #                 st.session_state.sel_secciones[s] = val
+
+# #         with ftop2:
+# #             st.caption("Profesores")
+# #             bpro1, bpro2 = st.columns(2)
+# #             with bpro1:
+# #                 if st.button("Todos los profes", key=f"all_prof_{curso_actual}", use_container_width=True):
+# #                     for p in all_prof_codes:
+# #                         st.session_state.sel_profes[p] = True
+# #             with bpro2:
+# #                 if st.button("Ningún profe", key=f"none_prof_{curso_actual}", use_container_width=True):
+# #                     for p in all_prof_codes:
+# #                         st.session_state.sel_profes[p] = False
+
+# #             if not all_prof_codes:
+# #                 st.info("No hay profesores.")
+# #             else:
+# #                 for p in all_prof_codes:
+# #                     val = st.checkbox(
+# #                         p,
+# #                         value=st.session_state.sel_profes.get(p, True),
+# #                         key=f"prof_{curso_actual}_{p}"
+# #                     )
+# #                     st.session_state.sel_profes[p] = val
+
+# #     semana_sel = st.session_state.nav_semana
+# #     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
+# #     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
+
+# #     df_f = df.copy()
+
+# #     if sec_selected:
+# #         df_f = df_f[df_f["sección"].isin(sec_selected)].copy()
+# #     else:
+# #         df_f = df_f.iloc[0:0].copy()
+
+# #     if prof_selected:
+# #         df_f = df_f[
+# #             df_f["profesores"].apply(lambda x: row_has_prof(x, prof_selected))
+# #         ].copy()
+# #     else:
+# #         df_f = df_f.iloc[0:0].copy()
+
+# #     fechas_semana = df[df["semana"] == semana_sel]["fecha"]
+# #     if not fechas_semana.empty:
+# #         initial_date = fechas_semana.min().strftime("%Y-%m-%d")
+# #     else:
+# #         min_global = df["fecha"].min()
+# #         initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
+
+# #     events_cal = build_events_calendario_para_html(df_f)
+# #     html_cal = render_fullcalendar_html_allday_stack(
+# #         events=events_cal,
+# #         initial_date=initial_date,
+# #         tz=TIMEZONE,
+# #         height_px=1100
+# #     )
+
+# #     components.html(html_cal, height=1160, scrolling=False)
+
+# #     st.markdown("### Misiones de la semana mostrada")
+
+# #     df_mis_sem = df_misiones.copy()
+# #     if not df_mis_sem.empty:
+# #         df_mis_sem["fecha_limite"] = pd.to_datetime(df_mis_sem["fecha_limite"], errors="coerce")
+# #         fechas_sem = set(pd.to_datetime(df[df["semana"] == semana_sel]["fecha"], errors="coerce").dt.date.dropna())
+
+# #         df_mis_sem = df_mis_sem[df_mis_sem["fecha_limite"].dt.date.isin(fechas_sem)].copy()
+
+# #         if sec_selected:
+# #             df_mis_sem = df_mis_sem[df_mis_sem["sección"].isin(sec_selected)].copy()
+# #         else:
+# #             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+# #         if prof_selected:
+# #             df_mis_sem = df_mis_sem[
+# #                 df_mis_sem["responsables"].apply(lambda x: row_has_prof(x, prof_selected))
+# #             ].copy()
+# #         else:
+# #             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+# #         if not df_mis_sem.empty:
+# #             df_mis_sem = df_mis_sem.sort_values(["fecha_limite", "evento", "paso", "sección"]).copy()
+# #             df_mis_sem["fecha_limite"] = df_mis_sem["fecha_limite"].dt.strftime("%d/%m/%Y")
+# #             df_mis_sem["paso"] = df_mis_sem["paso"].apply(lambda x: PASO_LABELS.get(str(x).strip(), str(x).strip()))
+
+# #             st.dataframe(
+# #                 df_mis_sem[["fecha_limite", "evento", "paso", "sección", "responsables", "detalle", "estado"]],
+# #                 use_container_width=True,
+# #                 hide_index=True
+# #             )
+# #         else:
+# #             st.info("No hay misiones para esta semana con los filtros seleccionados.")
+# #     else:
+# #         st.info("No hay archivo de misiones cargado.")
+
+
+
+# # with tab1:
+# #     if "nav_semana" not in st.session_state:
+# #         st.session_state.nav_semana = semana_actual_desde_df(df)
+
+# #     semana_sel = st.session_state.nav_semana
+# #     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
+# #     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
+
+# #     df_f = df.copy()
+
+# #     if sec_selected:
+# #         df_f = df_f[df_f["sección"].isin(sec_selected)].copy()
+# #     else:
+# #         df_f = df_f.iloc[0:0].copy()
+
+# #     if prof_selected:
+# #         df_f = df_f[
+# #             df_f["profesores"].apply(lambda x: row_has_prof(x, prof_selected))
+# #         ].copy()
+# #     else:
+# #         df_f = df_f.iloc[0:0].copy()
+
+# #     fechas_semana = df[df["semana"] == semana_sel]["fecha"]
+# #     if not fechas_semana.empty:
+# #         initial_date = fechas_semana.min().strftime("%Y-%m-%d")
+# #     else:
+# #         min_global = pd.to_datetime(df["fecha"], errors="coerce").min()
+# #         if pd.notna(min_global):
+# #             initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
+# #         else:
+# #             initial_date = pd.Timestamp.now().strftime("%Y-%m-%d")
+
+# #     # calendario principal
+# #     events_cal = build_events_calendario_para_html(df_f)
+
+# #     # misiones all-day, filtradas por semana y filtros actuales
+# #     df_mis_sem = df_misiones.copy()
+# #     events_mis = []
+
+# #     if not df_mis_sem.empty:
+# #         df_mis_sem["fecha_limite"] = pd.to_datetime(df_mis_sem["fecha_limite"], errors="coerce")
+
+# #         fechas_sem = set(
+# #             pd.to_datetime(df[df["semana"] == semana_sel]["fecha"], errors="coerce").dt.date.dropna()
+# #         )
+
+# #         df_mis_sem = df_mis_sem[df_mis_sem["fecha_limite"].dt.date.isin(fechas_sem)].copy()
+
+# #         if sec_selected:
+# #             df_mis_sem = df_mis_sem[df_mis_sem["sección"].isin(sec_selected)].copy()
+# #         else:
+# #             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+# #         if prof_selected:
+# #             df_mis_sem = df_mis_sem[
+# #                 df_mis_sem["responsables"].apply(lambda x: row_has_prof(x, prof_selected))
+# #             ].copy()
+# #         else:
+# #             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+# #         events_mis = build_events_misiones_allday_para_html(df_mis_sem)
+
+# #     html_cal = render_fullcalendar_html_con_misiones_abajo(
+# #         events_cal=events_cal,
+# #         events_mis=events_mis,
+# #         initial_date=initial_date,
+# #         tz=TIMEZONE,
+# #         height_px=980
+# #     )
+
+# #     components.html(html_cal, height=1320, scrolling=False)
+
+# #     st.divider()
+# #     st.subheader("Filtros y navegación")
+
+# #     c_filtros, c_nav = st.columns([2, 1])
+
+# #     with c_filtros:
+# #         ftop1, ftop2 = st.columns(2)
+
+# #         with ftop1:
+# #             st.caption("Secciones")
+# #             bsec1, bsec2 = st.columns(2)
+
+# #             with bsec1:
+# #                 if st.button("Todas las secciones", key=f"all_sec_{curso_actual}", use_container_width=True):
+# #                     for s in all_secciones:
+# #                         st.session_state.sel_secciones[s] = True
+# #                     st.rerun()
+
+# #             with bsec2:
+# #                 if st.button("Ninguna sección", key=f"none_sec_{curso_actual}", use_container_width=True):
+# #                     for s in all_secciones:
+# #                         st.session_state.sel_secciones[s] = False
+# #                     st.rerun()
+
+# #             for s in all_secciones:
+# #                 val = st.checkbox(
+# #                     s,
+# #                     value=st.session_state.sel_secciones.get(s, True),
+# #                     key=f"sec_{curso_actual}_{s}"
+# #                 )
+# #                 st.session_state.sel_secciones[s] = val
+# #                 inicializar_widgets_filtros(curso_actual, all_secciones, all_prof_codes)
+
+# #         with ftop2:
+# #             st.caption("Profesores")
+# #             bpro1, bpro2 = st.columns(2)
+
+# #             with bpro1:
+# #                 if st.button("Todos los profes", key=f"all_prof_{curso_actual}", use_container_width=True):
+# #                     for p in all_prof_codes:
+# #                         st.session_state.sel_profes[p] = True
+# #                     st.rerun()
+
+# #             with bpro2:
+# #                 if st.button("Ningún profe", key=f"none_prof_{curso_actual}", use_container_width=True):
+# #                     for p in all_prof_codes:
+# #                         st.session_state.sel_profes[p] = False
+# #                     st.rerun()
+
+# #             if not all_prof_codes:
+# #                 st.info("No hay profesores.")
+# #             else:
+# #                 for p in all_prof_codes:
+# #                     val = st.checkbox(
+# #                         p,
+# #                         value=st.session_state.sel_profes.get(p, True),
+# #                         key=f"prof_{curso_actual}_{p}"
+# #                     )
+# #                     st.session_state.sel_profes[p] = val
+# #                     inicializar_widgets_filtros(curso_actual, all_secciones, all_prof_codes)
+
+# #     with c_nav:
+# #         max_sem = df["semana"].max()
+# #         if pd.isna(max_sem):
+# #             max_sem = 20
+# #         weeks = list(range(1, int(max_sem) + 1))
+
+# #         st.radio(
+# #             "Semana",
+# #             options=weeks,
+# #             horizontal=True,
+# #             key="nav_semana"
+# #         )
+
+
+# with tab1:
+#     if "nav_semana" not in st.session_state:
+#         st.session_state.nav_semana = semana_actual_desde_df(df)
+
+#     semana_sel = st.session_state.nav_semana
+
+#     sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
+
+#     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
+#     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
+
+#     df_f = df.copy()
+
+#     if sec_selected:
+#         df_f = df_f[df_f["sección"].isin(sec_selected)].copy()
+#     else:
+#         df_f = df_f.iloc[0:0].copy()
+
+#     if prof_selected:
+#         df_f = df_f[
+#             df_f["profesores"].apply(lambda x: row_has_prof(x, prof_selected))
+#         ].copy()
+#     else:
+#         df_f = df_f.iloc[0:0].copy()
+
+#     fechas_semana = df[df["semana"] == semana_sel]["fecha"]
+#     if not fechas_semana.empty:
+#         initial_date = fechas_semana.min().strftime("%Y-%m-%d")
+#     else:
+#         min_global = pd.to_datetime(df["fecha"], errors="coerce").min()
+#         if pd.notna(min_global):
+#             initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
+#         else:
+#             initial_date = pd.Timestamp.now().strftime("%Y-%m-%d")
+
+#     events_cal = build_events_calendario_para_html(df_f)
+
+#     df_mis_sem = df_misiones.copy()
+#     events_mis = []
+#     alto_misiones = 220
+
+#     if not df_mis_sem.empty:
+#         df_mis_sem["fecha_limite"] = pd.to_datetime(df_mis_sem["fecha_limite"], errors="coerce")
+
+#         fechas_sem = set(
+#             pd.to_datetime(df[df["semana"] == semana_sel]["fecha"], errors="coerce").dt.date.dropna()
+#         )
+
+#         df_mis_sem = df_mis_sem[df_mis_sem["fecha_limite"].dt.date.isin(fechas_sem)].copy()
+
+#         if sec_selected:
+#             df_mis_sem = df_mis_sem[df_mis_sem["sección"].isin(sec_selected)].copy()
+#         else:
+#             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+#         if prof_selected:
+#             df_mis_sem = df_mis_sem[
+#                 df_mis_sem["responsables"].apply(lambda x: row_has_prof(x, prof_selected))
+#             ].copy()
+#         else:
+#             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+#         events_mis = build_events_misiones_allday_para_html(df_mis_sem)
+#         alto_misiones = altura_misiones_allday(df_mis_sem)
+
+#     html_cal = render_fullcalendar_html_con_misiones_abajo(
+#         events_cal=events_cal,
+#         events_mis=events_mis,
+#         initial_date=initial_date,
+#         tz=TIMEZONE,
+#         height_px=980,
+#         height_misiones_px=alto_misiones
+#     )
+
+#     components.html(html_cal, height=1100 + alto_misiones, scrolling=False)
+
+#     st.divider()
+#     st.subheader("Filtros y navegación")
+
+#     c_filtros, c_nav = st.columns([2, 1])
+
+#     with c_filtros:
+#         ftop1, ftop2 = st.columns(2)
+
+#         with ftop1:
+#             st.caption("Secciones")
+#             bsec1, bsec2 = st.columns(2)
+
+#             with bsec1:
+#                 if st.button("Todas las secciones", key=f"all_sec_{curso_actual}", use_container_width=True):
+#                     for s in all_secciones:
+#                         st.session_state.sel_secciones[s] = True
+#                         st.session_state[f"sec_{curso_actual}_{s}"] = True
+#                     st.rerun()
+
+#             with bsec2:
+#                 if st.button("Ninguna sección", key=f"none_sec_{curso_actual}", use_container_width=True):
+#                     for s in all_secciones:
+#                         st.session_state.sel_secciones[s] = False
+#                         st.session_state[f"sec_{curso_actual}_{s}"] = False
+#                     st.rerun()
+
+#             for s in all_secciones:
+#                 st.checkbox(
+#                     s,
+#                     key=f"sec_{curso_actual}_{s}"
+#                 )
+
+#         with ftop2:
+#             st.caption("Profesores")
+#             bpro1, bpro2 = st.columns(2)
+
+#             with bpro1:
+#                 if st.button("Todos los profes", key=f"all_prof_{curso_actual}", use_container_width=True):
+#                     for p in all_prof_codes:
+#                         st.session_state.sel_profes[p] = True
+#                         st.session_state[f"prof_{curso_actual}_{p}"] = True
+#                     st.rerun()
+
+#             with bpro2:
+#                 if st.button("Ningún profe", key=f"none_prof_{curso_actual}", use_container_width=True):
+#                     for p in all_prof_codes:
+#                         st.session_state.sel_profes[p] = False
+#                         st.session_state[f"prof_{curso_actual}_{p}"] = False
+#                     st.rerun()
+
+#             if not all_prof_codes:
+#                 st.info("No hay profesores.")
+#             else:
+#                 for p in all_prof_codes:
+#                     st.checkbox(
+#                         p,
+#                         key=f"prof_{curso_actual}_{p}"
+#                     )
+
+#     with c_nav:
+#         max_sem = df["semana"].max()
+#         if pd.isna(max_sem):
+#             max_sem = 20
+#         weeks = list(range(1, int(max_sem) + 1))
+
+#         st.radio(
+#             "Semana",
+#             options=weeks,
+#             horizontal=True,
+#             key="nav_semana"
+#         )
+
+#     sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
+
+
+# # ============================================================
+# # TAB 2: HORARIOS
+# # ============================================================
+# with tab2:
+#     st.subheader(f"📄 Horarios cargados de: {EXCEL_CALENDARIO_PATH}")
+#     st.caption("Vista coloreada en la web para facilitar la lectura.")
+
+#     tabla_resumen_colores()
+
+#     df_tab2 = df.sort_values(["semana", "sección", "fecha"]).copy()
+
+#     st.dataframe(
+#         estilo_tabla_calendario(df_tab2),
+#         use_container_width=True,
+#         hide_index=True
+#     )
+
+#     if os.path.exists(EXCEL_CALENDARIO_PATH):
+#         with open(EXCEL_CALENDARIO_PATH, "rb") as f:
+#             st.download_button(
+#                 "⬇️ Descargar Excel de Horarios",
+#                 f,
+#                 file_name=f"calendario_{curso_actual}.xlsx",
+#                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#             )
+
+# # ============================================================
+# # TAB 3: MISIONES
+# # ============================================================
+# with tab3:
+#     st.subheader(f"🧭 Misiones y protocolo docente — {curso_info['label']}")
+#     st.caption("Vista ordenada para profesores: matriz rápida con todas las misiones y plan detallado.")
+
+#     # ✅ NUEVO: misiones por persona/mes
+#     tabla_misiones_por_profesor_y_mes(df_misiones)
+
+#     if df_plan.empty and df_misiones.empty:
+#         st.info("No se encontró 'misiones.xlsx' o no tiene las hojas esperadas.")
+#     else:
+#         if not df_misiones.empty:
+#             st.markdown("### 📌 Matriz rápida por sección")
+#             html_mat = render_matriz_misiones_html(df_misiones)
+#             components.html(html_mat, height=650, scrolling=True)
+
+#         if not df_plan.empty:
+#             st.markdown("### ✅ Plan completo por evaluación")
+#             html_plan = render_plan_html(df_plan)
+#             components.html(html_plan, height=650, scrolling=True)
+
+#         if os.path.exists(EXCEL_MISIONES_PATH):
+#             with open(EXCEL_MISIONES_PATH, "rb") as f:
+#                 st.download_button(
+#                     "⬇️ Descargar Excel de Misiones",
+#                     f,
+#                     file_name=f"misiones_{curso_actual}.xlsx",
+#                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#                 )
+
+# # ============================================================
+# # TAB 4: ESTADÍSTICAS
+# # ============================================================
+# # with tab4:
+# #     st.subheader("📊 Plots útiles para profesores")
+
+# #     df_plot = df.copy()
+# #     df_plot["semana"] = pd.to_numeric(df_plot["semana"], errors="coerce")
+# #     df_plot = df_plot.dropna(subset=["semana"])
+
+# #     c1, c2 = st.columns(2)
+
+# #     with c1:
+# #         st.markdown("### Eventos por semana")
+# #         week_counts = df_plot.groupby("semana").size().rename("eventos")
+# #         st.bar_chart(week_counts)
+
+# #     with c2:
+# #         st.markdown("### Eventos por actividad")
+# #         act_counts = df_plot.groupby("actividad").size().rename("eventos").sort_values(ascending=False)
+# #         st.bar_chart(act_counts)
+
+# #     st.divider()
+
+# #     st.markdown("### Carga por profesor (horarios)")
+# #     rows = []
+# #     for _, r in df_plot.iterrows():
+# #         for p in split_profes(r.get("profesores", "")):
+# #             rows.append({
+# #                 "profesor": p,
+# #                 "actividad": r.get("actividad", ""),
+# #                 "semana": r.get("semana", None)
+# #             })
+
+# #     if rows:
+# #         prof_df = pd.DataFrame(rows)
+# #         prof_counts = prof_df.groupby("profesor").size().rename("eventos").sort_values(ascending=False)
+# #         st.bar_chart(prof_counts)
+# #     else:
+# #         st.info("No hay profesores asignados en el calendario.")
+
+# #     st.divider()
+
+# #     if not df_misiones.empty:
+# #         st.markdown("### Misiones por profesor")
+# #         filas_misiones = []
+# #         for _, r in df_misiones.iterrows():
+# #             for p in split_profes(r.get("responsables", "")):
+# #                 filas_misiones.append({
+# #                     "profesor": p,
+# #                     "evento": r.get("evento", ""),
+# #                     "paso": PASO_LABELS.get(str(r.get("paso", "")).strip(), str(r.get("paso", "")).strip())
+# #                 })
+
+# #         if filas_misiones:
+# #             df_mp = pd.DataFrame(filas_misiones)
+# #             conteo_misiones = df_mp.groupby("profesor").size().rename("misiones").sort_values(ascending=False)
+# #             st.bar_chart(conteo_misiones)
+
+# #             st.markdown("### Distribución por tipo de paso")
+# #             conteo_pasos = df_mp.groupby("paso").size().rename("cantidad").sort_values(ascending=False)
+# #             st.bar_chart(conteo_pasos)
+
+
+# with tab4:
+#     st.subheader("📊 Plots útiles para profesores")
+
+#     df_plot = df.copy()
+#     df_plot["semana"] = pd.to_numeric(df_plot["semana"], errors="coerce")
+#     df_plot = df_plot.dropna(subset=["semana"])
+
+#     c1, c2 = st.columns(2)
+
+#     with c1:
+#         st.markdown("### Eventos por semana")
+#         week_counts = df_plot.groupby("semana").size().rename("eventos")
+#         st.bar_chart(week_counts)
+
+#     with c2:
+#         st.markdown("### Eventos por actividad")
+#         act_counts = df_plot.groupby("actividad").size().rename("eventos").sort_values(ascending=False)
+#         st.bar_chart(act_counts)
+
+#     st.divider()
+
+#     st.markdown("### Carga por profesor (horarios)")
+#     rows = []
+#     for _, r in df_plot.iterrows():
+#         for p in split_profes(r.get("profesores", "")):
+#             rows.append({
+#                 "profesor": p,
+#                 "actividad": r.get("actividad", ""),
+#                 "semana": r.get("semana", None)
+#             })
+
+#     if rows:
+#         prof_df = pd.DataFrame(rows)
+#         prof_counts = prof_df.groupby("profesor").size().rename("eventos").sort_values(ascending=False)
+#         st.bar_chart(prof_counts)
+#     else:
+#         st.info("No hay profesores asignados en el calendario.")
+
+#     st.divider()
+
+#     if not df_misiones.empty:
+#         st.markdown("### Misiones por profesor")
+
+#         filas_misiones = []
+#         for _, r in df_misiones.iterrows():
+#             for p in split_profes(r.get("responsables", "")):
+#                 filas_misiones.append({
+#                     "profesor": p,
+#                     "evento": r.get("evento", ""),
+#                     "paso": PASO_LABELS.get(str(r.get("paso", "")).strip(), str(r.get("paso", "")).strip()),
+#                     "estado": str(r.get("estado", "")).strip() or "Pendiente"
+#                 })
+
+#         if filas_misiones:
+#             df_mp = pd.DataFrame(filas_misiones)
+
+#             conteo_misiones = df_mp.groupby("profesor").size().rename("misiones").sort_values(ascending=False)
+#             st.bar_chart(conteo_misiones)
+
+#             st.markdown("### Distribución por tipo de paso")
+#             conteo_pasos = df_mp.groupby("paso").size().rename("cantidad").sort_values(ascending=False)
+#             st.bar_chart(conteo_pasos)
+
+#             st.divider()
+
+#             # st.markdown("### Proporción misiones / carga de seminario")
+
+#             # excluir_pec_plot = st.checkbox(
+#             #     "Excluir del numerador las misiones PEC puras (construcción/pauta)",
+#             #     value=False,
+#             #     key=f"excluir_pec_plot_{curso_actual}"
+#             # )
+
+#             # df_carga = construir_tabla_carga_seminario(
+#             #     df_cal=df,
+#             #     df_misiones=df_misiones,
+#             #     excluir_pec_del_numerador=excluir_pec_plot
+#             # )
+
+#             # if not df_carga.empty:
+#             #     df_carga["color"] = df_carga["profesor"].apply(color_profesor)
+
+#             #     fig = px.bar(
+#             #         df_carga,
+#             #         x="profesor",
+#             #         y="ratio",
+#             #         color="profesor",
+#             #         color_discrete_map={p: color_profesor(p) for p in df_carga["profesor"].unique()},
+#             #         custom_data=["misiones_no_lab", "slots_seminario_semana1", "seminarios_equivalentes"],
+#             #         title="Carga relativa de misiones respecto a seminarios asignados"
+#             #     )
+
+#             #     fig.update_traces(
+#             #         hovertemplate=(
+#             #             "<b>%{x}</b><br>"
+#             #             "Ratio: %{y:.3f}<br>"
+#             #             "Misiones no lab: %{customdata[0]}<br>"
+#             #             "Slots seminario semana 1: %{customdata[1]}<br>"
+#             #             "Seminarios equivalentes: %{customdata[2]}<extra></extra>"
+#             #         )
+#             #     )
+
+#             #     fig.update_layout(
+#             #         xaxis_title="Profesor",
+#             #         yaxis_title="misiones_no_lab / seminarios_equivalentes",
+#             #         yaxis=dict(range=[0, 2], fixedrange=False),
+#             #         showlegend=False,
+#             #         dragmode="zoom"
+#             #     )
+
+#             #     st.plotly_chart(fig, use_container_width=True)
+
+#             #     st.dataframe(
+#             #         df_carga,
+#             #         use_container_width=True,
+#             #         hide_index=True
+#             #     )
+
+
+#             # st.markdown("### Proporción misiones / carga de seminario")
+
+#             # with st.expander("Configurar pesos de misiones", expanded=False):
+#             #     pesos_editables = {}
+#             #     cols_pesos = st.columns(2)
+
+#             #     for i, paso in enumerate(PESOS_MISION.keys()):
+#             #         with cols_pesos[i % 2]:
+#             #             pesos_editables[paso] = st.number_input(
+#             #                 f"{paso}",
+#             #                 min_value=0.0,
+#             #                 value=float(PESOS_MISION[paso]),
+#             #                 step=0.1,
+#             #                 key=f"peso_{curso_actual}_{paso}"
+#             #             )
+
+#             # excluir_laboratorio_plot = st.checkbox(
+#             #     "Excluir misiones de laboratorio del cálculo",
+#             #     value=True,
+#             #     key=f"excluir_laboratorio_plot_{curso_actual}"
+#             # )
+
+#             # df_carga = construir_tabla_carga_seminario(
+#             #     df_cal=df,
+#             #     df_misiones=df_misiones,
+#             #     pesos=pesos_editables,
+#             #     excluir_laboratorio=excluir_laboratorio_plot
+#             # )
+
+#             # if not df_carga.empty:
+#             #     fig = px.bar(
+#             #         df_carga,
+#             #         x="profesor",
+#             #         y="ratio",
+#             #         color="profesor",
+#             #         color_discrete_map={p: color_profesor(p) for p in df_carga["profesor"].unique()},
+#             #         custom_data=["misiones_ponderadas", "cupos_semana_1", "clases_estimadas"],
+#             #         title="Carga relativa de misiones respecto a seminarios asignados"
+#             #     )
+
+#             #     fig.update_traces(
+#             #         hovertemplate=(
+#             #             "<b>%{x}</b><br>"
+#             #             "Ratio: %{y:.3f}<br>"
+#             #             "Misiones ponderadas: %{customdata[0]:.1f}<br>"
+#             #             "Cupos semana 1: %{customdata[1]}<br>"
+#             #             "Clases estimadas: %{customdata[2]}<extra></extra>"
+#             #         )
+#             #     )
+
+#             #     fig.update_layout(
+#             #         xaxis_title="Profesor",
+#             #         yaxis_title="misiones_ponderadas / clases_estimadas",
+#             #         yaxis=dict(range=[0, 2], fixedrange=False),
+#             #         showlegend=False,
+#             #         dragmode="zoom"
+#             #     )
+
+#             #     st.plotly_chart(fig, use_container_width=True)
+
+#             #     st.dataframe(
+#             #         df_carga,
+#             #         use_container_width=True,
+#             #         hide_index=True
+#             #     )
+
+#             # else:
+#             #     st.info("No se pudo construir la tabla de carga relativa.")
+            
+                
+            
+#             st.divider()
+#             st.markdown("### Proporción misiones / carga de seminario")
+
+#             st.markdown("#### Pesos por misión")
+#             pesos_default = {
+#                 "pedir_preguntas": 1.0,
+#                 "construir_control": 1.0,
+#                 "pauta_prueba": 1.0,
+#                 "corregir_y_notas": 1.0,
+#                 "revisar_tp": 1.0,
+#                 "construir_examen": 1.0,
+#                 "pauta_examen": 1.0,
+#                 "corregir_examen": 1.0,
+#                 "construir_taller_AB": 1.0,
+#                 "construir_taller_CD": 1.0,
+#                 "corregir_taller_A": 1.0,
+#                 "corregir_taller_B": 1.0,
+#                 "corregir_taller_C": 1.0,
+#                 "corregir_taller_D": 1.0,
+#             }
+
+#             pesos = {}
+#             cpes1, cpes2, cpes3 = st.columns(3)
+#             claves_pesos = list(pesos_default.keys())
+
+#             for i, paso in enumerate(claves_pesos):
+#                 col = [cpes1, cpes2, cpes3][i % 3]
+#                 with col:
+#                     pesos[paso] = st.number_input(
+#                         f"Peso {paso}",
+#                         min_value=0.0,
+#                         value=float(pesos_default[paso]),
+#                         step=0.1,
+#                         key=f"peso_{curso_actual}_{paso}"
+#                     )
+
+#             df_carga = construir_tabla_carga_seminario(
+#                 df_cal=df,
+#                 df_misiones=df_misiones,
+#                 pesos=pesos,
+#                 incluir_pec=True
+#             )
+
+#             if not df_carga.empty:
+#                 color_map = {p: color_profesor(p) for p in df_carga["profesor"].unique()}
+
+#                 fig = px.bar(
+#                     df_carga,
+#                     x="profesor",
+#                     y="ratio",
+#                     color="profesor",
+#                     color_discrete_map=color_map,
+#                     custom_data=["misiones_ponderadas", "cupos_semana_1", "clases_estimadas"],
+#                     title="Carga relativa de misiones respecto a seminarios asignados"
+#                 )
+
+#                 fig.update_traces(
+#                     hovertemplate=(
+#                         "<b>%{x}</b><br>"
+#                         "Ratio: %{y:.3f}<br>"
+#                         "Misiones ponderadas: %{customdata[0]:.1f}<br>"
+#                         "Cupos semana 1: %{customdata[1]}<br>"
+#                         "Clases estimadas: %{customdata[2]}<extra></extra>"
+#                     )
+#                 )
+
+#                 fig.update_layout(
+#                     xaxis_title="Profesor",
+#                     yaxis_title="misiones_ponderadas / clases_estimadas",
+#                     yaxis=dict(range=[0, 2], fixedrange=False),
+#                     showlegend=False,
+#                     dragmode="zoom"
+#                 )
+
+#                 st.plotly_chart(fig, use_container_width=True)
+
+#                 st.dataframe(
+#                     df_carga,
+#                     use_container_width=True,
+#                     hide_index=True
+#                 )
+#             else:
+#                 st.info("No se pudo construir la tabla de carga relativa.")
+        
+        
+#         else:
+#             st.info("No hay misiones registradas.")
+
+
+
+
+
+
 import os
 import html
+import json
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
-from streamlit_calendar import calendar
+import plotly.express as px
+
 
 # ============================================================
 # CONFIG FIJA
@@ -28,30 +3982,48 @@ CURSOS = {
         "carpeta": "medicina",
         "emoji": "🏥",
     },
-    
     "enobnu": {
-    "label": "Enobnu",
-    "carpeta": "enobnu",   # debe existir: data/enobnu/calendario.xlsx y data/enobnu/misiones.xlsx
-    "emoji": "🍇",         # cambia el emoji si quieres
+        "label": "Enobnu",
+        "carpeta": "enobnu",
+        "emoji": "🍇",
     },
 }
 
+
 # ============================================================
-# UTILIDADES Y ESTILOS
+# PALETA / ESTILOS
 # ============================================================
 PROF_PALETTE = {
-    "TY": "#1f77b4", "IG": "#2ca02c", "CC": "#ff7f0e",
-    "AR": "#9467bd", "JCS": "#8c564b",
-    "p1": "#1f77b4", "p2": "#2ca02c", "p3": "#ff7f0e",
-    "p4": "#9467bd", "p5": "#8c564b", "p6": "#e377c2",
-    "Todos": "#374151"
+    "TY": "#1f77b4",
+    "IG": "#2ca02c",
+    "CC": "#ff7f0e",
+    "AR": "#9467bd",
+    "JCS": "#8c564b",
+    "MB": "#e377c2",
+    "GM": "#17becf",
+    "VB": "#bcbd22",
+    "NV": "#d62728",
+    "JM": "#7f7f7f",
+    "EG": "#8c564b",
+    "RL": "#6b7280",
+    "DH": "#14b8a6",
+    "SM": "#ef4444",
+    "RM": "#f59e0b",
+    "XX": "#64748b",
+    "Todos": "#374151",
 }
+
+PALETA_FALLBACK = [
+    "#1f77b4", "#2ca02c", "#ff7f0e", "#9467bd", "#8c564b",
+    "#e377c2", "#17becf", "#bcbd22", "#d62728", "#14b8a6",
+    "#f59e0b", "#6366f1", "#ec4899", "#22c55e", "#0ea5e9",
+]
 
 EVAL_ICON = {
     "Trabajo práctico": "📝",
-    "Control": "⭐",          # o "🧾" si prefieres
-    "Certamen": "🧠",         # opcional
-    "Examen": "🎓",           # opcional
+    "Control": "⭐",
+    "Certamen": "🧠",
+    "Examen": "🎓",
 }
 
 ACT_COLORS = {
@@ -66,19 +4038,38 @@ ACT_COLORS = {
 }
 
 SECTION_COLORS = {
-    "Sección 1": "rgba(59, 130, 246, 0.18)",   # azul suave
-    "Sección 2": "rgba(34, 197, 94, 0.18)",    # verde suave
-    "Sección 3": "rgba(249, 115, 22, 0.18)",   # naranjo suave
-    "Sección 4": "rgba(168, 85, 247, 0.18)",   # violeta suave
+    "Sección 1": "rgba(59, 130, 246, 0.18)",
+    "Sección 2": "rgba(34, 197, 94, 0.18)",
+    "Sección 3": "rgba(249, 115, 22, 0.18)",
+    "Sección 4": "rgba(168, 85, 247, 0.18)",
 }
 
 BORDER_BY_ACTIVIDAD = {
-    "Clase teórica": "#111827",    # gris/negro
-    "Seminario": "#2563eb",        # azul
-    "Laboratorio": "#f59e0b",      # ámbar
-    "Trabajo autónomo": "#6b7280", # gris
-    "Examen": "#111827",           # negro
-    "Misión": "#991b1b",           # rojo oscuro
+    "Clase teórica": "#111827",
+    "Seminario": "#2563eb",
+    "Laboratorio": "#f59e0b",
+    "Trabajo autónomo": "#6b7280",
+    "Examen": "#111827",
+    "Misión": "#991b1b",
+}
+
+PESOS_MISION_DEFAULT = {
+    "pedir_preguntas": 1.0,
+    "construir_control": 1.0,
+    "pauta_prueba": 1.0,
+    "revisar_prueba": 1.0,
+    "escanear": 1.0,
+    "corregir_y_notas": 1.0,
+    "revisar_tp": 1.0,
+    "construir_examen": 1.0,
+    "pauta_examen": 1.0,
+    "corregir_examen": 1.0,
+    "construir_taller_AB": 1.0,
+    "construir_taller_CD": 1.0,
+    "corregir_taller_A": 1.0,
+    "corregir_taller_B": 1.0,
+    "corregir_taller_C": 1.0,
+    "corregir_taller_D": 1.0,
 }
 
 PASO_LABELS = {
@@ -99,6 +4090,17 @@ PASO_LABELS = {
     "revision_actividad_autonoma": "Revisión actividad autónoma",
     "revision_controles_y_nota": "Revisión controles y poner nota",
     "revisar_pruebas": "Revisar pruebas",
+    "construir_taller": "Construcción de taller",
+    "construir_taller_AB": "Construcción taller versiones A y B",
+    "construir_taller_CD": "Construcción taller versiones C y D",
+    "corregir_taller": "Corrección de taller",
+    "corregir_taller_A": "Corregir taller versión A",
+    "corregir_taller_B": "Corregir taller versión B",
+    "corregir_taller_C": "Corregir taller versión C",
+    "corregir_taller_D": "Corregir taller versión D",
+    "preparar_material_previo": "Preparar material previo",
+    "grabar_video_solucion": "Grabar video solución",
+    "corregir_informe_laboratorio": "Corregir informe de laboratorio",
 }
 
 ORDEN_PASOS = [
@@ -119,27 +4121,45 @@ ORDEN_PASOS = [
     "revision_actividad_autonoma",
     "revision_controles_y_nota",
     "revisar_pruebas",
+    "construir_taller_AB",
+    "construir_taller_CD",
+    "corregir_taller_A",
+    "corregir_taller_B",
+    "corregir_taller_C",
+    "corregir_taller_D",
+    "preparar_material_previo",
+    "grabar_video_solucion",
+    "corregir_informe_laboratorio",
 ]
 
 
-def obtener_paths_curso(curso_key: str):
-    carpeta = CURSOS[curso_key]["carpeta"]
-    base_dir = os.path.join(DATA_DIR, carpeta)
+# ============================================================
+# HELPERS GENERALES
+# ============================================================
+def color_profesor(codigo: str) -> str:
+    codigo = str(codigo).strip()
+    if not codigo:
+        return "#6b7280"
+    if codigo in PROF_PALETTE:
+        return PROF_PALETTE[codigo]
+    idx = sum(ord(ch) for ch in codigo) % len(PALETA_FALLBACK)
+    return PALETA_FALLBACK[idx]
 
-    return {
-        "base_dir": base_dir,
-        "excel_calendario": os.path.join(base_dir, "calendario.xlsx"),
-        "excel_misiones": os.path.join(base_dir, "misiones.xlsx"),
-    }
 
-
-def split_profes(s: str):
-    if not s or pd.isna(s):
+def split_profes(valor):
+    if valor is None:
         return []
-    return [x.strip() for x in str(s).split(",") if x.strip()]
+    try:
+        if pd.isna(valor):
+            return []
+    except Exception:
+        pass
+    if isinstance(valor, (list, tuple)):
+        return [str(x).strip() for x in valor if str(x).strip()]
+    return [x.strip() for x in str(valor).split(",") if x.strip()]
 
 
-def row_has_prof(row_prof: str, selected_set: set) -> bool:
+def row_has_prof(row_prof, selected_set: set) -> bool:
     profs = set(split_profes(row_prof))
     if not profs:
         return False
@@ -147,11 +4167,186 @@ def row_has_prof(row_prof: str, selected_set: set) -> bool:
 
 
 def escape_texto(x):
-    if x is None or pd.isna(x):
+    if x is None:
         return ""
+    try:
+        if pd.isna(x):
+            return ""
+    except Exception:
+        pass
     return html.escape(str(x))
 
 
+def obtener_paths_curso(curso_key: str):
+    carpeta = CURSOS[curso_key]["carpeta"]
+    base_dir = os.path.join(DATA_DIR, carpeta)
+    return {
+        "base_dir": base_dir,
+        "excel_calendario": os.path.join(base_dir, "calendario.xlsx"),
+        "excel_misiones": os.path.join(base_dir, "misiones.xlsx"),
+    }
+
+
+def normalizar_columnas(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df
+
+    df2 = df.copy()
+    rename_map = {}
+
+    for col in df2.columns:
+        base = str(col).strip()
+
+        if base.lower() == "seccion":
+            rename_map[col] = "sección"
+        elif base.lower() == "evaluacion":
+            rename_map[col] = "evaluación"
+        elif base.lower() == "dia":
+            rename_map[col] = "día"
+        else:
+            rename_map[col] = base
+
+    df2 = df2.rename(columns=rename_map)
+    return df2
+
+
+def asegurar_columnas(df: pd.DataFrame, cols, fill=""):
+    df2 = df.copy()
+    for c in cols:
+        if c not in df2.columns:
+            df2[c] = fill
+    return df2
+
+
+def semana_actual_desde_df(df):
+    if df.empty or "fecha" not in df.columns or "semana" not in df.columns:
+        return 1
+
+    df2 = df.copy()
+    df2["fecha"] = pd.to_datetime(df2["fecha"], errors="coerce")
+    df2["semana"] = pd.to_numeric(df2["semana"], errors="coerce")
+    df2 = df2.dropna(subset=["fecha", "semana"]).copy()
+
+    if df2.empty:
+        return 1
+
+    hoy = pd.Timestamp.now(tz=TIMEZONE).tz_localize(None).normalize()
+
+    resumen = (
+        df2.groupby("semana", as_index=False)
+        .agg(fecha_min=("fecha", "min"), fecha_max=("fecha", "max"))
+        .sort_values("semana")
+        .reset_index(drop=True)
+    )
+
+    mask = (
+        (resumen["fecha_min"].dt.normalize() <= hoy) &
+        (resumen["fecha_max"].dt.normalize() >= hoy)
+    )
+    if mask.any():
+        return int(resumen.loc[mask, "semana"].iloc[0])
+
+    if hoy < resumen["fecha_min"].min().normalize():
+        return int(resumen["semana"].min())
+
+    if hoy > resumen["fecha_max"].max().normalize():
+        return int(resumen["semana"].max())
+
+    futuras = resumen[resumen["fecha_min"].dt.normalize() > hoy]
+    if not futuras.empty:
+        return int(futuras["semana"].iloc[0])
+
+    return int(resumen["semana"].max())
+
+
+# ============================================================
+# CARGA DE DATOS
+# ============================================================
+def cargar_datos_calendario_excel(excel_calendario_path):
+    if not os.path.exists(excel_calendario_path):
+        st.error(f"⚠️ No se encontró el archivo: {excel_calendario_path}")
+        st.stop()
+
+    df = pd.read_excel(excel_calendario_path, sheet_name="Calendario")
+    df = normalizar_columnas(df)
+    df = asegurar_columnas(
+        df,
+        ["fecha", "semana", "horario", "sección", "actividad", "tema", "evaluación", "profesores", "observaciones"]
+    )
+
+    df["fecha"] = pd.to_datetime(df["fecha"], errors="coerce")
+    df["semana"] = pd.to_numeric(df["semana"], errors="coerce")
+
+    cols_str = ["horario", "sección", "actividad", "tema", "evaluación", "profesores", "observaciones"]
+    for c in cols_str:
+        df[c] = df[c].fillna("").astype(str).str.strip()
+
+    return df
+
+
+def cargar_sheet_excel(path, sheet):
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    try:
+        df = pd.read_excel(path, sheet_name=sheet)
+        return normalizar_columnas(df)
+    except Exception:
+        return pd.DataFrame()
+
+
+def cargar_datos_misiones_base(excel_misiones_path):
+    df = cargar_sheet_excel(excel_misiones_path, "Misiones")
+    if df.empty:
+        return df
+
+    df = asegurar_columnas(
+        df,
+        ["fecha_limite", "fecha_evento", "evento", "tipo_evento", "paso", "sección", "responsables", "detalle", "estado"]
+    )
+
+    for c in ["fecha_limite", "fecha_evento"]:
+        df[c] = pd.to_datetime(df[c], errors="coerce")
+
+    for c in ["evento", "tipo_evento", "paso", "sección", "responsables", "detalle", "estado"]:
+        df[c] = df[c].fillna("").astype(str).str.strip()
+
+    return df
+
+
+# ============================================================
+# FILTROS
+# ============================================================
+def inicializar_widgets_filtros(curso_actual, all_secciones, all_prof_codes):
+    if "sel_secciones" not in st.session_state:
+        st.session_state.sel_secciones = {s: True for s in all_secciones}
+    if "sel_profes" not in st.session_state:
+        st.session_state.sel_profes = {p: True for p in all_prof_codes}
+
+    for s in all_secciones:
+        key = f"sec_{curso_actual}_{s}"
+        if key not in st.session_state:
+            st.session_state[key] = st.session_state.sel_secciones.get(s, True)
+
+    for p in all_prof_codes:
+        key = f"prof_{curso_actual}_{p}"
+        if key not in st.session_state:
+            st.session_state[key] = st.session_state.sel_profes.get(p, True)
+
+
+def sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes):
+    st.session_state.sel_secciones = {
+        s: bool(st.session_state.get(f"sec_{curso_actual}_{s}", True))
+        for s in all_secciones
+    }
+    st.session_state.sel_profes = {
+        p: bool(st.session_state.get(f"prof_{curso_actual}_{p}", True))
+        for p in all_prof_codes
+    }
+
+
+# ============================================================
+# MISIONES / ESTADÍSTICAS
+# ============================================================
 def color_paso(paso: str) -> str:
     paso = str(paso).strip()
     if paso in ["pedir_preguntas", "construir_control", "pauta_prueba", "construir_examen", "pauta_examen"]:
@@ -167,140 +4362,209 @@ def color_paso(paso: str) -> str:
     return "#f3f4f6"
 
 
+def es_mision_laboratorio(row) -> bool:
+    tipo_evento = str(row.get("tipo_evento", "")).strip().lower()
+    evento = str(row.get("evento", "")).strip().lower()
+    paso = str(row.get("paso", "")).strip().lower()
+    detalle = str(row.get("detalle", "")).strip().lower()
+
+    return (
+        "laboratorio" in tipo_evento
+        or "informe laboratorio" in tipo_evento
+        or "laboratorio" in evento
+        or "informe laboratorio" in evento
+        or paso == "corregir_informe_laboratorio"
+        or "laboratorio" in detalle
+    )
+
+
+def construir_tabla_carga_seminario(df_cal, df_misiones, pesos=None):
+    if pesos is None:
+        pesos = {}
+
+    df_sem1 = df_cal.copy()
+    df_sem1["semana"] = pd.to_numeric(df_sem1["semana"], errors="coerce")
+    df_sem1 = df_sem1[
+        (df_sem1["actividad"].astype(str).str.strip() == "Seminario") &
+        (df_sem1["semana"] == 1)
+    ].copy()
+
+    conteo_cupos = {}
+    for _, r in df_sem1.iterrows():
+        for p in split_profes(r.get("profesores", "")):
+            conteo_cupos[p] = conteo_cupos.get(p, 0) + 1
+
+    clases_estimadas = {p: n * 17 for p, n in conteo_cupos.items()}
+    profes_seminario = set(conteo_cupos.keys())
+
+    df_mis = df_misiones.copy()
+    if df_mis.empty:
+        return pd.DataFrame(columns=[
+            "profesor", "cupos_semana_1", "clases_estimadas", "misiones_ponderadas", "ratio"
+        ])
+
+    df_mis = asegurar_columnas(df_mis, ["tipo_evento", "evento", "paso", "responsables", "detalle"])
+    for c in ["tipo_evento", "evento", "paso", "responsables", "detalle"]:
+        df_mis[c] = df_mis[c].fillna("").astype(str)
+
+    df_mis = df_mis[~df_mis.apply(es_mision_laboratorio, axis=1)].copy()
+
+    carga = {}
+    for _, r in df_mis.iterrows():
+        paso = str(r.get("paso", "")).strip()
+        peso = float(pesos.get(paso, 1.0))
+        for p in split_profes(r.get("responsables", "")):
+            if p not in profes_seminario:
+                continue
+            carga[p] = carga.get(p, 0.0) + peso
+
+    filas = []
+    for p in sorted(profes_seminario):
+        cupos = conteo_cupos.get(p, 0)
+        clases = clases_estimadas.get(p, 0)
+        mis = carga.get(p, 0.0)
+        ratio = (mis / clases) if clases > 0 else 0.0
+        filas.append({
+            "profesor": p,
+            "cupos_semana_1": cupos,
+            "clases_estimadas": clases,
+            "misiones_ponderadas": mis,
+            "ratio": ratio,
+        })
+
+    return pd.DataFrame(filas).sort_values(
+        ["ratio", "misiones_ponderadas", "profesor"],
+        ascending=[False, False, True]
+    ).reset_index(drop=True)
+
+
 # ============================================================
-# CARGA DE DATOS
+# TABLA MISIONES POR PERSONA
 # ============================================================
-def cargar_datos_calendario_excel(excel_calendario_path):
-    if not os.path.exists(excel_calendario_path):
-        st.error(f"⚠️ No se encontró el archivo: {excel_calendario_path}")
-        st.warning("Genera primero el Excel correspondiente al curso seleccionado.")
-        st.stop()
-
-    df = pd.read_excel(excel_calendario_path, sheet_name="Calendario")
-    df["fecha"] = pd.to_datetime(df["fecha"], errors="coerce")
-
-    cols_str = [
-        "horario", "sección", "actividad", "tema",
-        "evaluación", "profesores", "observaciones"
-    ]
-    for c in cols_str:
-        if c in df.columns:
-            df[c] = df[c].fillna("").astype(str)
-
-    return df
-
-
-def cargar_sheet_excel(path, sheet):
-    if not os.path.exists(path):
-        return pd.DataFrame()
-    try:
-        return pd.read_excel(path, sheet_name=sheet)
-    except Exception:
-        return pd.DataFrame()
-
-
-def cargar_datos_misiones_base(excel_misiones_path):
-    df = cargar_sheet_excel(excel_misiones_path, "Misiones")
-    if df.empty:
-        return df
-
-    for c in ["fecha_limite", "fecha_evento", "fecha"]:
-        if c in df.columns:
-            df[c] = pd.to_datetime(df[c], errors="coerce")
-
-    for c in ["evento", "paso", "sección", "responsables", "detalle", "estado"]:
-        if c in df.columns:
-            df[c] = df[c].fillna("").astype(str)
-
-    return df
-
-
-
 def tabla_misiones_por_profesor_y_mes(df_misiones: pd.DataFrame):
-    """
-    UI: tabs por profesor (p1..pN) y selector de mes.
-    Muestra una tabla con misiones (fecha_limite, paso, evento, sección, detalle).
-    """
     if df_misiones.empty:
         st.info("No hay misiones para mostrar.")
         return
 
     df2 = df_misiones.copy()
-
-    # Asegurar datetime
     df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
     df2 = df2.dropna(subset=["fecha_limite"]).copy()
 
-    # Columnas seguras
     for c in ["evento", "paso", "sección", "responsables", "detalle", "estado"]:
-        if c in df2.columns:
-            df2[c] = df2[c].fillna("").astype(str)
-        else:
+        if c not in df2.columns:
             df2[c] = ""
+        df2[c] = df2[c].fillna("").astype(str)
 
-    # Obtener lista de profes desde responsables
     profs = set()
     for s in df2["responsables"].dropna().unique():
         for p in split_profes(s):
-            profs.add(p)
+            profs.add(p.strip())
 
-    # Si quieres SOLO p1..p6:
-    profs = [p for p in sorted(profs) if p.startswith("p")]
+    profs = sorted([p for p in profs if p])
+
     if not profs:
-        st.info("No hay responsables tipo p1, p2, ... en el archivo de misiones.")
+        st.info("No hay responsables en el archivo de misiones.")
         return
 
-    st.markdown("### 👤 Misiones por persona y por mes")
+    st.markdown("### 👤 Misiones por persona")
     tabs = st.tabs(profs)
 
     for i, prof in enumerate(profs):
         with tabs[i]:
-            # Filtrar por prof
             dfp = df2[df2["responsables"].apply(lambda x: prof in split_profes(x))].copy()
+
             if dfp.empty:
                 st.info(f"{prof}: no tiene misiones asignadas.")
                 continue
 
-            # Meses disponibles para ese prof
-            dfp["mes"] = dfp["fecha_limite"].dt.to_period("M").astype(str)
-            meses = sorted(dfp["mes"].unique())
+            dfp = dfp.sort_values(["fecha_limite", "evento", "paso", "sección"]).copy()
 
-            mes_sel = st.selectbox(
-                "Selecciona mes:",
-                options=meses,
-                index=len(meses) - 1,
-                key=f"mes_sel_{prof}"
-            )
+            primer_mes = dfp["fecha_limite"].min().to_period("M").to_timestamp()
+            ultimo_mes = dfp["fecha_limite"].max().to_period("M").to_timestamp()
 
-            dfm = dfp[dfp["mes"] == mes_sel].copy()
-            dfm = dfm.sort_values(["fecha_limite", "evento", "paso", "sección"])
+            clave_offset = f"offset_mes_{prof}"
+            if clave_offset not in st.session_state:
+                st.session_state[clave_offset] = 0
 
-            # Tabla bonita
-            df_show = dfm[["fecha_limite", "evento", "paso", "sección", "detalle", "estado"]].copy()
+            mes_actual = pd.Timestamp.today().to_period("M").to_timestamp()
+            mes_base = max(primer_mes, mes_actual)
+            mes_sel = (mes_base + pd.DateOffset(months=st.session_state[clave_offset])).to_period("M").to_timestamp()
 
-            # Formato fecha
-            df_show["fecha_limite"] = df_show["fecha_limite"].dt.strftime("%d/%m/%Y")
+            if mes_sel < primer_mes:
+                mes_sel = primer_mes
+            if mes_sel > ultimo_mes:
+                mes_sel = ultimo_mes
 
-            # Labels más humanos si tienes PASO_LABELS
-            if "PASO_LABELS" in globals():
-                df_show["paso"] = df_show["paso"].apply(lambda x: PASO_LABELS.get(str(x).strip(), str(x).strip()))
+            c1, c2, c3 = st.columns([1, 3, 1])
+            with c1:
+                if st.button("⬅️", key=f"prev_mes_{prof}", use_container_width=True):
+                    st.session_state[clave_offset] -= 1
+                    st.rerun()
 
-            st.dataframe(
-                df_show,
-                use_container_width=True,
-                hide_index=True,
-                column_config={
-                    "fecha_limite": st.column_config.TextColumn("Vence"),
-                    "evento": st.column_config.TextColumn("Evaluación"),
-                    "paso": st.column_config.TextColumn("Misión"),
-                    "sección": st.column_config.TextColumn("Sección"),
-                    "detalle": st.column_config.TextColumn("Detalle"),
-                    "estado": st.column_config.TextColumn("Estado"),
-                }
-            )
+            with c2:
+                st.markdown(
+                    f"<div style='text-align:center; font-weight:700; font-size:18px; margin-top:6px;'>"
+                    f"{mes_sel.strftime('%B %Y').capitalize()}</div>",
+                    unsafe_allow_html=True
+                )
+
+            with c3:
+                if st.button("➡️", key=f"next_mes_{prof}", use_container_width=True):
+                    st.session_state[clave_offset] += 1
+                    st.rerun()
+
+            inicio_mes = mes_sel
+            fin_mes = mes_sel + pd.DateOffset(months=1)
+
+            dfm = dfp[(dfp["fecha_limite"] >= inicio_mes) & (dfp["fecha_limite"] < fin_mes)].copy()
+
+            if dfm.empty:
+                st.info("No hay misiones para este mes.")
+                continue
+
+            st.markdown("---")
+
+            for _, r in dfm.iterrows():
+                fecha_limite = r["fecha_limite"].strftime("%d/%m/%Y") if pd.notna(r["fecha_limite"]) else "—"
+                evento = str(r.get("evento", "")).strip()
+                paso = PASO_LABELS.get(str(r.get("paso", "")).strip(), str(r.get("paso", "")).strip())
+                seccion = str(r.get("sección", "")).strip()
+                detalle = str(r.get("detalle", "")).strip()
+                estado = str(r.get("estado", "")).strip()
+
+                color_estado = "#dcfce7" if estado.lower() in ["completado", "completada", "listo", "ok", "done"] else "#fee2e2"
+
+                st.markdown(f"""
+                <div style="
+                    border:1px solid #d1d5db;
+                    border-left:6px solid #2563eb;
+                    border-radius:10px;
+                    padding:12px 14px;
+                    margin-bottom:10px;
+                    background:white;
+                ">
+                    <div style="font-weight:800; font-size:15px;">{paso}</div>
+                    <div style="margin-top:4px; color:#374151;"><b>Vence:</b> {fecha_limite}</div>
+                    <div style="color:#374151;"><b>Evaluación:</b> {evento or '—'}</div>
+                    <div style="color:#374151;"><b>Sección:</b> {seccion or '—'}</div>
+                    <div style="color:#374151;"><b>Detalle:</b> {detalle or '—'}</div>
+                    <div style="
+                        display:inline-block;
+                        margin-top:8px;
+                        padding:4px 10px;
+                        border-radius:999px;
+                        background:{color_estado};
+                        font-weight:700;
+                        font-size:12px;
+                    ">
+                        {estado or 'Pendiente'}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
 
 # ============================================================
-# TAB 2: COLORES WEB PARA CALENDARIO
+# TAB 2: TABLA HORARIOS
 # ============================================================
 def color_fila_calendario(row):
     actividad = str(row.get("actividad", "")).strip()
@@ -324,14 +4588,13 @@ def color_fila_calendario(row):
             if col == "evaluación":
                 estilos[i] = "background-color: #fde68a; font-weight: bold;"
             elif col == "observaciones":
-                estilos[i] = estilos[i] + " font-style: italic;"
+                estilos[i] += " font-style: italic;"
 
     return estilos
 
 
 def estilo_tabla_calendario(df_tabla: pd.DataFrame):
     df2 = df_tabla.copy()
-
     if "fecha" in df2.columns:
         df2["fecha"] = pd.to_datetime(df2["fecha"], errors="coerce")
 
@@ -339,24 +4602,15 @@ def estilo_tabla_calendario(df_tabla: pd.DataFrame):
         df2.style
         .apply(color_fila_calendario, axis=1)
         .format({"fecha": lambda x: x.strftime("%d/%m/%Y") if pd.notna(x) else ""})
-        .set_properties(**{
-            "text-align": "left",
-            "font-size": "13px",
-            "border-color": "#d1d5db"
-        })
-        .set_properties(subset=[c for c in ["fecha", "semana", "horario"] if c in df2.columns], **{
-            "text-align": "center"
-        })
-        .set_properties(subset=[c for c in ["evaluación"] if c in df2.columns], **{
-            "text-align": "center"
-        })
+        .set_properties(**{"text-align": "left", "font-size": "13px", "border-color": "#d1d5db"})
+        .set_properties(subset=[c for c in ["fecha", "semana", "horario"] if c in df2.columns], **{"text-align": "center"})
+        .set_properties(subset=[c for c in ["evaluación"] if c in df2.columns], **{"text-align": "center"})
     )
-
     return styler
 
 
 def tabla_resumen_colores():
-    html_leyenda = """
+    st.markdown("""
     <div style="display:flex; flex-wrap:wrap; gap:10px; margin:8px 0 14px 0; font-size:13px;">
         <span style="background:#dbeafe; padding:6px 10px; border-radius:8px;">Clase teórica</span>
         <span style="background:#dcfce7; padding:6px 10px; border-radius:8px;">Seminario</span>
@@ -367,8 +4621,7 @@ def tabla_resumen_colores():
         <span style="background:#e5e7eb; padding:6px 10px; border-radius:8px;">Examen</span>
         <span style="background:#fde68a; padding:6px 10px; border-radius:8px; font-weight:700;">Evaluación</span>
     </div>
-    """
-    st.markdown(html_leyenda, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 
 # ============================================================
@@ -381,7 +4634,7 @@ def render_badges_profes(responsables: str) -> str:
 
     badges = []
     for p in lista:
-        color = PROF_PALETTE.get(p, "#6b7280")
+        color = color_profesor(p)
         badges.append(
             f"<span style='display:inline-block; margin:2px 4px 2px 0; "
             f"padding:4px 9px; border-radius:999px; background:{color}; color:white; "
@@ -395,14 +4648,12 @@ def render_matriz_misiones_html(df_mis: pd.DataFrame) -> str:
         return "<p>No hay misiones disponibles.</p>"
 
     df2 = df_mis.copy()
+    df2 = asegurar_columnas(df2, ["evento", "paso", "sección", "responsables", "detalle"])
 
     for c in ["evento", "paso", "sección", "responsables", "detalle"]:
-        if c in df2.columns:
-            df2[c] = df2[c].fillna("").astype(str)
+        df2[c] = df2[c].fillna("").astype(str)
 
-    df2["_orden_paso"] = df2["paso"].apply(
-        lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999
-    )
+    df2["_orden_paso"] = df2["paso"].apply(lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999)
 
     secciones_fijas = ["Sección 1", "Sección 2", "Sección 3", "Sección 4"]
     secciones_presentes = [s for s in secciones_fijas if s in df2["sección"].unique()]
@@ -441,15 +4692,11 @@ def render_matriz_misiones_html(df_mis: pd.DataFrame) -> str:
         <div style="font-size:12px; color:#6b7280; margin-top:3px;">{escape_texto(detalle) if detalle else "—"}</div>
         """
 
-        celdas_secciones = ""
+        celdas = ""
         for sec in secciones_presentes:
             val = str(row.get(sec, "")).strip()
-            if val:
-                contenido = render_badges_profes(val)
-            else:
-                contenido = "<span style='color:#bbb;'>—</span>"
-
-            celdas_secciones += f"""
+            contenido = render_badges_profes(val) if val else "<span style='color:#bbb;'>—</span>"
+            celdas += f"""
             <td style="padding:10px; border:1px solid #d1d5db; vertical-align:top; background:white;">
                 {contenido}
             </td>
@@ -463,7 +4710,7 @@ def render_matriz_misiones_html(df_mis: pd.DataFrame) -> str:
             <td style="padding:10px; border:1px solid #d1d5db; vertical-align:top; background:{color_fila}; min-width:320px;">
                 {detalle_html}
             </td>
-            {celdas_secciones}
+            {celdas}
         </tr>
         """
 
@@ -506,20 +4753,13 @@ def render_plan_html(df_plan: pd.DataFrame) -> str:
         return "<p>No hay plan disponible.</p>"
 
     df2 = df_plan.copy()
+    df2 = asegurar_columnas(df2, ["evento", "paso", "sección", "detalle", "responsables", "estado", "fecha_limite", "fecha_evento"])
 
-    if "fecha_limite" in df2.columns:
-        df2["fecha_limite"] = pd.to_datetime(df2["fecha_limite"], errors="coerce")
-    if "fecha_evento" in df2.columns:
-        df2["fecha_evento"] = pd.to_datetime(df2["fecha_evento"], errors="coerce")
+    df2["fecha_limite"] = pd.to_datetime(df2["fecha_limite"], errors="coerce")
+    df2["fecha_evento"] = pd.to_datetime(df2["fecha_evento"], errors="coerce")
+    df2["_orden"] = df2["paso"].apply(lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999)
 
-    if "paso" in df2.columns:
-        df2["_orden"] = df2["paso"].apply(lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999)
-    else:
-        df2["_orden"] = 999
-
-    ordenar_cols = [c for c in ["evento", "_orden", "sección", "fecha_limite"] if c in df2.columns]
-    if ordenar_cols:
-        df2 = df2.sort_values(ordenar_cols)
+    df2 = df2.sort_values(["evento", "_orden", "sección", "fecha_limite"]).copy()
 
     rows_html = ""
     for _, row in df2.iterrows():
@@ -587,407 +4827,9 @@ def render_plan_html(df_plan: pd.DataFrame) -> str:
 
 
 # ============================================================
-# CALENDARIO
+# EVENTOS CALENDARIO
 # ============================================================
-def df_calendario_a_fullcalendar_events(df: pd.DataFrame):
-    events = []
-
-    for _, r in df.iterrows():
-        fecha = r["fecha"]
-        horario = r.get("horario", "").strip()
-        tema = r.get("tema", "").strip()
-        evaluacion = r.get("evaluación", "").strip()
-        profs = r.get("profesores", "").strip()
-        obs = r.get("observaciones", "").strip()
-        actividad = r.get("actividad", "").strip()
-
-        eval_ic = EVAL_ICON.get(evaluacion, "")
-        prefix = (eval_ic + " ") if eval_ic else ""
-
-        all_day = False
-        start_iso, end_iso = "", ""
-
-        if "–" in horario or "-" in horario:
-            try:
-                h_clean = horario.replace("-", "–")
-                a, b = h_clean.split("–")
-                hi = pd.to_datetime(a.strip(), format="%H:%M").time()
-                hf = pd.to_datetime(b.strip(), format="%H:%M").time()
-
-                start_dt = fecha + pd.Timedelta(hours=hi.hour, minutes=hi.minute)
-                end_dt = fecha + pd.Timedelta(hours=hf.hour, minutes=hf.minute)
-
-                start_iso = start_dt.isoformat()
-                end_iso = end_dt.isoformat()
-            except Exception:
-                all_day = True
-                start_iso = fecha.date().isoformat()
-                end_iso = (fecha + pd.Timedelta(days=1)).date().isoformat()
-        else:
-            all_day = True
-            start_iso = fecha.date().isoformat()
-            end_iso = (fecha + pd.Timedelta(days=1)).date().isoformat()
-
-        # title = f"{prefix}{actividad} · {tema}" if tema else f"{prefix}{actividad}"
-        
-        title = f"{prefix}{actividad} · {tema}" if tema else f"{prefix}{actividad}"
-        if evaluacion:
-            title = f"{prefix}{evaluacion} · {actividad}" + (f" · {tema}" if tema else "")
-
-        # # color = ACT_COLORS.get(actividad, "#888888")
-        # # if "Feriado" in actividad or "Pausa" in actividad:
-        # #     color = ACT_COLORS.get("Sin clases (Feriado)")
-        # color = ACT_COLORS.get(actividad, "#888888")
-        # if "Feriado" in actividad or "Pausa" in actividad:
-        #     color = ACT_COLORS.get("Sin clases (Feriado)")
-
-        # # 🔥 Resaltar evaluaciones (control/prueba/tp) con un color fuerte
-        # if evaluacion:
-        #     color = "#f59e0b"   # ámbar (muy visible)
-        
-        seccion = r.get("sección", "").strip()
-        actividad = r.get("actividad", "").strip()
-        evaluacion = r.get("evaluación", "").strip()
-
-        bg = SECTION_COLORS.get(seccion, "rgba(148,163,184,0.14)")  # fallback suave
-        border = BORDER_BY_ACTIVIDAD.get(actividad, "#64748b")
-
-        # Si es evaluación, puedes reforzar un poco el borde (opcional)
-        if evaluacion:
-            border = "#b45309"  # ámbar oscuro
-
-        events.append({            
-            "title": title,
-            "start": start_iso,
-            "end": end_iso,
-            "allDay": all_day,
-            "backgroundColor": bg,
-            "borderColor": border,
-            "textColor": "#111827",
-            "extendedProps": {
-                "tipo": "clase",
-                "semana": r.get("semana", ""),
-                "día": r.get("día", ""),
-                "horario": horario,
-                "sección": r.get("sección", ""),
-                "actividad": actividad,
-                "tema": tema,
-                "evaluación": evaluacion,
-                "profesores": profs,
-                "observaciones": obs,
-            }
-        })
-
-    return events
-
-
-# def df_misiones_a_fullcalendar_events(df_mis: pd.DataFrame):
-#     events = []
-
-#     if df_mis.empty:
-#         return events
-
-#     for _, r in df_mis.iterrows():
-#         fecha = r.get("fecha_limite", pd.NaT)
-#         if pd.isna(fecha):
-#             continue
-
-#         evento = str(r.get("evento", "")).strip()
-#         paso = str(r.get("paso", "")).strip()
-#         paso_label = PASO_LABELS.get(paso, paso)
-#         responsables = str(r.get("responsables", "")).strip()
-#         seccion = str(r.get("sección", "")).strip()
-#         detalle = str(r.get("detalle", "")).strip()
-#         estado = str(r.get("estado", "Pendiente")).strip()
-
-#         title = f"🚩 {evento} · {paso_label}"
-
-#         events.append({
-#             "title": title,
-#             "start": fecha.date().isoformat(),
-#             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
-#             "allDay": True,
-#             "color": ACT_COLORS.get("Misión", "#8c564b"),
-#             "extendedProps": {
-#                 "tipo": "mision",
-#                 "actividad": "Misión",
-#                 "tema": evento,
-#                 "horario": "",
-#                 "sección": seccion,
-#                 "evaluación": paso_label,
-#                 "profesores": responsables,
-#                 "observaciones": f"{detalle} | Estado: {estado}" if detalle else f"Estado: {estado}",
-#             }
-#         })
-
-#     return events
-
-# def df_misiones_a_fullcalendar_events(df_mis: pd.DataFrame):
-#     events = []
-
-#     if df_mis.empty:
-#         return events
-
-#     for _, r in df_mis.iterrows():
-#         fecha = r.get("fecha_limite", pd.NaT)
-#         if pd.isna(fecha):
-#             continue
-
-#         evento = str(r.get("evento", "")).strip()
-#         paso = str(r.get("paso", "")).strip()
-#         paso_label = PASO_LABELS.get(paso, paso)
-#         responsables = str(r.get("responsables", "")).strip()
-#         seccion = str(r.get("sección", "")).strip()
-#         detalle = str(r.get("detalle", "")).strip()
-#         estado = str(r.get("estado", "Pendiente")).strip()
-
-#         fecha_evento = r.get("fecha_evento", pd.NaT)
-#         if pd.notna(fecha_evento):
-#             fecha_evento_str = pd.to_datetime(fecha_evento).strftime("%d/%m/%Y")
-#         else:
-#             fecha_evento_str = ""
-
-#         # Título mucho más explicativo
-#         titulo = f"🚩 Fin de plazo: {paso_label}"
-#         if evento:
-#             titulo += f" — {evento}"
-#         if seccion:
-#             titulo += f" — {seccion}"
-
-#         # Observaciones completas para el modal
-#         obs_partes = []
-#         if detalle:
-#             obs_partes.append(detalle)
-#         if fecha_evento_str:
-#             obs_partes.append(f"Evaluación asociada: {fecha_evento_str}")
-#         if estado:
-#             obs_partes.append(f"Estado: {estado}")
-
-#         obs = " | ".join(obs_partes)
-
-#         events.append({
-#             "title": titulo,
-#             "start": fecha.date().isoformat(),
-#             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
-#             "allDay": True,
-#             "color": "#b91c1c",  # rojo más fuerte para que destaque
-#             "extendedProps": {
-#                 "tipo": "mision",
-#                 "actividad": "Misión",
-#                 "tema": titulo,
-#                 "horario": "Todo el día",
-#                 "sección": seccion,
-#                 "evaluación": paso_label,
-#                 "profesores": responsables,
-#                 "observaciones": obs,
-#             }
-#         })
-
-#     return events
-
-def df_misiones_a_fullcalendar_events(df_mis: pd.DataFrame):
-    """
-    Renderiza los plazos de misiones como eventos CON HORA (no allDay),
-    dividiendo el día en N segmentos para que SIEMPRE se vean todos.
-    """
-    events = []
-    if df_mis.empty:
-        return events
-
-    df2 = df_mis.copy()
-    df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
-    df2 = df2.dropna(subset=["fecha_limite"]).copy()
-
-    # Agrupamos por día para asignar slots (1/N del día por misión)
-    df2["dia"] = df2["fecha_limite"].dt.date
-
-    # Orden lógico (si no está en ORDEN_PASOS, va al final)
-    def rank_paso(p):
-        p = str(p).strip()
-        return ORDEN_PASOS.index(p) if p in ORDEN_PASOS else 999
-
-    df2["_rank"] = df2["paso"].apply(rank_paso)
-    df2 = df2.sort_values(["dia", "_rank", "evento", "sección"]).reset_index(drop=True)
-
-    for dia, sub in df2.groupby("dia"):
-        sub = sub.reset_index(drop=True)
-        n = len(sub)
-        if n <= 0:
-            continue
-
-        for i in range(n):
-            r = sub.loc[i]
-
-            fecha = pd.Timestamp(dia)
-
-            # Segmento horario del día (divide 24h en n partes)
-            start_dt = fecha + pd.Timedelta(hours=(24 * i) / n)
-            end_dt   = fecha + pd.Timedelta(hours=(24 * (i + 1)) / n)
-
-            evento = str(r.get("evento", "")).strip()
-            paso = str(r.get("paso", "")).strip()
-            paso_label = PASO_LABELS.get(paso, paso)
-            seccion = str(r.get("sección", "")).strip()
-            responsables = str(r.get("responsables", "")).strip()
-            detalle = str(r.get("detalle", "")).strip()
-            estado = str(r.get("estado", "Pendiente")).strip()
-
-            # Título MUY explicativo (y usa observaciones porque ya vienen metidas en detalle)
-            titulo = f"🚩 Vence: {paso_label}"
-            if evento:
-                titulo += f" — {evento}"
-            if seccion:
-                titulo += f" — {seccion}"
-
-            # Observaciones completas para modal
-            obs_partes = []
-            if detalle:
-                obs_partes.append(detalle)
-            if estado:
-                obs_partes.append(f"Estado: {estado}")
-            obs = " | ".join(obs_partes)
-
-            # Color por tipo de paso (más informativo que rojo único)
-            color = "#b91c1c"  # default rojo
-            if paso in ["construir_control", "pauta_prueba", "construir_examen", "pauta_examen", "pedir_preguntas"]:
-                color = "#2563eb"  # azul
-            if paso in ["revisar_prueba", "revision_guia", "revisar_pruebas"]:
-                color = "#f59e0b"  # ámbar
-            if paso in ["escanear", "subir_pauta_controles"]:
-                color = "#7c3aed"  # violeta
-            if paso in ["corregir_y_notas", "revisar_tp", "corregir_examen", "revision_controles_y_nota"]:
-                color = "#16a34a"  # verde
-
-            events.append({
-                "title": titulo,
-                "start": start_dt.isoformat(),
-                "end": end_dt.isoformat(),
-                "allDay": False,  # CLAVE: así no se colapsan
-                # "color": color,
-                "backgroundColor": "rgba(239, 68, 68, 0.20)",  # rojo con transparencia
-                "borderColor": "#991b1b",
-                "textColor": "#7f1d1d",
-                "extendedProps": {
-                    "tipo": "mision",
-                    "actividad": "Misión",
-                    "tema": titulo,
-                    "horario": f"{start_dt.strftime('%H:%M')}–{end_dt.strftime('%H:%M')}",
-                    "sección": seccion,
-                    "evaluación": paso_label,
-                    "profesores": responsables,
-                    "observaciones": obs,
-                }
-            })
-
-    return events
-
-
-# def df_misiones_deadlines_background_events(df_mis: pd.DataFrame):
-#     events = []
-
-#     if df_mis.empty:
-#         return events
-
-#     fechas_agregadas = set()
-
-#     for _, r in df_mis.iterrows():
-#         fecha = r.get("fecha_limite", pd.NaT)
-#         if pd.isna(fecha):
-#             continue
-
-#         fecha_str = fecha.date().isoformat()
-
-#         # un solo fondo rojo por día
-#         if fecha_str in fechas_agregadas:
-#             continue
-
-#         fechas_agregadas.add(fecha_str)
-
-#         events.append({
-#             "title": "Vencimiento de misión",
-#             "start": fecha_str,
-#             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
-#             "allDay": True,
-#             "display": "background",
-#             "color": "#fecaca",   # rojo suave visible
-#         })
-
-#     return events
-
-def df_misiones_deadlines_background_events(df_mis: pd.DataFrame):
-    """
-    Crea background events por cada fecha con misiones venciendo.
-    Si hay N misiones ese día, divide el día en N franjas (vertical en timeGridWeek).
-    """
-    events = []
-    if df_mis.empty:
-        return events
-
-    df2 = df_mis.copy()
-    df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
-    df2["paso"] = df2.get("paso", "").fillna("").astype(str)
-
-    # Agrupar por día
-    df2 = df2.dropna(subset=["fecha_limite"]).copy()
-    df2["dia"] = df2["fecha_limite"].dt.date
-
-    # paleta (rotativa) para distinguir visualmente
-    # palette = [
-    #     "#fecaca",  # rojo suave
-    #     "#fde68a",  # amarillo suave
-    #     "#bfdbfe",  # azul suave
-    #     "#bbf7d0",  # verde suave
-    #     "#e9d5ff",  # violeta suave
-    #     "#fed7aa",  # naranjo suave
-    # ]
-    
-    palette = [
-    "rgba(239, 68, 68, 0.10)",   # rojo suave
-    "rgba(244, 63, 94, 0.08)",   # rosado suave
-    "rgba(251, 113, 133, 0.08)", # rosado más claro
-    "rgba(185, 28, 28, 0.06)",   # rojo oscuro muy suave
-    ]
-
-    for dia, sub in df2.groupby("dia"):
-        sub = sub.sort_values(["paso"]).copy()
-        n = len(sub)
-        if n <= 0:
-            continue
-
-        # división del día en n segmentos
-        # (timeGridWeek: se verá como franjas verticales por día)
-        for i, (_, r) in enumerate(sub.iterrows()):
-            # color = palette[i % len(palette)]
-            paso = str(r.get("paso", "")).strip()
-            color = color_paso(paso)
-            start = pd.Timestamp(dia) + pd.Timedelta(hours=(24 * i) / n)
-            end = pd.Timestamp(dia) + pd.Timedelta(hours=(24 * (i + 1)) / n)
-
-            paso = str(r.get("paso", "")).strip()
-            paso_label = PASO_LABELS.get(paso, paso) if paso else "Misión"
-
-            events.append({
-                "title": f"Vence: {paso_label}",     # no siempre se ve, pero sirve para hover/tooltip
-                "start": start.isoformat(),
-                "end": end.isoformat(),
-                "allDay": False,
-                "display": "background",
-                "color": color,
-            })
-
-    return events
-
-
-
-import json
-
 def build_events_calendario_para_html(df: pd.DataFrame):
-    """
-    Convierte tu df_f (calendario) en eventos FullCalendar, respetando:
-    - color de fondo por sección (SECTION_COLORS)
-    - borde por actividad (BORDER_BY_ACTIVIDAD)
-    - títulos con evaluación visible
-    """
     events = []
 
     for _, r in df.iterrows():
@@ -1003,7 +4845,6 @@ def build_events_calendario_para_html(df: pd.DataFrame):
         actividad = str(r.get("actividad", "")).strip()
         seccion = str(r.get("sección", "")).strip()
 
-        # Parse horario
         all_day = False
         if ("–" in horario) or ("-" in horario):
             try:
@@ -1024,21 +4865,32 @@ def build_events_calendario_para_html(df: pd.DataFrame):
             start = fecha.date().isoformat()
             end = (fecha + pd.Timedelta(days=1)).date().isoformat()
 
-        # Título
         prefix = (EVAL_ICON.get(evaluacion, "") + " ") if evaluacion else ""
-        if evaluacion:
-            title = f"{prefix}{evaluacion} · {actividad}" + (f" · {tema}" if tema else "")
-        else:
-            title = f"{prefix}{actividad}" + (f" · {tema}" if tema else "")
 
-        # Estilo
+        partes_titulo = []
+        if evaluacion:
+            partes_titulo.append(f"{prefix}{evaluacion}")
+            if actividad:
+                partes_titulo.append(actividad)
+        else:
+            if actividad:
+                partes_titulo.append(f"{prefix}{actividad}".strip())
+
+        if tema:
+            partes_titulo.append(tema)
+        if seccion:
+            partes_titulo.append(seccion)
+        if profs:
+            partes_titulo.append(profs)
+
+        title = " · ".join([x for x in partes_titulo if x])
+
         bg = SECTION_COLORS.get(seccion, "rgba(148,163,184,0.14)")
         border = BORDER_BY_ACTIVIDAD.get(actividad, "#64748b")
-        # Evaluación: borde más fuerte
+
         if evaluacion:
             border = "#b45309"
 
-        # feriado/pausa: rojo suave
         if "Feriado" in actividad or "Pausa" in actividad:
             bg = "rgba(239,68,68,0.12)"
             border = "#991b1b"
@@ -1067,18 +4919,18 @@ def build_events_calendario_para_html(df: pd.DataFrame):
 
 
 def build_events_misiones_allday_para_html(df_misiones: pd.DataFrame):
-    """
-    Misiones como ALL-DAY (arriba), apiladas (stack) y con texto completo.
-    """
     events = []
     if df_misiones.empty:
         return events
 
     df2 = df_misiones.copy()
-    df2["fecha_limite"] = pd.to_datetime(df2.get("fecha_limite", pd.NaT), errors="coerce")
+    df2 = asegurar_columnas(df2, ["fecha_limite", "evento", "paso", "sección", "responsables", "detalle", "estado"])
+    df2["fecha_limite"] = pd.to_datetime(df2["fecha_limite"], errors="coerce")
     df2 = df2.dropna(subset=["fecha_limite"]).copy()
 
-    # Orden por día y por paso
+    if df2.empty:
+        return events
+
     def rank_paso(p):
         p = str(p).strip()
         return ORDEN_PASOS.index(p) if p in ORDEN_PASOS else 999
@@ -1099,29 +4951,24 @@ def build_events_misiones_allday_para_html(df_misiones: pd.DataFrame):
         detalle = str(r.get("detalle", "")).strip()
         estado = str(r.get("estado", "Pendiente")).strip()
 
-        # Título EXPLICATIVO y largo (all-day lo permite mejor)
-        title = f"🚩 Vence: {paso_label}"
+        title = f"🚩 {paso_label}"
         if evento:
             title += f" — {evento}"
         if seccion:
             title += f" — {seccion}"
+        if responsables:
+            title += f" — {responsables}"
 
-        # Observaciones para modal
         obs = " | ".join([x for x in [detalle, f"Estado: {estado}" if estado else ""] if x])
-
-        # Estilo misión: rojizo TRANSPARENTE (no fuerte)
-        bg = "rgba(239, 68, 68, 0.10)"
-        border = "#991b1b"
-        text = "#7f1d1d"
 
         events.append({
             "title": title,
             "start": fecha.date().isoformat(),
             "end": (fecha + pd.Timedelta(days=1)).date().isoformat(),
             "allDay": True,
-            "backgroundColor": bg,
-            "borderColor": border,
-            "textColor": text,
+            "backgroundColor": "rgba(239, 68, 68, 0.10)",
+            "borderColor": "#991b1b",
+            "textColor": "#7f1d1d",
             "extendedProps": {
                 "tipo": "mision",
                 "actividad": "Misión",
@@ -1137,15 +4984,26 @@ def build_events_misiones_allday_para_html(df_misiones: pd.DataFrame):
     return events
 
 
-def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Santiago", height_px=780):
-    """
-    FullCalendar embebido con:
-    - all-day expandible (misiones arriba)
-    - stack vertical (una encima de otra)
-    - NO solapamiento raro
-    - wrap de texto + auto-fit simple
-    """
-    events_json = json.dumps(events, ensure_ascii=False)
+def altura_misiones_allday(df_mis_sem):
+    if df_mis_sem.empty or "fecha_limite" not in df_mis_sem.columns:
+        return 220
+
+    df2 = df_mis_sem.copy()
+    df2["fecha_limite"] = pd.to_datetime(df2["fecha_limite"], errors="coerce")
+    df2 = df2.dropna(subset=["fecha_limite"]).copy()
+
+    if df2.empty:
+        return 220
+
+    max_por_dia = df2.groupby(df2["fecha_limite"].dt.date).size().max()
+    max_por_dia = int(max_por_dia) if pd.notna(max_por_dia) else 1
+
+    return max(220, min(520, 130 + 34 * max_por_dia))
+
+
+def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_date, tz="America/Santiago", height_px=820, height_misiones_px=260):
+    events_cal_json = json.dumps(events_cal, ensure_ascii=False)
+    events_mis_json = json.dumps(events_mis, ensure_ascii=False)
 
     return f"""
 <!DOCTYPE html>
@@ -1155,61 +5013,78 @@ def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Sant
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/locales-all.global.min.js"></script>
 
   <style>
     html, body {{
-      margin:0; padding:0;
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
       background: white;
     }}
-    #calendar {{ padding: 0 6px; }}
 
-    /* Bordes grilla más visibles */
+    #calendar-main {{
+      padding: 0 6px;
+      margin-bottom: 12px;
+    }}
+
+    .titulo-misiones {{
+      padding: 0 10px;
+      margin: 8px 0 6px 0;
+      font-size: 15px;
+      font-weight: 800;
+      color: #374151;
+    }}
+
+    #calendar-misiones-wrap {{
+      margin-left: 54px;
+      width: calc(100% - 54px);
+    }}
+
+    #calendar-misiones {{
+      padding: 0 6px;
+      margin-top: 4px;
+    }}
+
     .fc .fc-scrollgrid, .fc .fc-scrollgrid td, .fc .fc-scrollgrid th {{
       border-width: 2px !important;
       border-color: rgba(0,0,0,0.22) !important;
     }}
 
-    /* Eventos: borde más grueso */
     .fc .fc-event {{
       border-width: 3px !important;
       border-style: solid !important;
       border-radius: 10px !important;
     }}
 
-    /* Texto WRAP real */
     .fc .fc-event-title {{
       white-space: normal !important;
       font-size: 13px !important;
       line-height: 1.15 !important;
       font-weight: 700 !important;
     }}
+
     .fc .fc-event-main {{
       padding: 6px 10px !important;
     }}
 
-    /* ====== all-day: expandible y alto ====== */
-    .fc .fc-timegrid-allday {{
-      min-height: 180px !important;  /* base grande */
-    }}
-
-    /* En all-day, que la fila crezca en vez de cortar */
-    .fc .fc-timegrid-axis-frame,
-    .fc .fc-timegrid-col-frame {{
-      overflow: visible !important;
-    }}
-
-    /* Evita que se escape texto a otra columna */
-    .fc .fc-timegrid-col-frame {{
-      overflow: hidden !important;
-    }}
-
-    /* Subir un poco el alto de slots */
     .fc .fc-timegrid-slot {{
       height: 2.0em !important;
     }}
 
-    /* ===== Modal simple ===== */
+    .fc .fc-day-today {{
+      background: rgba(250, 204, 21, 0.10) !important;
+    }}
+
+    .fc .fc-daygrid-day.fc-day-today,
+    .fc .fc-timegrid-col.fc-day-today {{
+      box-shadow: inset 0 0 0 2px rgba(245, 158, 11, 0.45);
+    }}
+
+    .fc-theme-standard td, .fc-theme-standard th {{
+      border-color: rgba(0,0,0,0.22) !important;
+    }}
+
     .modal-overlay {{
       position: fixed;
       inset: 0;
@@ -1219,6 +5094,7 @@ def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Sant
       justify-content: center;
       z-index: 9999;
     }}
+
     .modal {{
       width: min(720px, 92vw);
       background: white;
@@ -1226,22 +5102,43 @@ def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Sant
       padding: 16px;
       box-shadow: 0 12px 35px rgba(0,0,0,0.25);
     }}
-    .modal h3 {{ margin: 0 0 10px 0; font-size: 18px; }}
-    .row {{ margin: 6px 0; font-size: 14px; }}
-    .label {{ font-weight: 800; }}
+
+    .modal h3 {{
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }}
+
+    .row {{
+      margin: 6px 0;
+      font-size: 14px;
+    }}
+
+    .label {{
+      font-weight: 800;
+    }}
+
     .close {{
-      float: right; cursor: pointer;
+      float: right;
+      cursor: pointer;
       padding: 6px 10px;
       border-radius: 10px;
       background: #f3f4f6;
       font-weight: 800;
     }}
-    .close:hover {{ background: #e5e7eb; }}
+
+    .close:hover {{
+      background: #e5e7eb;
+    }}
   </style>
 </head>
 
 <body>
-  <div id="calendar"></div>
+  <div id="calendar-main"></div>
+
+  <div class="titulo-misiones">Misiones (plazos all-day de la semana)</div>
+  <div id="calendar-misiones-wrap">
+    <div id="calendar-misiones"></div>
+  </div>
 
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
@@ -1257,7 +5154,8 @@ def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Sant
   </div>
 
   <script>
-    const events = {events_json};
+    const eventsCal = {events_cal_json};
+    const eventsMis = {events_mis_json};
 
     const overlay = document.getElementById('modalOverlay');
     const closeBtn = document.getElementById('modalClose');
@@ -1284,52 +5182,44 @@ def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Sant
     }});
 
     document.addEventListener('DOMContentLoaded', function() {{
-      const calendarEl = document.getElementById('calendar');
+      const calendarMainEl = document.getElementById('calendar-main');
+      const calendarMisEl = document.getElementById('calendar-misiones');
 
-      const calendar = new FullCalendar.Calendar(calendarEl, {{
+      const calMain = new FullCalendar.Calendar(calendarMainEl, {{
+        locale: 'es',
         timeZone: {json.dumps(tz)},
+        firstDay: 1,
         initialView: 'timeGridWeek',
         initialDate: {json.dumps(initial_date)},
         height: {height_px},
         nowIndicator: true,
-
-        headerToolbar: {{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,listWeek'
-        }},
-
+        allDaySlot: false,
         slotMinTime: '08:00:00',
         slotMaxTime: '21:00:00',
         expandRows: true,
         stickyHeaderDates: true,
         weekNumbers: true,
-        allDaySlot: true,
-        
-        /* 👇👇 FIX eventos simultáneos */
+        dayHeaderFormat: {{ weekday: 'short', day: '2-digit', month: '2-digit' }},
+        titleFormat: {{ year: 'numeric', month: 'long' }},
+        headerToolbar: {{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        }},
         slotEventOverlap: false,
         eventOverlap: false,
         eventMaxStack: 50,
-
         dayMaxEvents: false,
         dayMaxEventRows: false,
-        eventDisplay: "block",
-
-        /* ====== clave para all-day apilado ====== */
-        dayMaxEvents: false,
-        dayMaxEventRows: false,
-
-        /* IMPORTANTÍSIMO: en all-day, NO “inline”, sino “block” */
         eventDisplay: 'block',
-
-        events: events,
-
+        events: eventsCal,
         eventClick: function(info) {{
           openModal(info);
         }},
-
+        datesSet: function(info) {{
+          calMis.gotoDate(info.start);
+        }},
         eventDidMount: function(arg) {{
-          // Solo para asegurar wrap en all-day
           const titleEl = arg.el.querySelector('.fc-event-title');
           if (titleEl) {{
             titleEl.style.whiteSpace = 'normal';
@@ -1337,7 +5227,34 @@ def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Sant
         }},
       }});
 
-      calendar.render();
+      const calMis = new FullCalendar.Calendar(calendarMisEl, {{
+        locale: 'es',
+        timeZone: {json.dumps(tz)},
+        firstDay: 1,
+        initialView: 'dayGridWeek',
+        initialDate: {json.dumps(initial_date)},
+        height: {height_misiones_px},
+        headerToolbar: false,
+        weekNumbers: false,
+        fixedWeekCount: false,
+        dayMaxEvents: false,
+        dayMaxEventRows: false,
+        displayEventTime: false,
+        dayHeaderFormat: {{ weekday: 'short', day: '2-digit', month: '2-digit' }},
+        events: eventsMis,
+        eventClick: function(info) {{
+          openModal(info);
+        }},
+        eventDidMount: function(arg) {{
+          const titleEl = arg.el.querySelector('.fc-event-title');
+          if (titleEl) {{
+            titleEl.style.whiteSpace = 'normal';
+          }}
+        }},
+      }});
+
+      calMain.render();
+      calMis.render();
     }});
   </script>
 </body>
@@ -1345,9 +5262,8 @@ def render_fullcalendar_html_allday_stack(events, initial_date, tz="America/Sant
 """
 
 
-
 # ============================================================
-# MODAL
+# MODAL STREAMLIT (por si lo quieres reutilizar)
 # ============================================================
 @st.dialog("Detalles del Evento")
 def mostrar_detalle_evento(props):
@@ -1376,78 +5292,12 @@ def mostrar_detalle_evento(props):
 
 
 # ============================================================
-# UI PRINCIPAL
+# CONFIG STREAMLIT
 # ============================================================
 st.set_page_config(page_title="Calendario del Curso", layout="wide")
 
-# st.markdown("""
-# <style>
-# div.stButton > button {
-#     min-height: 70px;
-#     font-size: 22px;
-#     font-weight: 700;
-#     border-radius: 14px;
-# }
-# </style>
-# """, unsafe_allow_html=True)
-
-# st.markdown("""
-# <style>
-# /* Permite que el título del evento haga wrap (no se corte con ...). */
-# .fc .fc-event-title, 
-# .fc .fc-event-title-container,
-# .fc .fc-event-title-wrap {
-#   white-space: normal !important;
-# }
-
-# /* Aumenta altura de la fila all-day para que quepan títulos */
-# .fc .fc-timegrid-axis-cushion,
-# .fc .fc-timegrid-slot-label-cushion {
-#   white-space: nowrap;
-# }
-# .fc .fc-timegrid-event-harness, 
-# .fc .fc-daygrid-event-harness {
-#   margin-top: 2px;
-# }
-
-# /* En all-day, evita que quede ultra angosto */
-# .fc .fc-timegrid-event .fc-event-main {
-#   padding: 2px 6px;
-# }
-# </style>
-# """, unsafe_allow_html=True)
-
-
-
-# st.markdown("""
-# <style>
-# /* Más alto el área all-day en timeGridWeek */
-# .fc .fc-timegrid-axis-frame,
-# .fc .fc-timegrid-col-frame {
-#   min-height: 120px;
-# }
-
-# /* Eventos: fuente un poco más chica y wrap real */
-# .fc .fc-event-title {
-#   font-size: 12px !important;
-#   line-height: 1.15 !important;
-#   white-space: normal !important;
-# }
-
-# /* All-day: que no quede ultra apretado */
-# .fc .fc-timegrid-event-harness-inset .fc-event-main {
-#   padding: 2px 6px !important;
-# }
-# </style>
-# """, unsafe_allow_html=True)
-
 st.markdown("""
 <style>
-/* =========================
-   ENFOQUE 3: MÁS ESPACIO Y TEXTO
-   ========================= */
-
-/* Que el título NO se corte y tenga más tamaño/alto */
 .fc .fc-event-title,
 .fc .fc-event-title-container,
 .fc .fc-event-title-wrap {
@@ -1455,71 +5305,46 @@ st.markdown("""
   overflow: visible !important;
 }
 
-/* Más padding para que se lea mejor */
 .fc .fc-event-main {
   padding: 4px 8px !important;
 }
 
-/* Aumentar altura mínima de los eventos (hace que quepa más texto) */
 .fc .fc-timegrid-event,
 .fc .fc-daygrid-event {
   min-height: 72px !important;
 }
 
-/* Aumentar tamaño de fuente (puedes ajustar 13/14) */
 .fc .fc-event-title {
   font-size: 14px !important;
   line-height: 1.2 !important;
   font-weight: 700 !important;
 }
 
-/* Aumentar el alto de las filas horarias para que entren más eventos */
 .fc .fc-timegrid-slot {
-  height: 2.2em !important;   /* sube el “zoom vertical” */
+  height: 2.2em !important;
 }
 
-/* Aumentar el área all-day (donde caen misiones si son allDay) */
 .fc .fc-timegrid-allday {
   min-height: 140px !important;
 }
 
-/* =========================
-   FIX SOLAPAMIENTO (TU IMAGEN)
-   ========================= */
-
-/* Background events SIEMPRE detrás */
 .fc .fc-bg-event {
   z-index: 1 !important;
-  opacity: 0.35 !important; /* fondo suave */
+  opacity: 0.35 !important;
 }
 
-/* Eventos normales por encima del fondo */
 .fc .fc-event {
   z-index: 3 !important;
   position: relative !important;
+  border-width: 3px !important;
 }
 
-/* Evita que el contenido del evento se “escape” y se dibuje encima de otra columna */
 .fc .fc-timegrid-event .fc-event-main,
-.fc .fc-timegrid-event .fc-event-main-frame {
-  overflow: hidden !important;
-}
-
-/* El contenedor de cada columna: que recorte lo que se salga */
+.fc .fc-timegrid-event .fc-event-main-frame,
 .fc .fc-timegrid-col-frame {
   overflow: hidden !important;
 }
 
-/* =========================
-   BORDES MÁS GRUESOS
-   ========================= */
-
-/* Bordes de los eventos (tarjetas) más gruesos */
-.fc .fc-event {
-  border-width: 3px !important;
-}
-
-/* Bordes de la grilla también más visibles */
 .fc .fc-timegrid-slot,
 .fc .fc-timegrid-axis,
 .fc .fc-timegrid-col,
@@ -1530,7 +5355,6 @@ st.markdown("""
   border-color: rgba(0,0,0,0.25) !important;
 }
 
-/* Línea del “ahora” (roja) más gruesa */
 .fc .fc-timegrid-now-indicator-line {
   border-width: 3px !important;
 }
@@ -1538,6 +5362,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+# ============================================================
+# ESTADO INICIAL
+# ============================================================
 if "curso_seleccionado" not in st.session_state:
     st.session_state.curso_seleccionado = "fokito"
 
@@ -1550,35 +5377,17 @@ with c2:
         st.image(LOGO_PATH, use_container_width=True)
 
 st.markdown("### Selección de curso")
-
-# b1, b2, b3 = st.columns(3)
-
-# with b1:
-#     if st.button("🧮 Fokito", use_container_width=True):
-#         st.session_state.curso_seleccionado = "fokito"
-
-# with b2:
-#     if st.button("🩺 Tecnología Médica", use_container_width=True):
-#         st.session_state.curso_seleccionado = "tecnologia_medica"
-
-# with b3:
-#     if st.button("🏥 Medicina", use_container_width=True):
-#         st.session_state.curso_seleccionado = "medicina"
-
 b1, b2, b3, b4 = st.columns(4)
 
 with b1:
     if st.button("🧮 Fokito", use_container_width=True):
         st.session_state.curso_seleccionado = "fokito"
-
 with b2:
     if st.button("🩺 Tecnología Médica", use_container_width=True):
         st.session_state.curso_seleccionado = "tecnologia_medica"
-
 with b3:
     if st.button("🏥 Medicina", use_container_width=True):
         st.session_state.curso_seleccionado = "medicina"
-
 with b4:
     if st.button("🍇 Enobnu", use_container_width=True):
         st.session_state.curso_seleccionado = "enobnu"
@@ -1597,7 +5406,7 @@ df_misiones = cargar_datos_misiones_base(EXCEL_MISIONES_PATH)
 df_mat = cargar_sheet_excel(EXCEL_MISIONES_PATH, "Matriz")
 df_plan = cargar_sheet_excel(EXCEL_MISIONES_PATH, "Plan")
 
-all_secciones = sorted(df["sección"].dropna().unique())
+all_secciones = sorted([x for x in df["sección"].dropna().astype(str).unique() if str(x).strip()])
 
 all_prof_codes = set()
 for s in df["profesores"].dropna().unique():
@@ -1617,22 +5426,13 @@ if "curso_anterior" not in st.session_state:
 if st.session_state.curso_anterior != curso_actual:
     st.session_state.sel_secciones = {s: True for s in all_secciones}
     st.session_state.sel_profes = {p: True for p in all_prof_codes}
-    st.session_state.nav_semana = 1
+    st.session_state.nav_semana = semana_actual_desde_df(df)
     st.session_state.curso_anterior = curso_actual
 
-if "sel_secciones" not in st.session_state:
-    st.session_state.sel_secciones = {s: True for s in all_secciones}
-else:
-    st.session_state.sel_secciones = {
-        s: st.session_state.sel_secciones.get(s, True) for s in all_secciones
-    }
+if "nav_semana" not in st.session_state:
+    st.session_state.nav_semana = semana_actual_desde_df(df)
 
-if "sel_profes" not in st.session_state:
-    st.session_state.sel_profes = {p: True for p in all_prof_codes}
-else:
-    st.session_state.sel_profes = {
-        p: st.session_state.sel_profes.get(p, True) for p in all_prof_codes
-    }
+inicializar_widgets_filtros(curso_actual, all_secciones, all_prof_codes)
 
 tab1, tab2, tab3, tab4 = st.tabs([
     "📆 Calendario",
@@ -1641,206 +5441,144 @@ tab1, tab2, tab3, tab4 = st.tabs([
     "📊 Estadísticas"
 ])
 
+
 # ============================================================
 # TAB 1: CALENDARIO
 # ============================================================
-# with tab1:
-#     if "nav_semana" not in st.session_state:
-#         st.session_state.nav_semana = 1
-
-#     semana_sel = st.session_state.nav_semana
-#     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
-#     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
-
-#     df_f = df[df["sección"].isin(sec_selected)].copy()
-
-#     if all_prof_codes:
-#         df_f = df_f[
-#             df_f["profesores"].apply(
-#                 lambda x: row_has_prof(x, prof_selected) if prof_selected else True
-#             )
-#         ].copy()
-
-#     fechas_semana = df[df["semana"] == semana_sel]["fecha"]
-#     if not fechas_semana.empty:
-#         initial_date = fechas_semana.min().strftime("%Y-%m-%d")
-#     else:
-#         min_global = df["fecha"].min()
-#         initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
-
-#     # events_cal = df_calendario_a_fullcalendar_events(df_f)
-#     # events_mis = df_misiones_a_fullcalendar_events(df_misiones)
-#     # events = events_cal + events_mis
-    
-#     events_cal = df_calendario_a_fullcalendar_events(df_f)
-#     events_mis = df_misiones_a_fullcalendar_events(df_misiones)
-#     events_mis_bg = df_misiones_deadlines_background_events(df_misiones)
-
-#     events = events_cal + events_mis_bg + events_mis
-
-#     calendar_options = {
-#         "initialView": "timeGridWeek",
-#         "initialDate": initial_date,
-#         "headerToolbar": {
-#             "left": "prev,next today",
-#             "center": "title",
-#             "right": "dayGridMonth,timeGridWeek,listWeek",
-#         },
-#         "height": 750,
-#         "eventMaxStack": 99,
-#         "slotMinTime": "08:00:00",
-#         "slotMaxTime": "21:00:00",
-#         "allDaySlot": True,
-#         "weekNumbers": True,
-#         "eventDisplay": "block",
-#         "dayMaxEventRows": False,
-#         "expandRows": True,
-#         "stickyHeaderDates": True,
-#         "dayMaxEvents": False,
-#         "eventTimeFormat": {
-#             "hour": "2-digit",
-#             "minute": "2-digit",
-#             "meridiem": False
-# },
-#     }
-
-#     state = calendar(events=events, options=calendar_options, key=f"cal_{curso_actual}_{semana_sel}")
-
-#     if state.get("eventClick"):
-#         ev = state["eventClick"]["event"]
-#         props = ev.get("extendedProps", {})
-#         mostrar_detalle_evento(props)
-
-#     st.divider()
-
-#     c_nav, c_filtros = st.columns([1, 2])
-
-#     with c_nav:
-#         st.subheader("Navegación")
-#         max_sem = df["semana"].max()
-#         if pd.isna(max_sem):
-#             max_sem = 20
-#         weeks = list(range(1, int(max_sem) + 1))
-
-#         st.radio(
-#             "Seleccionar Semana:",
-#             options=weeks,
-#             horizontal=True,
-#             key="nav_semana"
-#         )
-
-#     with c_filtros:
-#         st.subheader("Filtros")
-#         fcol1, fcol2 = st.columns(2)
-
-#         with fcol1:
-#             st.caption("Secciones")
-#             for s in all_secciones:
-#                 st.checkbox(
-#                     s,
-#                     value=st.session_state.sel_secciones.get(s, True),
-#                     key=f"sec_{curso_actual}_{s}"
-#                 )
-#                 st.session_state.sel_secciones[s] = st.session_state[f"sec_{curso_actual}_{s}"]
-
-#         with fcol2:
-#             st.caption("Profesores")
-#             if not all_prof_codes:
-#                 st.info("No hay profesores.")
-#             for p in all_prof_codes:
-#                 st.checkbox(
-#                     p,
-#                     value=st.session_state.sel_profes.get(p, True),
-#                     key=f"prof_{curso_actual}_{p}"
-#                 )
-#                 st.session_state.sel_profes[p] = st.session_state[f"prof_{curso_actual}_{p}"]
-
-
 with tab1:
-    if "nav_semana" not in st.session_state:
-        st.session_state.nav_semana = 1
+    sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
 
     semana_sel = st.session_state.nav_semana
     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
 
-    df_f = df[df["sección"].isin(sec_selected)].copy()
-    if all_prof_codes:
-        df_f = df_f[
-            df_f["profesores"].apply(
-                lambda x: row_has_prof(x, prof_selected) if prof_selected else True
-            )
-        ].copy()
+    df_f = df.copy()
 
-    # initial_date: lunes de la semana seleccionada (según tus datos)
-    fechas_semana = df[df["semana"] == semana_sel]["fecha"]
+    if sec_selected:
+        df_f = df_f[df_f["sección"].isin(sec_selected)].copy()
+    else:
+        df_f = df_f.iloc[0:0].copy()
+
+    if prof_selected:
+        df_f = df_f[df_f["profesores"].apply(lambda x: row_has_prof(x, prof_selected))].copy()
+    else:
+        df_f = df_f.iloc[0:0].copy()
+
+    fechas_semana = df[df["semana"] == semana_sel]["fecha"].dropna()
     if not fechas_semana.empty:
         initial_date = fechas_semana.min().strftime("%Y-%m-%d")
     else:
-        min_global = df["fecha"].min()
-        initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
+        min_global = pd.to_datetime(df["fecha"], errors="coerce").min()
+        if pd.notna(min_global):
+            initial_date = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).strftime("%Y-%m-%d")
+        else:
+            initial_date = pd.Timestamp.now().strftime("%Y-%m-%d")
 
-    # ====== eventos: clases/horarios + misiones ALL-DAY ======
     events_cal = build_events_calendario_para_html(df_f)
-    events_mis = build_events_misiones_allday_para_html(df_misiones)
 
-    # Si quieres que misiones siempre estén “arriba”, las ponemos primero
-    events = events_mis + events_cal
+    df_mis_sem = df_misiones.copy()
+    events_mis = []
+    alto_misiones = 220
 
-    html_cal = render_fullcalendar_html_allday_stack(
-        events=events,
+    if not df_mis_sem.empty:
+        df_mis_sem["fecha_limite"] = pd.to_datetime(df_mis_sem["fecha_limite"], errors="coerce")
+
+        fechas_sem = set(
+            pd.to_datetime(df[df["semana"] == semana_sel]["fecha"], errors="coerce")
+            .dt.date.dropna()
+        )
+
+        df_mis_sem = df_mis_sem[df_mis_sem["fecha_limite"].dt.date.isin(fechas_sem)].copy()
+
+        if sec_selected:
+            df_mis_sem = df_mis_sem[df_mis_sem["sección"].isin(sec_selected)].copy()
+        else:
+            df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+        if prof_selected:
+            df_mis_sem = df_mis_sem[df_mis_sem["responsables"].apply(lambda x: row_has_prof(x, prof_selected))].copy()
+        else:
+            df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+        # FIX importante: si quedan misiones, se renderizan sí o sí
+        if not df_mis_sem.empty:
+            events_mis = build_events_misiones_allday_para_html(df_mis_sem)
+            alto_misiones = altura_misiones_allday(df_mis_sem)
+
+    html_cal = render_fullcalendar_html_con_misiones_abajo(
+        events_cal=events_cal,
+        events_mis=events_mis,
         initial_date=initial_date,
         tz=TIMEZONE,
-        height_px=1100
+        height_px=980,
+        height_misiones_px=alto_misiones
     )
 
-    # Render del calendario
-    components.html(html_cal, height=1160, scrolling=False)
+    components.html(html_cal, height=1100 + alto_misiones, scrolling=False)
 
     st.divider()
+    st.subheader("Filtros y navegación")
 
-    # ====== (mantienes navegación + filtros igual) ======
-    c_nav, c_filtros = st.columns([1, 2])
+    c_filtros, c_nav = st.columns([2, 1])
+
+    with c_filtros:
+        ftop1, ftop2 = st.columns(2)
+
+        with ftop1:
+            st.caption("Secciones")
+            bsec1, bsec2 = st.columns(2)
+
+            with bsec1:
+                if st.button("Todas las secciones", key=f"all_sec_{curso_actual}", use_container_width=True):
+                    for s in all_secciones:
+                        st.session_state.sel_secciones[s] = True
+                        st.session_state[f"sec_{curso_actual}_{s}"] = True
+                    st.rerun()
+
+            with bsec2:
+                if st.button("Ninguna sección", key=f"none_sec_{curso_actual}", use_container_width=True):
+                    for s in all_secciones:
+                        st.session_state.sel_secciones[s] = False
+                        st.session_state[f"sec_{curso_actual}_{s}"] = False
+                    st.rerun()
+
+            for s in all_secciones:
+                st.checkbox(s, key=f"sec_{curso_actual}_{s}")
+
+        with ftop2:
+            st.caption("Profesores")
+            bpro1, bpro2 = st.columns(2)
+
+            with bpro1:
+                if st.button("Todos los profes", key=f"all_prof_{curso_actual}", use_container_width=True):
+                    for p in all_prof_codes:
+                        st.session_state.sel_profes[p] = True
+                        st.session_state[f"prof_{curso_actual}_{p}"] = True
+                    st.rerun()
+
+            with bpro2:
+                if st.button("Ningún profe", key=f"none_prof_{curso_actual}", use_container_width=True):
+                    for p in all_prof_codes:
+                        st.session_state.sel_profes[p] = False
+                        st.session_state[f"prof_{curso_actual}_{p}"] = False
+                    st.rerun()
+
+            if not all_prof_codes:
+                st.info("No hay profesores.")
+            else:
+                for p in all_prof_codes:
+                    st.checkbox(p, key=f"prof_{curso_actual}_{p}")
 
     with c_nav:
-        st.subheader("Navegación")
         max_sem = df["semana"].max()
         if pd.isna(max_sem):
             max_sem = 20
+
         weeks = list(range(1, int(max_sem) + 1))
+        st.radio("Semana", options=weeks, horizontal=True, key="nav_semana")
 
-        st.radio(
-            "Seleccionar Semana:",
-            options=weeks,
-            horizontal=True,
-            key="nav_semana"
-        )
+    sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
 
-    with c_filtros:
-        st.subheader("Filtros")
-        fcol1, fcol2 = st.columns(2)
-
-        with fcol1:
-            st.caption("Secciones")
-            for s in all_secciones:
-                st.checkbox(
-                    s,
-                    value=st.session_state.sel_secciones.get(s, True),
-                    key=f"sec_{curso_actual}_{s}"
-                )
-                st.session_state.sel_secciones[s] = st.session_state[f"sec_{curso_actual}_{s}"]
-
-        with fcol2:
-            st.caption("Profesores")
-            if not all_prof_codes:
-                st.info("No hay profesores.")
-            for p in all_prof_codes:
-                st.checkbox(
-                    p,
-                    value=st.session_state.sel_profes.get(p, True),
-                    key=f"prof_{curso_actual}_{p}"
-                )
-                st.session_state.sel_profes[p] = st.session_state[f"prof_{curso_actual}_{p}"]
 
 # ============================================================
 # TAB 2: HORARIOS
@@ -1868,6 +5606,7 @@ with tab2:
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
+
 # ============================================================
 # TAB 3: MISIONES
 # ============================================================
@@ -1875,7 +5614,6 @@ with tab3:
     st.subheader(f"🧭 Misiones y protocolo docente — {curso_info['label']}")
     st.caption("Vista ordenada para profesores: matriz rápida con todas las misiones y plan detallado.")
 
-    # ✅ NUEVO: misiones por persona/mes
     tabla_misiones_por_profesor_y_mes(df_misiones)
 
     if df_plan.empty and df_misiones.empty:
@@ -1900,6 +5638,7 @@ with tab3:
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
 
+
 # ============================================================
 # TAB 4: ESTADÍSTICAS
 # ============================================================
@@ -1923,8 +5662,8 @@ with tab4:
         st.bar_chart(act_counts)
 
     st.divider()
-
     st.markdown("### Carga por profesor (horarios)")
+
     rows = []
     for _, r in df_plot.iterrows():
         for p in split_profes(r.get("profesores", "")):
@@ -1945,20 +5684,93 @@ with tab4:
 
     if not df_misiones.empty:
         st.markdown("### Misiones por profesor")
+
         filas_misiones = []
         for _, r in df_misiones.iterrows():
             for p in split_profes(r.get("responsables", "")):
                 filas_misiones.append({
                     "profesor": p,
                     "evento": r.get("evento", ""),
-                    "paso": PASO_LABELS.get(str(r.get("paso", "")).strip(), str(r.get("paso", "")).strip())
+                    "paso": PASO_LABELS.get(str(r.get("paso", "")).strip(), str(r.get("paso", "")).strip()),
+                    "estado": str(r.get("estado", "")).strip() or "Pendiente"
                 })
 
         if filas_misiones:
             df_mp = pd.DataFrame(filas_misiones)
+
             conteo_misiones = df_mp.groupby("profesor").size().rename("misiones").sort_values(ascending=False)
             st.bar_chart(conteo_misiones)
 
             st.markdown("### Distribución por tipo de paso")
             conteo_pasos = df_mp.groupby("paso").size().rename("cantidad").sort_values(ascending=False)
             st.bar_chart(conteo_pasos)
+
+            st.divider()
+            st.markdown("### Proporción misiones / carga de seminario")
+            st.markdown("#### Pesos por misión")
+
+            pesos = {}
+            cpes1, cpes2, cpes3 = st.columns(3)
+            claves_pesos = list(PESOS_MISION_DEFAULT.keys())
+
+            for i, paso in enumerate(claves_pesos):
+                col = [cpes1, cpes2, cpes3][i % 3]
+                with col:
+                    pesos[paso] = st.number_input(
+                        f"Peso {paso}",
+                        min_value=0.0,
+                        value=float(PESOS_MISION_DEFAULT[paso]),
+                        step=0.1,
+                        key=f"peso_{curso_actual}_{paso}"
+                    )
+
+            df_carga = construir_tabla_carga_seminario(
+                df_cal=df,
+                df_misiones=df_misiones,
+                pesos=pesos
+            )
+
+            if not df_carga.empty:
+                color_map = {p: color_profesor(p) for p in df_carga["profesor"].unique()}
+
+                fig = px.bar(
+                    df_carga,
+                    x="profesor",
+                    y="ratio",
+                    color="profesor",
+                    color_discrete_map=color_map,
+                    custom_data=["misiones_ponderadas", "cupos_semana_1", "clases_estimadas"],
+                    title="Carga relativa de misiones respecto a seminarios asignados"
+                )
+
+                fig.update_traces(
+                    hovertemplate=(
+                        "<b>%{x}</b><br>"
+                        "Ratio: %{y:.3f}<br>"
+                        "Misiones ponderadas: %{customdata[0]:.1f}<br>"
+                        "Cupos semana 1: %{customdata[1]}<br>"
+                        "Clases estimadas: %{customdata[2]}<extra></extra>"
+                    )
+                )
+
+                fig.update_layout(
+                    xaxis_title="Profesor",
+                    yaxis_title="misiones_ponderadas / clases_estimadas",
+                    yaxis=dict(range=[0, 2], fixedrange=False),
+                    showlegend=False,
+                    dragmode="zoom"
+                )
+
+                st.plotly_chart(fig, use_container_width=True)
+
+                st.dataframe(
+                    df_carga,
+                    use_container_width=True,
+                    hide_index=True
+                )
+            else:
+                st.info("No se pudo construir la tabla de carga relativa.")
+        else:
+            st.info("No hay misiones registradas.")
+    else:
+        st.info("No hay archivo de misiones cargado.")

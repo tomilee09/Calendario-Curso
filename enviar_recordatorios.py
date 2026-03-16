@@ -200,15 +200,56 @@ def obtener_info_profesor(profesores_dict, codigo):
     return profesores_dict.get(codigo, {"nombre": codigo, "email": ""})
 
 
-def obtener_cc_por_secciones(secciones, emails_cfg, profesores_dict):
+# def obtener_cc_por_secciones(secciones, emails_cfg, profesores_dict):
+#     """
+#     Agrega a CC el PEC según sección, sin repetir.
+#     Soporta:
+#       pec_por_seccion:
+#         "Sección 1": "TY"
+#     donde "TY" se busca en profesores_dict.
+#     """
+#     cc_final = []
+
+#     cc_directo = emails_cfg.get("cc", []) or []
+#     for x in cc_directo:
+#         correo = str(x).strip()
+#         if correo and correo not in cc_final:
+#             cc_final.append(correo)
+
+#     pec_por_seccion = emails_cfg.get("pec_por_seccion", {}) or {}
+
+#     for seccion in sorted(set(secciones)):
+#         if seccion not in pec_por_seccion:
+#             continue
+
+#         ref = str(pec_por_seccion[seccion]).strip()
+#         if not ref:
+#             continue
+
+#         # Si parece email, usar directo
+#         if "@" in ref:
+#             if ref not in cc_final:
+#                 cc_final.append(ref)
+#         else:
+#             info = obtener_info_profesor(profesores_dict, ref)
+#             correo = str(info.get("email", "")).strip()
+#             if correo and correo not in cc_final:
+#                 cc_final.append(correo)
+
+#     return cc_final
+
+
+def obtener_cc_por_secciones(secciones, config_curso, profesores_dict):
     """
-    Agrega a CC el PEC según sección, sin repetir.
-    Soporta:
-      pec_por_seccion:
-        "Sección 1": "TY"
-    donde "TY" se busca en profesores_dict.
+    Agrega a CC:
+    - emails.cc
+    - PEC por sección, leído desde misiones.coordinacion.pec_por_seccion
     """
     cc_final = []
+
+    emails_cfg = config_curso.get("emails", {}) or {}
+    misiones_cfg = config_curso.get("misiones", {}) or {}
+    coord_cfg = misiones_cfg.get("coordinacion", {}) or {}
 
     cc_directo = emails_cfg.get("cc", []) or []
     for x in cc_directo:
@@ -216,17 +257,13 @@ def obtener_cc_por_secciones(secciones, emails_cfg, profesores_dict):
         if correo and correo not in cc_final:
             cc_final.append(correo)
 
-    pec_por_seccion = emails_cfg.get("pec_por_seccion", {}) or {}
+    pec_por_seccion = coord_cfg.get("pec_por_seccion", {}) or {}
 
     for seccion in sorted(set(secciones)):
-        if seccion not in pec_por_seccion:
-            continue
-
-        ref = str(pec_por_seccion[seccion]).strip()
+        ref = str(pec_por_seccion.get(seccion, "")).strip()
         if not ref:
             continue
 
-        # Si parece email, usar directo
         if "@" in ref:
             if ref not in cc_final:
                 cc_final.append(ref)
@@ -237,6 +274,7 @@ def obtener_cc_por_secciones(secciones, emails_cfg, profesores_dict):
                 cc_final.append(correo)
 
     return cc_final
+
 
 
 # ============================================================
@@ -732,7 +770,8 @@ def procesar_curso(curso_key, info, now_local, dry_run, forzar, service):
         if not df_prof_clases.empty and "sección" in df_prof_clases.columns:
             secciones_prof.extend([str(x).strip() for x in df_prof_clases["sección"].dropna().unique() if str(x).strip()])
 
-        cc_list = obtener_cc_por_secciones(secciones_prof, emails_cfg, profesores_dict)
+        # cc_list = obtener_cc_por_secciones(secciones_prof, emails_cfg, profesores_dict)
+        cc_list = obtener_cc_por_secciones(secciones_prof, config, profesores_dict)
 
         send_key = f"resumen_semanal|{curso_key}|{prof}|{lunes_sig.isoformat()}"
         if was_sent(log, send_key) and not forzar:
@@ -870,7 +909,8 @@ def recopilar_resumenes_globales(now_local):
             if not df_prof_clases.empty and "sección" in df_prof_clases.columns:
                 secciones_prof.extend([str(x).strip() for x in df_prof_clases["sección"].dropna().unique() if str(x).strip()])
 
-            cc_list = obtener_cc_por_secciones(secciones_prof, emails_cfg, profesores_globales)
+            # cc_list = obtener_cc_por_secciones(secciones_prof, emails_cfg, profesores_globales)
+            cc_list = obtener_cc_por_secciones(secciones_prof, config, profesores_globales)
             for cc in cc_list:
                 resumen_global[prof]["cc"].add(cc)
 

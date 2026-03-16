@@ -248,20 +248,80 @@ def construir_df(config: dict) -> pd.DataFrame:
         mask = (df["sección"] == secc) & (df["actividad"] == act)
         df.loc[mask, "profesores"] = prof
 
+    # for ev in cfg.get("evaluaciones", []) or []:
+    #     if ev.get("modo") == "por_filtro":
+    #         mask = (
+    #             (df["sección"] == ev.get("seccion")) &
+    #             (df["semana"] == int(ev.get("semana"))) &
+    #             (df["actividad"] == ev.get("actividad"))
+    #         )
+    #         df.loc[mask, "evaluación"] = ev.get("tipo", "")
+    #         obs = str(ev.get("observaciones", "")).strip()
+    #         if obs:
+    #             df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
+    #             df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
+    #                 lambda x: (x + " | " if x else "") + obs
+    #             )
+    
     for ev in cfg.get("evaluaciones", []) or []:
-        if ev.get("modo") == "por_filtro":
+        modo = str(ev.get("modo", "por_filtro")).strip()
+
+        if modo == "por_filtro":
             mask = (
                 (df["sección"] == ev.get("seccion")) &
                 (df["semana"] == int(ev.get("semana"))) &
                 (df["actividad"] == ev.get("actividad"))
             )
+
             df.loc[mask, "evaluación"] = ev.get("tipo", "")
+
             obs = str(ev.get("observaciones", "")).strip()
             if obs:
                 df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
                 df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
-                    lambda x: (x + " | " if x else "") + obs
+                    lambda x: (x + " | " if x and x != "nan" else "") + obs
                 )
+
+        elif modo == "por_fecha":
+            seccion_ev = str(ev.get("seccion", "")).strip()
+            fecha_ev = pd.Timestamp(ev.get("fecha")).date()
+            tipo_ev = str(ev.get("tipo", "")).strip()
+            obs = str(ev.get("observaciones", "")).strip()
+
+            # buscar si ya existe un evento ese día para esa sección
+            mask = (
+                (df["sección"] == seccion_ev) &
+                (df["fecha"] == fecha_ev)
+            )
+
+            if mask.any():
+                # si ya existe una fila ese día, marcarla como evaluación
+                df.loc[mask, "evaluación"] = tipo_ev
+
+                if obs:
+                    df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
+                    df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
+                        lambda x: (x + " | " if x and x != "nan" else "") + obs
+                    )
+            else:
+                # si no existe una fila ese día, crear una nueva
+                fecha_ts = pd.Timestamp(fecha_ev)
+                semana_ev = int(((fecha_ts - inicio).days) // 7) + 1
+
+                nuevos = [{
+                    "semana": semana_ev,
+                    "fecha": fecha_ev,
+                    "día": DIAS_ES_POR_WEEKDAY[fecha_ts.weekday()],
+                    "horario": "",
+                    "sección": seccion_ev,
+                    "actividad": "Examen" if tipo_ev.lower() == "examen" else "Clase teórica",
+                    "tema": obs,
+                    "evaluación": tipo_ev,
+                    "profesores": "",
+                    "observaciones": obs
+                }]
+
+                df = pd.concat([df, pd.DataFrame(nuevos)], ignore_index=True)
 
     fer = cfg.get("feriados", {}) or {}
     feriados_map = {}

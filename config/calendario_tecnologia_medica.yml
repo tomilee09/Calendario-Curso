@@ -16,27 +16,6 @@ calendario:
     - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "CC" }
     - { seccion: "Sección 1", actividad: "Seminario", profesores: ["TY", "MB", "GM", "XX"] }
 
-  # temas_por_semana:
-  #   1: "Lógica 1"
-  #   2: "Lógica 2"
-  #   3: "Lógica 3"
-  #   4: "Repaso (semana mechona)"
-  #   5: "Certamen 1"
-  #   6: "Modelos y Derivadas 1"
-  #   7: "Modelos y Derivadas 2"
-  #   8: "Modelos y Derivadas 3"
-  #   9: "Modelos y Derivadas 4"
-  #   10: "Semana Receso"
-  #   11: "Certamen 2"
-  #   12: "Linealización de modelos"
-  #   13: "Trigonometría y Vectores 1"
-  #   14: "Trigonometría y Vectores 2"
-  #   15: "Trigonometría y Vectores 3"
-  #   16: "Certamen 3"
-  #   17: "Trabajo Autónomo"
-  #   18: "Examen Primera Oportunidad"
-  #   19: "Examen Segunda Oportunidad"
-
   temas_teoricos:
     1: "Lógica 1"
     2: "Lógica 2"
@@ -79,21 +58,20 @@ calendario:
     18: "Examen Primera Oportunidad"
     19: "Examen Segunda Oportunidad"
 
-
   evaluaciones:
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2, 15 min" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 3, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 3, 15 min" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 7, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 2, 15 min" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 8, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 3, 15 min" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 9, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 4, 15 min" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 14, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 2, 15 min" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 3, 15 min" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 5, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 11, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 3" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 2, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 3, actividad: "Seminario", tipo: "Control", observaciones: "Control lógica 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 7, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 8, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 9, actividad: "Seminario", tipo: "Control", observaciones: "Control Modelos y Derivadas 4" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 14, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Seminario", tipo: "Control", observaciones: "Control Trigonometría y Vectores 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 5, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 11, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 3" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
 
   pausas_academicas: []
   semanas_trabajo_autonomo: [17]
@@ -113,144 +91,92 @@ calendario:
     manuales: []
 
 misiones:
-  aleatoriedad:
-    semilla: 42
-
-  secciones:
-    - "Sección 2"
-
-  profesores:
-    - { codigo: "p1", horas_contrato: 10 }
-    - { codigo: "p2", horas_contrato: 10 }
-    - { codigo: "p3", horas_contrato: 10 }
-    - { codigo: "p4", horas_contrato: 10 }
-
   alias_seccion:
-    "Sección 2": "Sección 2 (Jueves)"
+    "Sección 1": "Sección 1 (Miércoles)"
+
+  coordinacion:
+    pec_por_seccion:
+      "Sección 1": "CC"
+    pcc_por_seccion:
+      "Sección 1": "TY"
+
+  # overrides SOLO si quieres romper el ciclo normal
+  overrides_responsables:
+    # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-03-26", slot: "C" }
+    # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-04-02", responsables: ["GM"] }
 
   protocolos:
     Control:
       construir_control:
-        responsables: "Asignar"
         detalle: "Construcción del control."
         offset_dias: -7
-      pauta_prueba:
-        responsables: "Asignar"
-        detalle: "Pauta del control."
-        offset_dias: -5
       escanear:
-        responsables: "Asignar"
         detalle: "Escanear control y subir a carpeta."
-        offset_dias: 2
+        offset_dias: 7
       corregir_y_notas:
-        responsables: "Asignar"
         detalle: "Corregir control y subir notas."
-        offset_dias: 14
+        offset_dias: 7
 
     Certamen:
       pedir_preguntas:
-        responsables: "Todos"
-        detalle: "Cada profesor propone preguntas para el certamen."
+        detalle: "Enviar preguntas para certamen con solución."
         offset_dias: -14
       construir_control:
-        responsables: "Asignar"
         detalle: "Construcción del certamen."
         offset_dias: -7
       pauta_prueba:
-        responsables: "Asignar"
         detalle: "Pauta del certamen."
-        offset_dias: -5
-      revisar_prueba:
-        responsables: "Asignar"
-        detalle: "Revisión final del certamen."
-        offset_dias: -3
-      escanear:
-        responsables: "Asignar"
-        detalle: "Escanear certamen y subir a carpeta."
-        offset_dias: 2
+        offset_dias: -4
       corregir_y_notas:
-        responsables: "Asignar"
         detalle: "Corregir certamen y subir notas."
-        offset_dias: 14
+        offset_dias: 7
 
     Trabajo práctico:
       revisar_tp:
-        responsables: "Todos"
         detalle: "Revisar TP y subir nota."
-        offset_dias: 14
+        offset_dias: 7
 
     Examen:
       pedir_preguntas:
-        responsables: "Todos"
-        detalle: "Preguntas para examen."
-        offset_dias: -21
-      construir_examen:
-        responsables: "Asignar"
-        detalle: "Construcción del examen."
+        detalle: "Preguntas para examen con solución."
         offset_dias: -14
-      pauta_examen:
-        responsables: "Asignar"
-        detalle: "Pauta del examen."
+      construir_examen:
+        detalle: "Construcción del examen."
         offset_dias: -7
+      pauta_examen:
+        detalle: "Pauta del examen."
+        offset_dias: -4
       corregir_examen:
-        responsables: "Asignar"
         detalle: "Corregir examen."
-        offset_dias: 14
+        offset_dias: 7
 
+    Taller:
+      construir_taller:
+        responsables: "Asignar"
+        detalle: "Construcción del taller colaborativo con versiones A, B, C y D."
+        offset_dias: -7
+      corregir_taller:
+        responsables: "Asignar"
+        detalle: "Corrección del taller según la versión asignada."
+        offset_dias: 7
+
+    Laboratorio:
+      preparar_material_previo:
+        responsables: "PEC"
+        detalle: "Preparar material previo / resumen para el laboratorio."
+        offset_dias: -5
+      grabar_video_solucion:
+        responsables: "Asignar"
+        detalle: "Grabar video de la solución del laboratorio."
+        offset_dias: 2
+      corregir_informe_laboratorio:
+        responsables: "Todos"
+        detalle: "Corregir informe de laboratorio."
+        offset_dias: 7
 
 emails:
-  # profesores:
-  #   MB:
-  #     nombre: "Maximiliano"
-  #     email: "maximiliano.bernal@ug.uchile.cl"
-  #   JM:
-  #     nombre: "José"
-  #     email: "jose.mondaca.r@ug.uchile.cl"
-  #   GM:
-  #     nombre: "Gabriela"
-  #     email: "gabriela.martinez1e@gmail.com"
-  #   VB:
-  #     nombre: "Valeria"
-  #     email: "valeria.brancacho@ug.uchile.cl"
-  #   NV:
-  #     nombre: "Naty"
-  #     email: "varasnaty@hotmail.com"
-  #   EG:
-  #     nombre: "Eduardo"
-  #     email: "eaguerra0@gmail.com"
-  #   RL:
-  #     nombre: "Rosa"
-  #     email: "rosaluciladelcarmen@gmail.com"
-  #   DH:
-  #     nombre: "Diego"
-  #     email: "dmhidalgo@uc.cl"
-  #   SM:
-  #     nombre: "Sebastián"
-  #     email: "s.sandoval.marconi91@gmail.com"
-  #   TY:
-  #     nombre: "Tomás"
-  #     email: "joriv.yanez@ug.uchile.cl"
-  #   IG:
-  #     nombre: "Ingrid"
-  #     email: "igalaz2009@uchile.cl"
-  #   CC:
-  #     nombre: "Caroll"
-  #     email: "cacuellar@uchile.cl"
-  #   AR:
-  #     nombre: "Alexander"
-  #     email: "alexander.riquelme@uchile.cl"
-  #   JCS:
-  #     nombre: "Juan"
-  #     email: "juan.salas.g@uchile.cl"
-
-  pec_por_seccion:
-    "Sección 1": "TY"
-    "Sección 2": "IG"
-
   from_name: "J. Tomás Yáñez"
-
   cc: []
-
   estado_envios_path: "data/email_log.json"
 
   resumen_semanal:
@@ -275,7 +201,7 @@ emails:
       {lista_clases}
 
       Si no aparece ninguna misión, eso significa que no tienes misiones planificadas originalmente para esta semana.
-      De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+      De todos modos, puede haber coordinaciones adicionales conversadas con el equipo docente que no estén reflejadas aquí.
 
       Puedes revisar el calendario completo aquí:
       https://calendario-curso.streamlit.app

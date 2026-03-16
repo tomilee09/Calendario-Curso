@@ -18,10 +18,10 @@ calendario:
 
   profesores_base:
     - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "IG" }
-    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["AR", "JCS", "TY", "XX"] }
+    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["TY", "JCS", "AR", "XX"] }
 
     - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "IG" }
-    - { seccion: "Sección 2", actividad: "Seminario", profesores: ["AR", "JCS", "TY", "XX"] }
+    - { seccion: "Sección 2", actividad: "Seminario", profesores: ["TY", "JCS", "AR", "XX"] }
 
   temas_teoricos:
     1: "Lógica 1"
@@ -113,111 +113,96 @@ calendario:
     usar_automaticos_chile: true
     manuales: []
 
+
 misiones:
-  aleatoriedad:
-    semilla: 42
-
-  secciones:
-    - "Sección 1"
-    - "Sección 2"
-
-  profesores:
-    - { codigo: "AR", horas_contrato: 10 }
-    - { codigo: "JCS", horas_contrato: 10 }
-    - { codigo: "GM", horas_contrato: 10 }
-    - { codigo: "VB", horas_contrato: 10 }
-    - { codigo: "NV", horas_contrato: 10 }
-    - { codigo: "CC", horas_contrato: 10 }
-    - { codigo: "IG", horas_contrato: 10 }
-    - { codigo: "TY", horas_contrato: 10 }
-    - { codigo: "JM", horas_contrato: 10 }
-    - { codigo: "EG", horas_contrato: 10 }
-    - { codigo: "RL", horas_contrato: 10 }
-    - { codigo: "DH", horas_contrato: 10 }
-    - { codigo: "SM", horas_contrato: 10 }
-
   alias_seccion:
-    "Sección 1": "Sección 1 (Miercoles)"
-    "Sección 2": "Sección 2 (Jueves)"
+    "Sección 1": "Sección 1 (Miércoles)"
+
+  coordinacion:
+    pec_por_seccion:
+      "Sección 1": "IG"
+      "Sección 2": "IG"
+    pcc_por_seccion:
+      "Sección 1": "JCS"
+      "Sección 2": "TY"
+
+  # overrides SOLO si quieres romper el ciclo normal
+  overrides_responsables:
+    # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-03-26", slot: "C" }
+    # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-04-02", responsables: ["GM"] }
 
   protocolos:
     Control:
       construir_control:
-        responsables: "Asignar"
         detalle: "Construcción del control."
-        offset_dias: -6
-      pauta_prueba:
-        responsables: "Asignar"
-        detalle: "Pauta del control."
-        offset_dias: -5
+        offset_dias: -7
       escanear:
-        responsables: "Asignar"
         detalle: "Escanear control y subir a carpeta."
-        offset_dias: 2
+        offset_dias: 7
       corregir_y_notas:
-        responsables: "Asignar"
         detalle: "Corregir control y subir notas."
-        offset_dias: 13
+        offset_dias: 7
 
     Certamen:
       pedir_preguntas:
-        responsables: "Todos"
-        detalle: "Cada profesor propone preguntas para el certamen."
+        detalle: "Enviar preguntas para certamen con solución."
         offset_dias: -14
       construir_control:
-        responsables: "Asignar"
         detalle: "Construcción del certamen."
         offset_dias: -7
       pauta_prueba:
-        responsables: "Asignar"
         detalle: "Pauta del certamen."
-        offset_dias: -5
-      revisar_prueba:
-        responsables: "Asignar"
-        detalle: "Revisión final del certamen."
-        offset_dias: -3
-      escanear:
-        responsables: "Asignar"
-        detalle: "Escanear certamen y subir a carpeta."
-        offset_dias: 2
+        offset_dias: -4
       corregir_y_notas:
-        responsables: "Asignar"
         detalle: "Corregir certamen y subir notas."
-        offset_dias: 14
+        offset_dias: 7
 
     Trabajo práctico:
       revisar_tp:
-        responsables: "Todos"
         detalle: "Revisar TP y subir nota."
-        offset_dias: 14
+        offset_dias: 7
 
     Examen:
       pedir_preguntas:
-        responsables: "Todos"
-        detalle: "Preguntas para examen."
-        offset_dias: -21
-      construir_examen:
-        responsables: "Asignar"
-        detalle: "Construcción del examen."
+        detalle: "Preguntas para examen con solución."
         offset_dias: -14
-      pauta_examen:
-        responsables: "Asignar"
-        detalle: "Pauta del examen."
+      construir_examen:
+        detalle: "Construcción del examen."
         offset_dias: -7
+      pauta_examen:
+        detalle: "Pauta del examen."
+        offset_dias: -4
       corregir_examen:
-        responsables: "Asignar"
         detalle: "Corregir examen."
-        offset_dias: 14
+        offset_dias: 7
+
+    Taller:
+      construir_taller:
+        responsables: "Asignar"
+        detalle: "Construcción del taller colaborativo con versiones A, B, C y D."
+        offset_dias: -7
+      corregir_taller:
+        responsables: "Asignar"
+        detalle: "Corrección del taller según la versión asignada."
+        offset_dias: 7
+
+    Laboratorio:
+      preparar_material_previo:
+        responsables: "PEC"
+        detalle: "Preparar material previo / resumen para el laboratorio."
+        offset_dias: -5
+      grabar_video_solucion:
+        responsables: "Asignar"
+        detalle: "Grabar video de la solución del laboratorio."
+        offset_dias: 2
+      corregir_informe_laboratorio:
+        responsables: "Todos"
+        detalle: "Corregir informe de laboratorio."
+        offset_dias: 7
 
 emails:
-  pec_por_seccion:
-    "Sección 1": "TY"
-    "Sección 2": "IG"
-
   from_name: "J. Tomás Yáñez"
-
   cc: []
-
   estado_envios_path: "data/email_log.json"
 
   resumen_semanal:
@@ -241,8 +226,146 @@ emails:
 
       {lista_clases}
 
+      Si no aparece ninguna misión, eso significa que no tienes misiones planificadas originalmente para esta semana.
+      De todos modos, puede haber coordinaciones adicionales conversadas con el equipo docente que no estén reflejadas aquí.
+
       Puedes revisar el calendario completo aquí:
       https://calendario-curso.streamlit.app
 
       Saludos,
       {from_name}
+
+
+# misiones:
+#   aleatoriedad:
+#     semilla: 42
+
+#   secciones:
+#     - "Sección 1"
+#     - "Sección 2"
+
+#   profesores:
+#     - { codigo: "AR", horas_contrato: 10 }
+#     - { codigo: "JCS", horas_contrato: 10 }
+#     - { codigo: "GM", horas_contrato: 10 }
+#     - { codigo: "VB", horas_contrato: 10 }
+#     - { codigo: "NV", horas_contrato: 10 }
+#     - { codigo: "CC", horas_contrato: 10 }
+#     - { codigo: "IG", horas_contrato: 10 }
+#     - { codigo: "TY", horas_contrato: 10 }
+#     - { codigo: "JM", horas_contrato: 10 }
+#     - { codigo: "EG", horas_contrato: 10 }
+#     - { codigo: "RL", horas_contrato: 10 }
+#     - { codigo: "DH", horas_contrato: 10 }
+#     - { codigo: "SM", horas_contrato: 10 }
+
+#   alias_seccion:
+#     "Sección 1": "Sección 1 (Miercoles)"
+#     "Sección 2": "Sección 2 (Jueves)"
+
+#   protocolos:
+#     Control:
+#       construir_control:
+#         responsables: "Asignar"
+#         detalle: "Construcción del control."
+#         offset_dias: -6
+#       pauta_prueba:
+#         responsables: "Asignar"
+#         detalle: "Pauta del control."
+#         offset_dias: -5
+#       escanear:
+#         responsables: "Asignar"
+#         detalle: "Escanear control y subir a carpeta."
+#         offset_dias: 2
+#       corregir_y_notas:
+#         responsables: "Asignar"
+#         detalle: "Corregir control y subir notas."
+#         offset_dias: 13
+
+#     Certamen:
+#       pedir_preguntas:
+#         responsables: "Todos"
+#         detalle: "Cada profesor propone preguntas para el certamen."
+#         offset_dias: -14
+#       construir_control:
+#         responsables: "Asignar"
+#         detalle: "Construcción del certamen."
+#         offset_dias: -7
+#       pauta_prueba:
+#         responsables: "Asignar"
+#         detalle: "Pauta del certamen."
+#         offset_dias: -5
+#       revisar_prueba:
+#         responsables: "Asignar"
+#         detalle: "Revisión final del certamen."
+#         offset_dias: -3
+#       escanear:
+#         responsables: "Asignar"
+#         detalle: "Escanear certamen y subir a carpeta."
+#         offset_dias: 2
+#       corregir_y_notas:
+#         responsables: "Asignar"
+#         detalle: "Corregir certamen y subir notas."
+#         offset_dias: 14
+
+#     Trabajo práctico:
+#       revisar_tp:
+#         responsables: "Todos"
+#         detalle: "Revisar TP y subir nota."
+#         offset_dias: 14
+
+#     Examen:
+#       pedir_preguntas:
+#         responsables: "Todos"
+#         detalle: "Preguntas para examen."
+#         offset_dias: -21
+#       construir_examen:
+#         responsables: "Asignar"
+#         detalle: "Construcción del examen."
+#         offset_dias: -14
+#       pauta_examen:
+#         responsables: "Asignar"
+#         detalle: "Pauta del examen."
+#         offset_dias: -7
+#       corregir_examen:
+#         responsables: "Asignar"
+#         detalle: "Corregir examen."
+#         offset_dias: 14
+
+# emails:
+#   pec_por_seccion:
+#     "Sección 1": "TY"
+#     "Sección 2": "IG"
+
+#   from_name: "J. Tomás Yáñez"
+
+#   cc: []
+
+#   estado_envios_path: "data/email_log.json"
+
+#   resumen_semanal:
+#     dia_envio: "Friday"
+#     hora_envio: "09:00"
+#     asunto: "[{curso}] Resumen semanal {fecha_inicio_semana}–{fecha_fin_semana}"
+#     cuerpo: |
+#       Buen día {nombre_prof},
+
+#       Este es tu resumen para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+
+#       ====================
+#       MISIONES
+#       ====================
+
+#       {lista_misiones}
+
+#       ====================
+#       CLASES DE LA SEMANA
+#       ====================
+
+#       {lista_clases}
+
+#       Puedes revisar el calendario completo aquí:
+#       https://calendario-curso.streamlit.app
+
+#       Saludos,
+#       {from_name}

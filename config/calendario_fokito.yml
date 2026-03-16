@@ -179,26 +179,26 @@ calendario:
     # ======================================================
     # AJUSTES DE SALAS ESPECIALES / OBSERVACIONES
     # ======================================================
-    - { seccion: "Sección 1", semana: 1, actividad: "Clase teórica", observaciones: "Sala: CAMPUS NORTE AUDITORIO ZULEMA DE BARBIERI MONICA 4" }
+    - { seccion: "Sección 1", semana: 1, actividad: "Clase teórica" }
 
-    - { seccion: "Sección 2", semana: 1, actividad: "Clase teórica", observaciones: "Sala: CAMPUS NORTE AUDITORIO MONICA SUAREZ 1" }
-    - { seccion: "Sección 2", semana: 1, actividad: "Laboratorio", tema: "Sin Laboratorio", observaciones: "No hay laboratorio: la sala asignada es CAMPUS NORTE T.O AUDITORIO BRIGIDA FLORES, no sala de computación." }
+    - { seccion: "Sección 2", semana: 1, actividad: "Clase teórica"}
+    - { seccion: "Sección 2", semana: 1, actividad: "Laboratorio", tema: "Sin Laboratorio"}
 
-    - { seccion: "Sección 4", semana: 1, actividad: "Clase teórica", observaciones: "Sala: CAMPUS NORTE SALA CANCINO" }
-    - { seccion: "Sección 4", semana: 1, actividad: "Seminario", observaciones: "Salas: CAMPUS NORTE SALA FISIOLOGÍA 1 / 2 / 4" }
+    - { seccion: "Sección 4", semana: 1, actividad: "Clase teórica" }
+    - { seccion: "Sección 4", semana: 1, actividad: "Seminario" }
 
     # ======================================================
     # SECCIÓN 1
     # Labs oficiales: 1, 3, 5, 7, 9, 11, 13, 15
     # ======================================================
-    - { seccion: "Sección 1", semana: 1,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 1", semana: 3,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 1", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 1", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 1", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 1", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 1", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 1", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 1", semana: 1,  actividad: "Laboratorio", tema: "Tablas" }
+    - { seccion: "Sección 1", semana: 3,  actividad: "Laboratorio", tema: "Gráficos" }
+    - { seccion: "Sección 1", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen" }
+    - { seccion: "Sección 1", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
+    - { seccion: "Sección 1", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5" }
+    - { seccion: "Sección 1", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6" }
+    - { seccion: "Sección 1", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7" }
+    - { seccion: "Sección 1", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2" }
 
     # ======================================================
     # SECCIÓN 2
@@ -213,42 +213,42 @@ calendario:
 
 # 20/4 eliminar (se libera)
 # 4/5 se elimina por bloque protegido
-    - { seccion: "Sección 2", semana: 2,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 3,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 6,  actividad: "Laboratorio", tema: "no hay", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 8,  actividad: "Laboratorio", tema: "no hay", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 11, actividad: "Laboratorio", tema: "laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 14, actividad: "Laboratorio", tema: "laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 2", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 2", semana: 2,  actividad: "Laboratorio", tema: "Tablas" }
+    - { seccion: "Sección 2", semana: 3,  actividad: "Laboratorio", tema: "Gráficos" }
+    - { seccion: "Sección 2", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen" }
+    - { seccion: "Sección 2", semana: 6,  actividad: "Laboratorio", tema: "no hay" }
+    - { seccion: "Sección 2", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
+    - { seccion: "Sección 2", semana: 8,  actividad: "Laboratorio", tema: "no hay" }
+    - { seccion: "Sección 2", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5" }
+    - { seccion: "Sección 2", semana: 11, actividad: "Laboratorio", tema: "laboratorio 6" }
+    - { seccion: "Sección 2", semana: 14, actividad: "Laboratorio", tema: "laboratorio 7" }
+    - { seccion: "Sección 2", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2" }
 
     # ======================================================
     # SECCIÓN 3
     # Labs oficiales: 1, 2, 5, 8, 9, 11, 13, 15
     # ======================================================
-    - { seccion: "Sección 3", semana: 1,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 3", semana: 2,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 3", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 3", semana: 8,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 3", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 3", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 3", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 3", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
+    - { seccion: "Sección 3", semana: 1,  actividad: "Laboratorio", tema: "Tablas" }
+    - { seccion: "Sección 3", semana: 2,  actividad: "Laboratorio", tema: "Gráficos" }
+    - { seccion: "Sección 3", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen" }
+    - { seccion: "Sección 3", semana: 8,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
+    - { seccion: "Sección 3", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5" }
+    - { seccion: "Sección 3", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6" }
+    - { seccion: "Sección 3", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7" }
+    - { seccion: "Sección 3", semana: 15, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2" }
 
     # ======================================================
     # SECCIÓN 4
     # Labs oficiales: 1, 2, 4, 6, 8, 9, 11, 13
     # ======================================================
-    - { seccion: "Sección 4", semana: 1,  actividad: "Laboratorio", tema: "Tablas", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 4", semana: 2,  actividad: "Laboratorio", tema: "Gráficos", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 4", semana: 4,  actividad: "Laboratorio", tema: "Medidas de resumen", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ" }
-    - { seccion: "Sección 4", semana: 6,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ" }
-    - { seccion: "Sección 4", semana: 8,  actividad: "Laboratorio", tema: "Laboratorio 5", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 4", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 6", observaciones: "Salas: CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ / ANA MARIA ROJAS" }
-    - { seccion: "Sección 4", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 7", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
-    - { seccion: "Sección 4", semana: 13, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2", observaciones: "Sala: CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS" }
+    - { seccion: "Sección 4", semana: 1,  actividad: "Laboratorio", tema: "Tablas" }
+    - { seccion: "Sección 4", semana: 2,  actividad: "Laboratorio", tema: "Gráficos" }
+    - { seccion: "Sección 4", semana: 4,  actividad: "Laboratorio", tema: "Medidas de resumen" }
+    - { seccion: "Sección 4", semana: 6,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
+    - { seccion: "Sección 4", semana: 8,  actividad: "Laboratorio", tema: "Laboratorio 5" }
+    - { seccion: "Sección 4", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 6" }
+    - { seccion: "Sección 4", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 7" }
+    - { seccion: "Sección 4", semana: 13, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2" }
 
   # excepciones_evento:
     # - { seccion: "Sección 4", semana: 6, actividad: "Laboratorio", dia_semana: "Thursday", inicio: "18:30", fin: "20:00", tema: "Lab especial en otra sala", observaciones: "Sala 203" }
@@ -258,20 +258,88 @@ calendario:
     # - { seccion: "Sección 2", semana: 2, actividad: "Laboratorio", semana_nueva: 3 }
     # - { seccion: "Sección 2", semana: 1, actividad: "Laboratorio", semana_nueva: 2 }
     # - { seccion: "Sección 2", semana: 1, actividad: "clase teórica", inicio: "15:00", fin: "16:30" }
-  evaluaciones:
-    # Examenes
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
 
-    - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
-    - { modo: "por_filtro", seccion: "Sección 3", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
-    - { modo: "por_filtro", seccion: "Sección 4", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
+
+  # evaluaciones:
+  #   # Examenes
+  #   - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
+  #   - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
+  #   - { modo: "por_filtro", seccion: "Sección 3", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
+  #   - { modo: "por_filtro", seccion: "Sección 4", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Primera Oportunidad" }
+
+  #   - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
+  #   - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
+  #   - { modo: "por_filtro", seccion: "Sección 3", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
+  #   - { modo: "por_filtro", seccion: "Sección 4", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen Segunda Oportunidad" }
 
     # Trabajo Práctico
-    - { modo: "por_filtro", seccion: "Sección 2", semana: 6, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Entrega al final" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 6, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Entrega al final" }
+
+  evaluaciones:
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 2, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 9, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 14, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 7, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 1", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 7, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 1" }
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 15, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 2" }
+
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 2, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 9, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 14, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 7, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 2", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 7, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 1" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 15, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 2" }
+
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 2, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 9, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 14, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 7, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 3", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 7, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 1" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 15, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 2" }
+
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 2, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 1" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 9, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 2" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 14, actividad: "Seminario", tipo: "Taller", observaciones: "Taller Unidad 3" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 7, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_filtro", seccion: "Sección 4", semana: 16, actividad: "Clase teórica", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 12, actividad: "Seminario", tipo: "Trabajo práctico", observaciones: "Trabajo Práctico" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 7, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 1" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 15, actividad: "Laboratorio", tipo: "Informe laboratorio", observaciones: "Avance Laboratorio 2" }
+
+    # - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+    # - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+
+    # - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
+    # - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
+    # - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
+    # - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
+
+
+    - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+    - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-04-27", tipo: "Certamen", observaciones: "Certamen 1" }
+
+    - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
+    - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
 
   pausas_academicas:
     - { inicio: "2026-05-18", fin: "2026-05-24", etiqueta: "Semana de Pausa Académica" }
@@ -293,173 +361,312 @@ calendario:
     usar_automaticos_chile: true
     manuales: []
 
-# ============================================================
-# Misiones / Protocolos (antes misiones_config.yml)
-# ============================================================
+
 misiones:
-  aleatoriedad:
-    semilla: 42
-
-  # Secciones para matriz (puedes dejar todas o solo algunas)
-  secciones:
-    - "Sección 1"
-    - "Sección 2"
-    - "Sección 3"
-    - "Sección 4"
-
-  profesores:
-    - { codigo: "p1", horas_contrato: 10 }
-    - { codigo: "p2", horas_contrato: 10 }
-    - { codigo: "p3", horas_contrato: 10 }
-    - { codigo: "p4", horas_contrato: 10 }
-
   alias_seccion:
-    "Sección 1": "Sección 1"
-    "Sección 2": "Sección 2"
-    "Sección 3": "Sección 3"
-    "Sección 4": "Sección 4"
+    "Sección 1": "Sección 1 (Miércoles)"
 
-  # Protocolos por tipo de evaluación (mapea por "evaluación" del calendario)
-  # OJO: tu generador debe mapear Prueba/Certamen/Control a este protocolo (lo ajustas en Python)
+  coordinacion:
+    pec_por_seccion:
+      "Sección 1": "IG"
+      "Sección 2": "AR"
+      "Sección 3": "JCS"
+      "Sección 4": "CC"
+    pcc_por_seccion:
+      "Sección 1": "TY"
+      "Sección 2": "TY"
+      "Sección 3": "TY"
+      "Sección 4": "TY"
+
+  # overrides SOLO si quieres romper el ciclo normal
+  overrides_responsables:
+    # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-03-26", slot: "C" }
+    # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-04-02", responsables: ["GM"] }
+
   protocolos:
-    Prueba:
+    Control:
+      construir_control:
+        detalle: "Construcción del control."
+        offset_dias: -7
+      escanear:
+        detalle: "Escanear control y subir a carpeta."
+        offset_dias: 7
+      corregir_y_notas:
+        detalle: "Corregir control y subir notas."
+        offset_dias: 7
+
+    Certamen:
       pedir_preguntas:
-        responsables: "Todos"
-        detalle: "Recolección de preguntas."
+        detalle: "Enviar preguntas para certamen con solución."
         offset_dias: -14
       construir_control:
-        responsables: "Asignar"
-        detalle: "Armado y diagramación."
+        detalle: "Construcción del certamen."
         offset_dias: -7
       pauta_prueba:
-        responsables: "Asignar"
-        detalle: "Pauta oficial."
-        offset_dias: -5
-      revisar_prueba:
-        responsables: "Asignar"
-        detalle: "Revisión final."
-        offset_dias: -3
-      escanear:
-        responsables: "Asignar"
-        detalle: "Escaneo y subida."
-        offset_dias: +2
+        detalle: "Pauta del certamen."
+        offset_dias: -4
       corregir_y_notas:
-        responsables: "Asignar"
-        detalle: "Corrección y notas."
-        offset_dias: +14
+        detalle: "Corregir certamen y subir notas."
+        offset_dias: 7
 
-    TP:
+    Trabajo práctico:
       revisar_tp:
-        responsables: "Todos"
-        detalle: "Revisar TP y poner nota."
-        offset_dias: +14
+        detalle: "Revisar TP y subir nota."
+        offset_dias: 7
 
     Examen:
       pedir_preguntas:
-        responsables: "Todos"
-        detalle: "Preguntas examen."
-        offset_dias: -21
-      construir_examen:
-        responsables: "Asignar"
-        detalle: "Construcción examen."
+        detalle: "Preguntas para examen con solución."
         offset_dias: -14
-      pauta_examen:
-        responsables: "Asignar"
-        detalle: "Pauta examen."
+      construir_examen:
+        detalle: "Construcción del examen."
         offset_dias: -7
+      pauta_examen:
+        detalle: "Pauta del examen."
+        offset_dias: -4
       corregir_examen:
-        responsables: "Asignar"
-        detalle: "Corrección examen."
-        offset_dias: +14
+        detalle: "Corregir examen."
+        offset_dias: 7
 
-# ============================================================
-# Salidas por curso (rutas finales de los excels)
-# ============================================================
-salida:
-  calendario_excel_path: "data/calendario.xlsx"
-  misiones_excel_path: "data/misiones.xlsx"
+    Taller:
+      construir_taller:
+        responsables: "Asignar"
+        detalle: "Construcción del taller colaborativo con versiones A, B, C y D."
+        offset_dias: -7
+      corregir_taller:
+        responsables: "Asignar"
+        detalle: "Corrección del taller según la versión asignada."
+        offset_dias: 7
+
+    Laboratorio:
+      # preparar_material_previo:
+      #   responsables: "PEC"
+      #   detalle: "Preparar material previo / resumen para el laboratorio."
+      #   offset_dias: -5
+      # grabar_video_solucion:
+      #   responsables: "Asignar"
+      #   detalle: "Grabar video de la solución del laboratorio."
+      #   offset_dias: 2
+      corregir_informe_laboratorio:
+        responsables: "Todos"
+        detalle: "Corregir informe de laboratorio."
+        offset_dias: 7
 
 emails:
-  # profesores:
-  #   MB:
-  #     nombre: "Maximiliano"
-  #     email: "maximiliano.bernal@ug.uchile.cl"
-  #   JM:
-  #     nombre: "José"
-  #     email: "jose.mondaca.r@ug.uchile.cl"
-  #   GM:
-  #     nombre: "Gabriela"
-  #     email: "gabriela.martinez1e@gmail.com"
-  #   VB:
-  #     nombre: "Valeria"
-  #     email: "valeria.brancacho@ug.uchile.cl"
-  #   NV:
-  #     nombre: "Naty"
-  #     email: "varasnaty@hotmail.com"
-  #   EG:
-  #     nombre: "Eduardo"
-  #     email: "eaguerra0@gmail.com"
-  #   RL:
-  #     nombre: "Rosa"
-  #     email: "rosaluciladelcarmen@gmail.com"
-  #   DH:
-  #     nombre: "Diego"
-  #     email: "dmhidalgo@uc.cl"
-  #   SM:
-  #     nombre: "Sebastián"
-  #     email: "s.sandoval.marconi91@gmail.com"
-  #   TY:
-  #     nombre: "Tomás"
-  #     email: "joriv.yanez@ug.uchile.cl"
-  #   IG:
-  #     nombre: "Ingrid"
-  #     email: "igalaz2009@uchile.cl"
-  #   CC:
-  #     nombre: "Caroll"
-  #     email: "cacuellar@uchile.cl"
-  #   AR:
-  #     nombre: "Alexander"
-  #     email: "alexander.riquelme@uchile.cl"
-  #   JCS:
-  #     nombre: "Juan"
-  #     email: "juan.salas.g@uchile.cl"
-
-  pec_por_seccion:
-    "Sección 1": "TY"
-    "Sección 2": "IG"
-
   from_name: "J. Tomás Yáñez"
-
   cc: []
-
   estado_envios_path: "data/email_log.json"
 
-resumen_semanal:
-  dia_envio: "Friday"
-  hora_envio: "09:00"
-  asunto: "[{curso}] Resumen semanal {fecha_inicio_semana}–{fecha_fin_semana}"
-  cuerpo: |
-    Buen día {nombre_prof},
+  resumen_semanal:
+    dia_envio: "Friday"
+    hora_envio: "09:00"
+    asunto: "[{curso}] Resumen semanal {fecha_inicio_semana}–{fecha_fin_semana}"
+    cuerpo: |
+      Buen día {nombre_prof},
 
-    Este es tu resumen para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+      Este es tu resumen para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
 
-    ====================
-    MISIONES
-    ====================
+      ====================
+      MISIONES
+      ====================
 
-    {lista_misiones}
+      {lista_misiones}
 
-    ====================
-    CLASES DE LA SEMANA
-    ====================
+      ====================
+      CLASES DE LA SEMANA
+      ====================
 
-    {lista_clases}
+      {lista_clases}
 
-    Si no aparece ninguna misión, eso significa que no tienes tareas planificadas originalmente para esta semana.
-    De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+      Si no aparece ninguna misión, eso significa que no tienes misiones planificadas originalmente para esta semana.
+      De todos modos, puede haber coordinaciones adicionales conversadas con el equipo docente que no estén reflejadas aquí.
 
-    Puedes revisar el calendario completo aquí:
-    https://calendario-curso.streamlit.app
+      Puedes revisar el calendario completo aquí:
+      https://calendario-curso.streamlit.app
 
-    Saludos,
-    {from_name}
+      Saludos,
+      {from_name}
+
+
+
+
+
+# # ============================================================
+# # Misiones / Protocolos (antes misiones_config.yml)
+# # ============================================================
+# misiones:
+#   aleatoriedad:
+#     semilla: 42
+
+#   # Secciones para matriz (puedes dejar todas o solo algunas)
+#   secciones:
+#     - "Sección 1"
+#     - "Sección 2"
+#     - "Sección 3"
+#     - "Sección 4"
+
+#   profesores:
+#     - { codigo: "AR", horas_contrato: 10 }
+#     - { codigo: "JCS", horas_contrato: 10 }
+#     - { codigo: "GM", horas_contrato: 10 }
+#     - { codigo: "VB", horas_contrato: 10 }
+#     - { codigo: "NV", horas_contrato: 10 }
+#     - { codigo: "CC", horas_contrato: 10 }
+#     - { codigo: "IG", horas_contrato: 10 }
+#     - { codigo: "TY", horas_contrato: 10 }
+#     - { codigo: "JM", horas_contrato: 10 }
+#     - { codigo: "EG", horas_contrato: 10 }
+#     - { codigo: "RL", horas_contrato: 10 }
+#     - { codigo: "DH", horas_contrato: 10 }
+#     - { codigo: "SM", horas_contrato: 10 }
+
+#   alias_seccion:
+#     "Sección 1": "Sección 1"
+#     "Sección 2": "Sección 2"
+#     "Sección 3": "Sección 3"
+#     "Sección 4": "Sección 4"
+
+#   # Protocolos por tipo de evaluación (mapea por "evaluación" del calendario)
+#   # OJO: tu generador debe mapear Prueba/Certamen/Control a este protocolo (lo ajustas en Python)
+#   protocolos:
+#     Prueba:
+#       pedir_preguntas:
+#         responsables: "Todos"
+#         detalle: "Recolección de preguntas."
+#         offset_dias: -14
+#       construir_control:
+#         responsables: "Asignar"
+#         detalle: "Armado y diagramación."
+#         offset_dias: -7
+#       pauta_prueba:
+#         responsables: "Asignar"
+#         detalle: "Pauta oficial."
+#         offset_dias: -5
+#       revisar_prueba:
+#         responsables: "Asignar"
+#         detalle: "Revisión final."
+#         offset_dias: -3
+#       escanear:
+#         responsables: "Asignar"
+#         detalle: "Escaneo y subida."
+#         offset_dias: +2
+#       corregir_y_notas:
+#         responsables: "Asignar"
+#         detalle: "Corrección y notas."
+#         offset_dias: +14
+
+#     TP:
+#       revisar_tp:
+#         responsables: "Todos"
+#         detalle: "Revisar TP y poner nota."
+#         offset_dias: +14
+
+#     Examen:
+#       pedir_preguntas:
+#         responsables: "Todos"
+#         detalle: "Preguntas examen."
+#         offset_dias: -21
+#       construir_examen:
+#         responsables: "Asignar"
+#         detalle: "Construcción examen."
+#         offset_dias: -14
+#       pauta_examen:
+#         responsables: "Asignar"
+#         detalle: "Pauta examen."
+#         offset_dias: -7
+#       corregir_examen:
+#         responsables: "Asignar"
+#         detalle: "Corrección examen."
+#         offset_dias: +14
+
+# # ============================================================
+# # Salidas por curso (rutas finales de los excels)
+# # ============================================================
+# salida:
+#   calendario_excel_path: "data/calendario.xlsx"
+#   misiones_excel_path: "data/misiones.xlsx"
+
+# emails:
+#   # profesores:
+#   #   MB:
+#   #     nombre: "Maximiliano"
+#   #     email: "maximiliano.bernal@ug.uchile.cl"
+#   #   JM:
+#   #     nombre: "José"
+#   #     email: "jose.mondaca.r@ug.uchile.cl"
+#   #   GM:
+#   #     nombre: "Gabriela"
+#   #     email: "gabriela.martinez1e@gmail.com"
+#   #   VB:
+#   #     nombre: "Valeria"
+#   #     email: "valeria.brancacho@ug.uchile.cl"
+#   #   NV:
+#   #     nombre: "Naty"
+#   #     email: "varasnaty@hotmail.com"
+#   #   EG:
+#   #     nombre: "Eduardo"
+#   #     email: "eaguerra0@gmail.com"
+#   #   RL:
+#   #     nombre: "Rosa"
+#   #     email: "rosaluciladelcarmen@gmail.com"
+#   #   DH:
+#   #     nombre: "Diego"
+#   #     email: "dmhidalgo@uc.cl"
+#   #   SM:
+#   #     nombre: "Sebastián"
+#   #     email: "s.sandoval.marconi91@gmail.com"
+#   #   TY:
+#   #     nombre: "Tomás"
+#   #     email: "joriv.yanez@ug.uchile.cl"
+#   #   IG:
+#   #     nombre: "Ingrid"
+#   #     email: "igalaz2009@uchile.cl"
+#   #   CC:
+#   #     nombre: "Caroll"
+#   #     email: "cacuellar@uchile.cl"
+#   #   AR:
+#   #     nombre: "Alexander"
+#   #     email: "alexander.riquelme@uchile.cl"
+#   #   JCS:
+#   #     nombre: "Juan"
+#   #     email: "juan.salas.g@uchile.cl"
+
+#   pec_por_seccion:
+#     "Sección 1": "TY"
+#     "Sección 2": "IG"
+
+#   from_name: "J. Tomás Yáñez"
+
+#   cc: []
+
+#   estado_envios_path: "data/email_log.json"
+
+# resumen_semanal:
+#   dia_envio: "Friday"
+#   hora_envio: "09:00"
+#   asunto: "[{curso}] Resumen semanal {fecha_inicio_semana}–{fecha_fin_semana}"
+#   cuerpo: |
+#     Buen día {nombre_prof},
+
+#     Este es tu resumen para la semana del {fecha_inicio_semana} al {fecha_fin_semana} en el curso {curso}.
+
+#     ====================
+#     MISIONES
+#     ====================
+
+#     {lista_misiones}
+
+#     ====================
+#     CLASES DE LA SEMANA
+#     ====================
+
+#     {lista_clases}
+
+#     Si no aparece ninguna misión, eso significa que no tienes tareas planificadas originalmente para esta semana.
+#     De todos modos, puede haber coordinaciones adicionales conversadas con los PEC o con el equipo docente que no estén reflejadas aquí.
+
+#     Puedes revisar el calendario completo aquí:
+#     https://calendario-curso.streamlit.app
+
+#     Saludos,
+#     {from_name}
