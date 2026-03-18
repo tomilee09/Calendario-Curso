@@ -1,0 +1,21 @@
+urgentes:
+  - id: "u1"
+    curso: "fokito"
+    titulo: "Enviar preguntas Certamen 1"
+    descripcion: "Falta consolidar preguntas con solución y mandarlas hoy."
+    estado: "pendiente"
+    prioridad: "alta"
+
+  - id: "u2"
+    curso: "fokito"
+    titulo: "Subir pauta Taller Unidad 1"
+    descripcion: "Revisar versión final y subir a la carpeta compartida."
+    estado: "en_progreso"
+    prioridad: "media"
+
+  - id: "u3"
+    curso: "enobnu"
+    titulo: "Confirmar responsables de corrección"
+    descripcion: "Definir quién corrige cada sección."
+    estado: "completado"
+    prioridad: "alta"

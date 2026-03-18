@@ -30,7 +30,7 @@ calendario:
 
   profesores_base:
     - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "IG" }
-    - { seccion: "Sección 1", actividad: "Seminario",    profesores: ["JM", "MB", "NV"] }
+    - { seccion: "Sección 1", actividad: "Seminario",    profesores: ["JM", "NV", "MB"] }
     - { seccion: "Sección 1", actividad: "Laboratorio",  profesores: ["IG", "NV", "GM", "VB"] }
 
     - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "JCS" }
@@ -38,11 +38,11 @@ calendario:
     - { seccion: "Sección 2", actividad: "Laboratorio",  profesores: ["JCS", "GM", "VB", "XX"] }
 
     - { seccion: "Sección 3", actividad: "Clase teórica", profesores: "AR" }
-    - { seccion: "Sección 3", actividad: "Seminario",    profesores: ["EG", "RM", "XX"] }
-    - { seccion: "Sección 3", actividad: "Laboratorio",  profesores: ["EG", "AR", "XX", "XX"] }
+    - { seccion: "Sección 3", actividad: "Seminario",    profesores: ["JM", "NV", "EG"] }
+    - { seccion: "Sección 3", actividad: "Laboratorio",  profesores: ["AR", "JM", "MB", "EG"] }
 
     - { seccion: "Sección 4", actividad: "Clase teórica", profesores: "CC" }
-    - { seccion: "Sección 4", actividad: "Seminario",    profesores: ["SM", "XX", "XX"] }
+    - { seccion: "Sección 4", actividad: "Seminario",    profesores: ["RM", "SM", "XX"] }
     - { seccion: "Sección 4", actividad: "Laboratorio",  profesores: ["EG", "SM", "CC", "XX"] }
 
   # temas_por_semana:
