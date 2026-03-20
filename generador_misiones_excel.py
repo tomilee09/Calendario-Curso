@@ -3912,6 +3912,38 @@ def construir_misiones(config, df_cal):
         #     continue
 
 
+        # if proto_nombre == "Taller":
+        #     pool_global = obtener_pool_global_participantes(config)
+
+        #     if len(pool_global) == 0:
+        #         continue
+
+        #     elegidos, nuevo_cursor = elegir_varios_ciclico_sin_repetir(
+        #         pool_global,
+        #         contador_taller_global,
+        #         4
+        #     )
+
+        #     if len(elegidos) < 4:
+        #         elegidos_extra, cursor_extra = elegir_varios_ciclico_sin_repetir(
+        #             pool_global,
+        #             nuevo_cursor,
+        #             4
+        #         )
+        #         for p in elegidos_extra:
+        #             if p not in elegidos:
+        #                 elegidos.append(p)
+        #             if len(elegidos) == 4:
+        #                 break
+        #         nuevo_cursor = cursor_extra
+
+        #     if len(elegidos) < 4:
+        #         continue
+
+        #     contador_taller_global = nuevo_cursor
+
+        #     p1, p2, p3, p4 = elegidos[:4]
+        
         if proto_nombre == "Taller":
             pool_global = obtener_pool_global_participantes(config)
 
@@ -3943,6 +3975,68 @@ def construir_misiones(config, df_cal):
             contador_taller_global = nuevo_cursor
 
             p1, p2, p3, p4 = elegidos[:4]
+
+            for paso_key, paso in proto.items():
+                offset = int(paso.get("offset_dias", 0))
+                deadline = (fecha_evento + pd.Timedelta(days=offset)).date()
+
+                detalle = str(paso.get("detalle", "")).strip()
+                if detalle_base_evento:
+                    detalle = f"{detalle} — {detalle_base_evento}" if detalle else detalle_base_evento
+
+                if paso_key == "construir_taller":
+                    filas.append({
+                        "fecha_limite": deadline,
+                        "fecha_evento": fecha_evento.date(),
+                        "evento": nombre,
+                        "tipo_evento": proto_nombre,
+                        "paso": "construir_taller_AB",
+                        "sección": seccion,
+                        "responsables": normalizar_profes_str([p1, p2]),
+                        "detalle": f"{detalle} — Versiones A y B.",
+                        "estado": "Pendiente",
+                    })
+
+                    filas.append({
+                        "fecha_limite": deadline,
+                        "fecha_evento": fecha_evento.date(),
+                        "evento": nombre,
+                        "tipo_evento": proto_nombre,
+                        "paso": "construir_taller_CD",
+                        "sección": seccion,
+                        "responsables": normalizar_profes_str([p3, p4]),
+                        "detalle": f"{detalle} — Versiones C y D.",
+                        "estado": "Pendiente",
+                    })
+
+                elif paso_key == "corregir_taller":
+                    for prof, version in [(p1, "A"), (p2, "B"), (p3, "C"), (p4, "D")]:
+                        filas.append({
+                            "fecha_limite": deadline,
+                            "fecha_evento": fecha_evento.date(),
+                            "evento": nombre,
+                            "tipo_evento": proto_nombre,
+                            "paso": f"corregir_taller_{version}",
+                            "sección": seccion,
+                            "responsables": normalizar_profes_str([prof]),
+                            "detalle": f"{detalle} — Corregir versión {version}.",
+                            "estado": "Pendiente",
+                        })
+
+                else:
+                    filas.append({
+                        "fecha_limite": deadline,
+                        "fecha_evento": fecha_evento.date(),
+                        "evento": nombre,
+                        "tipo_evento": proto_nombre,
+                        "paso": paso_key,
+                        "sección": seccion,
+                        "responsables": normalizar_profes_str(elegidos),
+                        "detalle": detalle,
+                        "estado": "Pendiente",
+                    })
+
+            continue
 
 
         # ========================================================
