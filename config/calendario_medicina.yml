@@ -18,10 +18,10 @@ calendario:
 
   profesores_base:
     - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "IG" }
-    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["TY", "JCS", "AR", "XX"] }
+    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["TY", "JCS", "AR", "EG"] }
 
     - { seccion: "Sección 2", actividad: "Clase teórica", profesores: "IG" }
-    - { seccion: "Sección 2", actividad: "Seminario", profesores: ["TY", "JCS", "AR", "XX"] }
+    - { seccion: "Sección 2", actividad: "Seminario", profesores: ["TY", "JCS", "AR", "EG"] }
 
   temas_teoricos:
     1: "Lógica 1"

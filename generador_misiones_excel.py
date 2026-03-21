@@ -3442,6 +3442,8 @@ def obtener_pool_controles_seccion(config, seccion):
     return obtener_lista_seminario_seccion(config, seccion, mantener_duplicados=True)
 
 
+
+
 def obtener_pool_global_participantes(config):
     """
     Pool global ponderado para talleres.
@@ -3725,6 +3727,8 @@ def construir_misiones(config, df_cal):
             proto_nombre = "Taller"
         elif "certamen" in tipo_norm or "prueba" in tipo_norm:
             proto_nombre = "Certamen"
+        elif "portafolio" in tipo_norm:
+            proto_nombre = "Portafolio"
         elif "trabajo práctico" in tipo_norm or tipo_norm == "tp":
             proto_nombre = "Trabajo práctico"
         elif "examen" in tipo_norm:
@@ -3823,6 +3827,30 @@ def construir_misiones(config, df_cal):
                     "estado": "Pendiente",
                 })
             continue
+
+
+        if proto_nombre == "Portafolio":
+            for paso_key, paso in proto.items():
+                offset = int(paso.get("offset_dias", 0))
+                deadline = (fecha_evento + pd.Timedelta(days=offset)).date()
+
+                detalle = str(paso.get("detalle", "")).strip()
+                if detalle_base_evento:
+                    detalle = f"{detalle} — {detalle_base_evento}" if detalle else detalle_base_evento
+
+                filas.append({
+                    "fecha_limite": deadline,
+                    "fecha_evento": fecha_evento.date(),
+                    "evento": nombre,
+                    "tipo_evento": proto_nombre,
+                    "paso": paso_key,
+                    "sección": seccion,
+                    "responsables": normalizar_profes_str(participantes),
+                    "detalle": detalle,
+                    "estado": "Pendiente",
+                })
+            continue
+
 
         # ========================================================
         # TALLER
@@ -4291,6 +4319,7 @@ def exportar_excel(df_mis, df_mat, df_chequeo, df_pools, path):
             "preparar_material_previo",
             "grabar_video_solucion",
             "corregir_informe_laboratorio",
+            "revisar_portafolio",
         ]
 
         df_plan = df_mis.copy()

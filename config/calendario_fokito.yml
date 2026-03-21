@@ -341,6 +341,26 @@ calendario:
     - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
     - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-07-03", tipo: "Certamen", observaciones: "Certamen 2" }
 
+    - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+
+    - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-05-08", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-05-08", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-05-08", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-05-08", tipo: "Portafolio", observaciones: "Portafolio" }
+
+    - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-06-05", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-06-05", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-06-05", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-06-05", tipo: "Portafolio", observaciones: "Portafolio" }
+
+    - { modo: "por_fecha", seccion: "Sección 1", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 2", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 3", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_fecha", seccion: "Sección 4", fecha: "2026-04-10", tipo: "Portafolio", observaciones: "Portafolio" }
+
   pausas_academicas:
     - { inicio: "2026-05-18", fin: "2026-05-24", etiqueta: "Semana de Pausa Académica" }
 
@@ -450,6 +470,11 @@ misiones:
       corregir_informe_laboratorio:
         responsables: "Todos"
         detalle: "Corregir informe de laboratorio."
+        offset_dias: 7
+
+    Portafolio:
+      revisar_portafolio:
+        detalle: "Corregir portafolio del grupo de seminario."
         offset_dias: 7
 
 emails:

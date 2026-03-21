@@ -394,13 +394,22 @@ def split_profes(valor):
     return [x.strip() for x in str(valor).split(",") if x.strip()]
 
 
-def row_has_prof(row_prof, selected_set: set) -> bool:
+# def row_has_prof(row_prof, selected_set: set) -> bool:
+#     profs = set(split_profes(row_prof))
+#     if not profs:
+#         return False
+#     return len(profs.intersection(selected_set)) > 0
+
+def row_has_prof(row_prof, selected_set: set, evaluacion="") -> bool:
     profs = set(split_profes(row_prof))
-    if not profs:
-        return False
-    return len(profs.intersection(selected_set)) > 0
+    if profs:
+        return len(profs.intersection(selected_set)) > 0
 
+    # Si no hay profes explícitos pero sí hay evaluación, la dejamos pasar
+    if str(evaluacion).strip():
+        return True
 
+    return False
 
 def render_badge_responsable(responsable: str) -> str:
     if not responsable:
@@ -1174,6 +1183,94 @@ def render_plan_html(df_plan: pd.DataFrame) -> str:
 # ============================================================
 # EVENTOS CALENDARIO
 # ============================================================
+# def build_events_calendario_para_html(df: pd.DataFrame):
+#     events = []
+
+#     for _, r in df.iterrows():
+#         fecha = r.get("fecha", pd.NaT)
+#         if pd.isna(fecha):
+#             continue
+
+#         horario = str(r.get("horario", "")).strip()
+#         tema = str(r.get("tema", "")).strip()
+#         evaluacion = str(r.get("evaluación", "")).strip()
+#         profs = str(r.get("profesores", "")).strip()
+#         obs = str(r.get("observaciones", "")).strip()
+#         actividad = str(r.get("actividad", "")).strip()
+#         seccion = str(r.get("sección", "")).strip()
+
+#         all_day = False
+#         if ("–" in horario) or ("-" in horario):
+#             try:
+#                 h_clean = horario.replace("-", "–")
+#                 a, b = h_clean.split("–")
+#                 hi = pd.to_datetime(a.strip(), format="%H:%M").time()
+#                 hf = pd.to_datetime(b.strip(), format="%H:%M").time()
+#                 start_dt = fecha + pd.Timedelta(hours=hi.hour, minutes=hi.minute)
+#                 end_dt = fecha + pd.Timedelta(hours=hf.hour, minutes=hf.minute)
+#                 start = start_dt.isoformat()
+#                 end = end_dt.isoformat()
+#             except Exception:
+#                 all_day = True
+#                 start = fecha.date().isoformat()
+#                 end = (fecha + pd.Timedelta(days=1)).date().isoformat()
+#         else:
+#             all_day = True
+#             start = fecha.date().isoformat()
+#             end = (fecha + pd.Timedelta(days=1)).date().isoformat()
+
+#         prefix = (EVAL_ICON.get(evaluacion, "") + " ") if evaluacion else ""
+
+#         partes_titulo = []
+#         if evaluacion:
+#             partes_titulo.append(f"{prefix}{evaluacion}")
+#             if actividad:
+#                 partes_titulo.append(actividad)
+#         else:
+#             if actividad:
+#                 partes_titulo.append(f"{prefix}{actividad}".strip())
+
+#         if tema:
+#             partes_titulo.append(tema)
+#         if seccion:
+#             partes_titulo.append(seccion)
+#         if profs:
+#             partes_titulo.append(profs)
+
+#         title = " · ".join([x for x in partes_titulo if x])
+
+#         bg = SECTION_COLORS.get(seccion, "rgba(148,163,184,0.14)")
+#         border = BORDER_BY_ACTIVIDAD.get(actividad, "#64748b")
+
+#         if evaluacion:
+#             border = "#b45309"
+
+#         if "Feriado" in actividad or "Pausa" in actividad:
+#             bg = "rgba(239,68,68,0.12)"
+#             border = "#991b1b"
+
+#         events.append({
+#             "title": title,
+#             "start": start,
+#             "end": end,
+#             "allDay": all_day,
+#             "backgroundColor": bg,
+#             "borderColor": border,
+#             "textColor": "#111827",
+#             "extendedProps": {
+#                 "tipo": "clase",
+#                 "actividad": actividad,
+#                 "sección": seccion,
+#                 "horario": horario if horario else ("Todo el día" if all_day else ""),
+#                 "evaluación": evaluacion,
+#                 "profesores": profs,
+#                 "observaciones": obs,
+#                 "tema": tema,
+#             }
+#         })
+
+#     return events
+
 def build_events_calendario_para_html(df: pd.DataFrame):
     events = []
 
@@ -1197,30 +1294,24 @@ def build_events_calendario_para_html(df: pd.DataFrame):
                 a, b = h_clean.split("–")
                 hi = pd.to_datetime(a.strip(), format="%H:%M").time()
                 hf = pd.to_datetime(b.strip(), format="%H:%M").time()
-                start_dt = fecha + pd.Timedelta(hours=hi.hour, minutes=hi.minute)
-                end_dt = fecha + pd.Timedelta(hours=hf.hour, minutes=hf.minute)
+                start_dt = pd.Timestamp(fecha) + pd.Timedelta(hours=hi.hour, minutes=hi.minute)
+                end_dt = pd.Timestamp(fecha) + pd.Timedelta(hours=hf.hour, minutes=hf.minute)
                 start = start_dt.isoformat()
                 end = end_dt.isoformat()
             except Exception:
                 all_day = True
-                start = fecha.date().isoformat()
-                end = (fecha + pd.Timedelta(days=1)).date().isoformat()
+                start = pd.Timestamp(fecha).date().isoformat()
+                end = (pd.Timestamp(fecha) + pd.Timedelta(days=1)).date().isoformat()
         else:
             all_day = True
-            start = fecha.date().isoformat()
-            end = (fecha + pd.Timedelta(days=1)).date().isoformat()
+            start = pd.Timestamp(fecha).date().isoformat()
+            end = (pd.Timestamp(fecha) + pd.Timedelta(days=1)).date().isoformat()
 
-        prefix = (EVAL_ICON.get(evaluacion, "") + " ") if evaluacion else ""
-
+        # IMPORTANTE:
+        # YA NO metemos la evaluación en el título del bloque de clase.
         partes_titulo = []
-        if evaluacion:
-            partes_titulo.append(f"{prefix}{evaluacion}")
-            if actividad:
-                partes_titulo.append(actividad)
-        else:
-            if actividad:
-                partes_titulo.append(f"{prefix}{actividad}".strip())
-
+        if actividad:
+            partes_titulo.append(actividad)
         if tema:
             partes_titulo.append(tema)
         if seccion:
@@ -1232,9 +1323,6 @@ def build_events_calendario_para_html(df: pd.DataFrame):
 
         bg = SECTION_COLORS.get(seccion, "rgba(148,163,184,0.14)")
         border = BORDER_BY_ACTIVIDAD.get(actividad, "#64748b")
-
-        if evaluacion:
-            border = "#b45309"
 
         if "Feriado" in actividad or "Pausa" in actividad:
             bg = "rgba(239,68,68,0.12)"
@@ -1261,6 +1349,476 @@ def build_events_calendario_para_html(df: pd.DataFrame):
         })
 
     return events
+
+
+
+
+# def render_pendientes_semana_html(df_eval_sem: pd.DataFrame, df_mis_sem: pd.DataFrame, fechas_semana_ordenadas):
+#     """
+#     Muestra abajo del calendario:
+#     - evaluaciones de la semana (azul)
+#     - misiones de la semana (rojo)
+#     organizadas por día
+#     """
+#     dias_es = {
+#         0: "Lunes",
+#         1: "Martes",
+#         2: "Miércoles",
+#         3: "Jueves",
+#         4: "Viernes",
+#         5: "Sábado",
+#         6: "Domingo",
+#     }
+
+#     df_eval = df_eval_sem.copy() if df_eval_sem is not None else pd.DataFrame()
+#     df_mis = df_mis_sem.copy() if df_mis_sem is not None else pd.DataFrame()
+
+#     if not df_eval.empty:
+#         df_eval = asegurar_columnas(
+#             df_eval,
+#             ["fecha", "horario", "actividad", "tema", "evaluación", "sección", "profesores", "observaciones"]
+#         )
+#         df_eval["fecha"] = pd.to_datetime(df_eval["fecha"], errors="coerce")
+#         df_eval = df_eval.dropna(subset=["fecha"]).copy()
+#         df_eval["fecha_dia"] = df_eval["fecha"].dt.date
+
+#     if not df_mis.empty:
+#         df_mis = asegurar_columnas(
+#             df_mis,
+#             ["fecha_limite", "evento", "paso", "sección", "responsables", "detalle", "estado"]
+#         )
+#         df_mis["fecha_limite"] = pd.to_datetime(df_mis["fecha_limite"], errors="coerce")
+#         df_mis = df_mis.dropna(subset=["fecha_limite"]).copy()
+#         df_mis["fecha_dia"] = df_mis["fecha_limite"].dt.date
+#         df_mis["_rank"] = df_mis["paso"].apply(lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999)
+
+#     columnas_html = []
+
+#     for fecha in fechas_semana_ordenadas:
+#         fecha_ts = pd.Timestamp(fecha)
+#         fecha_date = fecha_ts.date()
+
+#         sub_eval = pd.DataFrame()
+#         sub_mis = pd.DataFrame()
+
+#         if not df_eval.empty:
+#             sub_eval = df_eval[df_eval["fecha_dia"] == fecha_date].copy()
+#             sub_eval = sub_eval[sub_eval["evaluación"].astype(str).str.strip() != ""].copy()
+#             sub_eval = sub_eval.sort_values(["horario", "sección", "actividad"]).reset_index(drop=True)
+
+#         if not df_mis.empty:
+#             sub_mis = df_mis[df_mis["fecha_dia"] == fecha_date].copy()
+#             sub_mis = sub_mis.sort_values(["_rank", "evento", "sección"]).reset_index(drop=True)
+
+#         tarjetas = ""
+
+#         # =====================================================
+#         # EVALUACIONES (AZUL)
+#         # =====================================================
+#         if not sub_eval.empty:
+#             for _, r in sub_eval.iterrows():
+#                 horario = escape_texto(r.get("horario", "Todo el día"))
+#                 evaluacion = escape_texto(r.get("evaluación", "Evaluación"))
+#                 actividad = escape_texto(r.get("actividad", ""))
+#                 tema = escape_texto(r.get("tema", ""))
+#                 seccion = escape_texto(r.get("sección", ""))
+#                 profes = str(r.get("profesores", "")).strip()
+#                 obs = escape_texto(r.get("observaciones", ""))
+
+#                 tarjetas += f"""
+#                 <div style="
+#                     border:1px solid #bfdbfe;
+#                     border-left:6px solid #2563eb;
+#                     border-radius:12px;
+#                     padding:10px;
+#                     margin-bottom:10px;
+#                     background:#eff6ff;
+#                 ">
+#                     <div style="
+#                         display:flex;
+#                         align-items:center;
+#                         gap:8px;
+#                         margin-bottom:6px;
+#                     ">
+#                         <div style="
+#                             width:14px;
+#                             height:14px;
+#                             min-width:14px;
+#                             border-radius:3px;
+#                             background:#2563eb;
+#                             border:2px solid #1d4ed8;
+#                         "></div>
+
+#                         <div style="font-weight:800; font-size:13px; color:#111827;">
+#                             {evaluacion}
+#                         </div>
+#                     </div>
+
+#                     <div style="font-size:12px; color:#374151; margin-bottom:3px;">
+#                         <b>Horario:</b> {horario if horario else "Todo el día"}
+#                     </div>
+#                     <div style="font-size:12px; color:#374151; margin-bottom:3px;">
+#                         <b>Actividad base:</b> {actividad if actividad else "—"}
+#                     </div>
+#                     <div style="font-size:12px; color:#374151; margin-bottom:3px;">
+#                         <b>Sección:</b> {seccion if seccion else "—"}
+#                     </div>
+#                     <div style="font-size:12px; color:#374151; margin-bottom:6px;">
+#                         <b>Profesores:</b> {render_badges_profes(profes)}
+#                     </div>
+#                     <div style="font-size:12px; color:#6b7280;">
+#                         {tema if tema else (obs if obs else "—")}
+#                     </div>
+#                 </div>
+#                 """
+
+#         # =====================================================
+#         # MISIONES (ROJO)
+#         # =====================================================
+#         if not sub_mis.empty:
+#             for _, r in sub_mis.iterrows():
+#                 paso = str(r.get("paso", "")).strip()
+#                 paso_label = PASO_LABELS.get(paso, paso if paso else "—")
+#                 evento = escape_texto(r.get("evento", ""))
+#                 seccion = escape_texto(r.get("sección", ""))
+#                 detalle = escape_texto(r.get("detalle", ""))
+#                 estado = escape_texto(r.get("estado", "Pendiente"))
+#                 responsables = str(r.get("responsables", "")).strip()
+
+#                 color_fondo = color_paso(paso)
+#                 color_estado = "#dcfce7" if str(estado).lower() in ["listo", "ok", "done", "completado", "completada"] else "#fee2e2"
+
+#                 tarjetas += f"""
+#                 <div style="
+#                     border:1px solid #d1d5db;
+#                     border-left:6px solid #991b1b;
+#                     border-radius:12px;
+#                     padding:10px;
+#                     margin-bottom:10px;
+#                     background:{color_fondo};
+#                 ">
+#                     <div style="
+#                         display:flex;
+#                         align-items:center;
+#                         gap:8px;
+#                         margin-bottom:6px;
+#                     ">
+#                         <div style="
+#                             width:14px;
+#                             height:14px;
+#                             min-width:14px;
+#                             border-radius:3px;
+#                             background:#dc2626;
+#                             border:2px solid #991b1b;
+#                         "></div>
+
+#                         <div style="font-weight:800; font-size:13px; color:#111827;">
+#                             {escape_texto(paso_label)}
+#                         </div>
+#                     </div>
+
+#                     <div style="font-size:12px; color:#374151; margin-bottom:3px;">
+#                         <b>Evaluación:</b> {evento if evento else "—"}
+#                     </div>
+#                     <div style="font-size:12px; color:#374151; margin-bottom:3px;">
+#                         <b>Sección:</b> {seccion if seccion else "—"}
+#                     </div>
+#                     <div style="font-size:12px; color:#374151; margin-bottom:6px;">
+#                         <b>Responsables:</b> {render_badges_profes(responsables)}
+#                     </div>
+#                     <div style="font-size:12px; color:#6b7280; margin-bottom:8px;">
+#                         {detalle if detalle else "—"}
+#                     </div>
+#                     <div style="
+#                         display:inline-block;
+#                         padding:4px 8px;
+#                         border-radius:999px;
+#                         background:{color_estado};
+#                         font-size:11px;
+#                         font-weight:700;
+#                         color:#111827;
+#                     ">
+#                         {estado if estado else "Pendiente"}
+#                     </div>
+#                 </div>
+#                 """
+
+#         if not tarjetas:
+#             tarjetas = """
+#             <div style="
+#                 border:1px dashed #d1d5db;
+#                 border-radius:10px;
+#                 padding:10px;
+#                 color:#9ca3af;
+#                 background:#fcfcfc;
+#                 font-size:13px;
+#             ">
+#                 Sin pendientes
+#             </div>
+#             """
+
+#         encabezado = f"{dias_es.get(fecha_ts.weekday(), '')} {fecha_ts.strftime('%d/%m')}"
+#         columnas_html.append(f"""
+#         <div style="min-width:260px; flex:1;">
+#             <div style="
+#                 text-align:center;
+#                 font-weight:800;
+#                 background:#374151;
+#                 color:white;
+#                 padding:10px 8px;
+#                 border-radius:10px;
+#                 margin-bottom:10px;
+#                 font-size:13px;
+#             ">
+#                 {encabezado}
+#             </div>
+#             {tarjetas}
+#         </div>
+#         """)
+
+#     return f"""
+#     <div style="
+#         width:100%;
+#         overflow-x:auto;
+#         padding-bottom:4px;
+#     ">
+#         <div style="
+#             display:flex;
+#             gap:12px;
+#             align-items:flex-start;
+#             min-width:1200px;
+#         ">
+#             {''.join(columnas_html)}
+#         </div>
+#     </div>
+#     """
+
+def render_pendientes_semana_html(df_eval_sem: pd.DataFrame, df_mis_sem: pd.DataFrame, fechas_semana_ordenadas):
+    """
+    Muestra abajo del calendario:
+    - evaluaciones de la semana (azul)
+    - misiones de la semana (rojo pastel)
+    organizadas por día
+    """
+
+    dias_es = {
+        0: "Lunes",
+        1: "Martes",
+        2: "Miércoles",
+        3: "Jueves",
+        4: "Viernes",
+        5: "Sábado",
+        6: "Domingo",
+    }
+
+    df_eval = df_eval_sem.copy() if df_eval_sem is not None else pd.DataFrame()
+    df_mis = df_mis_sem.copy() if df_mis_sem is not None else pd.DataFrame()
+
+    if not df_eval.empty:
+        df_eval = asegurar_columnas(
+            df_eval,
+            ["fecha", "horario", "actividad", "tema", "evaluación", "sección", "profesores", "observaciones"]
+        )
+        df_eval["fecha"] = pd.to_datetime(df_eval["fecha"], errors="coerce")
+        df_eval = df_eval.dropna(subset=["fecha"]).copy()
+        df_eval["fecha_dia"] = df_eval["fecha"].dt.date
+
+    if not df_mis.empty:
+        df_mis = asegurar_columnas(
+            df_mis,
+            ["fecha_limite", "evento", "paso", "sección", "responsables", "detalle", "estado"]
+        )
+        df_mis["fecha_limite"] = pd.to_datetime(df_mis["fecha_limite"], errors="coerce")
+        df_mis = df_mis.dropna(subset=["fecha_limite"]).copy()
+        df_mis["fecha_dia"] = df_mis["fecha_limite"].dt.date
+        df_mis["_rank"] = df_mis["paso"].apply(lambda x: ORDEN_PASOS.index(x) if x in ORDEN_PASOS else 999)
+
+    columnas_html = []
+
+    for fecha in fechas_semana_ordenadas:
+        fecha_ts = pd.Timestamp(fecha)
+        fecha_date = fecha_ts.date()
+
+        sub_eval = pd.DataFrame()
+        sub_mis = pd.DataFrame()
+
+        if not df_eval.empty:
+            sub_eval = df_eval[df_eval["fecha_dia"] == fecha_date].copy()
+            sub_eval = sub_eval[sub_eval["evaluación"].astype(str).str.strip() != ""].copy()
+            sub_eval = sub_eval.sort_values(["horario", "sección", "actividad"]).reset_index(drop=True)
+
+        if not df_mis.empty:
+            sub_mis = df_mis[df_mis["fecha_dia"] == fecha_date].copy()
+            sub_mis = sub_mis.sort_values(["_rank", "evento", "sección"]).reset_index(drop=True)
+
+        tarjetas = ""
+
+        # =====================================================
+        # EVALUACIONES (AZUL)
+        # =====================================================
+        if not sub_eval.empty:
+            for _, r in sub_eval.iterrows():
+                horario = escape_texto(r.get("horario", "Todo el día"))
+                evaluacion = escape_texto(r.get("evaluación", "Evaluación"))
+                actividad = escape_texto(r.get("actividad", ""))
+                tema = escape_texto(r.get("tema", ""))
+                seccion = escape_texto(r.get("sección", ""))
+                profes = str(r.get("profesores", "")).strip()
+                obs = escape_texto(r.get("observaciones", ""))
+
+                texto_final = tema if tema else (obs if obs else "—")
+
+                tarjetas += f"""
+                <div style="
+                    border:1px solid #bfdbfe;
+                    border-left:5px solid #3b82f6;
+                    border-radius:10px;
+                    padding:8px 9px;
+                    margin-bottom:8px;
+                    background:#eff6ff;
+                    font-family: Inter, Arial, sans-serif;
+                ">
+                    <div style="
+                        font-weight:700;
+                        font-size:12px;
+                        color:#1e3a8a;
+                        margin-bottom:4px;
+                        line-height:1.2;
+                    ">
+                        {evaluacion}
+                    </div>
+
+                    <div style="font-size:11px; color:#334155; line-height:1.25; margin-bottom:2px;">
+                        <b>Horario:</b> {horario if horario else "Todo el día"}
+                    </div>
+                    <div style="font-size:11px; color:#334155; line-height:1.25; margin-bottom:2px;">
+                        <b>Sección:</b> {seccion if seccion else "—"}
+                    </div>
+                    <div style="font-size:11px; color:#475569; line-height:1.25; margin-bottom:4px;">
+                        <b>Base:</b> {actividad if actividad else "—"}
+                    </div>
+                    <div style="font-size:11px; color:#64748b; line-height:1.25; margin-bottom:5px;">
+                        {texto_final}
+                    </div>
+                    <div style="font-size:11px; color:#334155; line-height:1.25;">
+                        <b>Profes:</b> {render_badges_profes(profes)}
+                    </div>
+                </div>
+                """
+
+        # =====================================================
+        # MISIONES (ROJO PASTEL COMPACTO)
+        # =====================================================
+        if not sub_mis.empty:
+            for _, r in sub_mis.iterrows():
+                paso = str(r.get("paso", "")).strip()
+                paso_label = PASO_LABELS.get(paso, paso if paso else "—")
+                evento = escape_texto(r.get("evento", ""))
+                seccion = escape_texto(r.get("sección", ""))
+                detalle = escape_texto(r.get("detalle", ""))
+                estado = escape_texto(r.get("estado", "Pendiente"))
+                responsables = str(r.get("responsables", "")).strip()
+
+                color_estado = "#dcfce7" if str(estado).lower() in ["listo", "ok", "done", "completado", "completada"] else "#fee2e2"
+
+                tarjetas += f"""
+                <div style="
+                    border:1px solid #fecaca;
+                    border-left:5px solid #f87171;
+                    border-radius:10px;
+                    padding:8px 9px;
+                    margin-bottom:8px;
+                    background:#fef2f2;
+                    font-family: Inter, Arial, sans-serif;
+                ">
+                    <div style="
+                        font-weight:700;
+                        font-size:12px;
+                        color:#991b1b;
+                        margin-bottom:4px;
+                        line-height:1.2;
+                    ">
+                        {escape_texto(paso_label)}
+                    </div>
+
+                    <div style="font-size:11px; color:#374151; line-height:1.25; margin-bottom:2px;">
+                        <b>Evaluación:</b> {evento if evento else "—"}
+                    </div>
+                    <div style="font-size:11px; color:#374151; line-height:1.25; margin-bottom:2px;">
+                        <b>Sección:</b> {seccion if seccion else "—"}
+                    </div>
+                    <div style="font-size:11px; color:#6b7280; line-height:1.25; margin-bottom:5px;">
+                        {detalle if detalle else "—"}
+                    </div>
+                    <div style="font-size:11px; color:#374151; line-height:1.25; margin-bottom:5px;">
+                        <b>Resp:</b> {render_badges_profes(responsables)}
+                    </div>
+                    <div style="
+                        display:inline-block;
+                        padding:3px 7px;
+                        border-radius:999px;
+                        background:{color_estado};
+                        font-size:10px;
+                        font-weight:700;
+                        color:#111827;
+                    ">
+                        {estado if estado else "Pendiente"}
+                    </div>
+                </div>
+                """
+
+        if not tarjetas:
+            tarjetas = """
+            <div style="
+                border:1px dashed #d1d5db;
+                border-radius:10px;
+                padding:10px;
+                color:#9ca3af;
+                background:#fcfcfc;
+                font-size:12px;
+                font-family: Inter, Arial, sans-serif;
+            ">
+                Sin pendientes
+            </div>
+            """
+
+        encabezado = f"{dias_es.get(fecha_ts.weekday(), '')} {fecha_ts.strftime('%d/%m')}"
+
+        columnas_html.append(f"""
+        <div style="min-width:240px; flex:1;">
+            <div style="
+                text-align:center;
+                font-weight:800;
+                background:#374151;
+                color:white;
+                padding:8px 6px;
+                border-radius:10px;
+                margin-bottom:8px;
+                font-size:12px;
+                font-family: Inter, Arial, sans-serif;
+            ">
+                {encabezado}
+            </div>
+            {tarjetas}
+        </div>
+        """)
+
+    return f"""
+    <div style="
+        width:100%;
+        overflow-x:auto;
+        padding-bottom:4px;
+    ">
+        <div style="
+            display:flex;
+            gap:10px;
+            align-items:flex-start;
+            min-width:1120px;
+        ">
+            {''.join(columnas_html)}
+        </div>
+    </div>
+    """
 
 
 def build_events_misiones_allday_para_html(df_misiones: pd.DataFrame):
@@ -1548,9 +2106,263 @@ def altura_misiones_allday(df_mis_sem):
     return max(260, 180 + 48 * max_por_dia)
 
 
-def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_date, tz="America/Santiago", height_px=900, height_misiones_px=260):
+# def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_date, tz="America/Santiago", height_px=900, height_misiones_px=260):
+#     events_cal_json = json.dumps(events_cal, ensure_ascii=False)
+#     events_mis_json = json.dumps(events_mis, ensure_ascii=False)
+
+#     return f"""
+# <!DOCTYPE html>
+# <html>
+# <head>
+#   <meta charset="utf-8" />
+#   <meta name="viewport" content="width=device-width, initial-scale=1" />
+#   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet"/>
+#   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+#   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/locales-all.global.min.js"></script>
+
+#   <style>
+#     html, body {{
+#       margin: 0;
+#       padding: 0;
+#       font-family: Arial, sans-serif;
+#       background: white;
+#     }}
+
+#     #calendar-main {{
+#       padding: 0 6px;
+#       margin-bottom: 12px;
+#     }}
+
+#     .titulo-misiones {{
+#       padding: 0 10px;
+#       margin: 8px 0 6px 0;
+#       font-size: 15px;
+#       font-weight: 800;
+#       color: #374151;
+#     }}
+
+#     #calendar-misiones-wrap {{
+#       margin-left: 54px;
+#       width: calc(100% - 54px);
+#     }}
+
+#     #calendar-misiones {{
+#       padding: 0 6px;
+#       margin-top: 4px;
+#     }}
+
+#     .fc .fc-scrollgrid, .fc .fc-scrollgrid td, .fc .fc-scrollgrid th {{
+#       border-width: 2px !important;
+#       border-color: rgba(0,0,0,0.22) !important;
+#     }}
+
+#     .fc .fc-event {{
+#       border-width: 3px !important;
+#       border-style: solid !important;
+#       border-radius: 10px !important;
+#     }}
+
+#     .fc .fc-event-title {{
+#       white-space: normal !important;
+#       font-size: 13px !important;
+#       line-height: 1.15 !important;
+#       font-weight: 700 !important;
+#     }}
+
+#     .fc .fc-event-main {{
+#       padding: 6px 10px !important;
+#     }}
+
+#     .fc .fc-timegrid-slot {{
+#       height: 2.0em !important;
+#     }}
+
+#     .fc .fc-day-today {{
+#       background: rgba(250, 204, 21, 0.10) !important;
+#     }}
+
+#     .fc .fc-daygrid-day.fc-day-today,
+#     .fc .fc-timegrid-col.fc-day-today {{
+#       box-shadow: inset 0 0 0 2px rgba(245, 158, 11, 0.45);
+#     }}
+
+#     .fc-theme-standard td, .fc-theme-standard th {{
+#       border-color: rgba(0,0,0,0.22) !important;
+#     }}
+
+#     .evento-mision {{
+#       background: #fee2e2 !important;
+#       border-color: #dc2626 !important;
+#       color: #7f1d1d !important;
+#     }}
+
+#     .modal-overlay {{
+#       position: fixed;
+#       inset: 0;
+#       background: rgba(0,0,0,0.35);
+#       display: none;
+#       align-items: center;
+#       justify-content: center;
+#       z-index: 9999;
+#     }}
+
+#     .modal {{
+#       width: min(720px, 92vw);
+#       background: white;
+#       border-radius: 14px;
+#       padding: 16px;
+#       box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+#     }}
+
+#     .modal h3 {{
+#       margin: 0 0 10px 0;
+#       font-size: 18px;
+#     }}
+
+#     .row {{
+#       margin: 6px 0;
+#       font-size: 14px;
+#     }}
+
+#     .label {{
+#       font-weight: 800;
+#     }}
+
+#     .close {{
+#       float: right;
+#       cursor: pointer;
+#       padding: 6px 10px;
+#       border-radius: 10px;
+#       background: #f3f4f6;
+#       font-weight: 800;
+#     }}
+
+#     .close:hover {{
+#       background: #e5e7eb;
+#     }}
+#   </style>
+# </head>
+
+# <body>
+#   <div id="calendar-main"></div>
+
+#   <div class="titulo-misiones">🚩 Misiones de la semana</div>
+#   <div id="calendar-misiones-wrap">
+#     <div id="calendar-misiones"></div>
+#   </div>
+
+#   <div class="modal-overlay" id="modalOverlay">
+#     <div class="modal">
+#       <div class="close" id="modalClose">Cerrar ✕</div>
+#       <h3 id="mTitle"></h3>
+#       <div class="row"><span class="label">Actividad:</span> <span id="mActividad"></span></div>
+#       <div class="row"><span class="label">Sección:</span> <span id="mSeccion"></span></div>
+#       <div class="row"><span class="label">Horario:</span> <span id="mHorario"></span></div>
+#       <div class="row"><span class="label">Evaluación/Paso:</span> <span id="mEval"></span></div>
+#       <div class="row"><span class="label">Profesores:</span> <span id="mProf"></span></div>
+#       <div class="row"><span class="label">Observaciones:</span> <span id="mObs"></span></div>
+#     </div>
+#   </div>
+
+#   <script>
+#     const eventsCal = {events_cal_json};
+#     const eventsMis = {events_mis_json};
+
+#     const overlay = document.getElementById('modalOverlay');
+#     const closeBtn = document.getElementById('modalClose');
+
+#     function openModal(info) {{
+#       const p = info.event.extendedProps || {{}};
+#       document.getElementById('mTitle').textContent = info.event.title || '';
+#       document.getElementById('mActividad').textContent = p.actividad || '';
+#       document.getElementById('mSeccion').textContent = p['sección'] || p.sección || '';
+#       document.getElementById('mHorario').textContent = p.horario || '';
+#       document.getElementById('mEval').textContent = p['evaluación'] || p.evaluación || '';
+#       document.getElementById('mProf').textContent = p.profesores || '';
+#       document.getElementById('mObs').textContent = p.observaciones || '';
+#       overlay.style.display = 'flex';
+#     }}
+
+#     function closeModal() {{
+#       overlay.style.display = 'none';
+#     }}
+
+#     closeBtn.addEventListener('click', closeModal);
+#     overlay.addEventListener('click', (e) => {{
+#       if (e.target === overlay) closeModal();
+#     }});
+
+#     document.addEventListener('DOMContentLoaded', function() {{
+#       const calendarMainEl = document.getElementById('calendar-main');
+#       const calendarMisEl = document.getElementById('calendar-misiones');
+
+#       const calMain = new FullCalendar.Calendar(calendarMainEl, {{
+#         locale: 'es',
+#         timeZone: {json.dumps(tz)},
+#         firstDay: 1,
+#         initialView: 'timeGridWeek',
+#         initialDate: {json.dumps(initial_date)},
+#         height: {height_px},
+#         nowIndicator: true,
+#         allDaySlot: false,
+#         slotMinTime: '08:00:00',
+#         slotMaxTime: '21:00:00',
+#         expandRows: true,
+#         stickyHeaderDates: true,
+#         weekNumbers: true,
+#         fixedWeekCount: false,
+#         showNonCurrentDates: false,
+#         dayHeaderFormat: {{ weekday: 'short', day: '2-digit', month: '2-digit' }},
+#         titleFormat: {{ year: 'numeric', month: 'long' }},
+#         headerToolbar: {{
+#           left: '',
+#           center: 'title',
+#           right: 'dayGridMonth,timeGridWeek,listWeek'
+#         }},
+#         events: eventsCal,
+#         eventClick: function(info) {{
+#           openModal(info);
+#         }},
+#       }});
+
+#       const calMis = new FullCalendar.Calendar(calendarMisEl, {{
+#         locale: 'es',
+#         timeZone: {json.dumps(tz)},
+#         firstDay: 1,
+#         initialView: 'dayGridWeek',
+#         initialDate: {json.dumps(initial_date)},
+#         height: {height_misiones_px},
+#         headerToolbar: false,
+#         weekNumbers: false,
+#         fixedWeekCount: false,
+#         showNonCurrentDates: false,
+#         contentHeight: "auto",
+#         dayMaxEvents: false,
+#         dayMaxEventRows: false,
+#         displayEventTime: false,
+#         dayHeaderFormat: {{ weekday: 'short', day: '2-digit', month: '2-digit' }},
+#         events: eventsMis,
+#         eventClick: function(info) {{
+#           openModal(info);
+#         }},
+#         eventDidMount: function(arg) {{
+#           arg.el.classList.add("evento-mision");
+#         }}
+#       }});
+
+#       calMain.render();
+#       calMis.render();
+#     }});
+#   </script>
+# </body>
+# </html>
+# """
+
+
+
+
+def render_fullcalendar_html_principal(events_cal, initial_date, tz="America/Santiago", height_px=980):
     events_cal_json = json.dumps(events_cal, ensure_ascii=False)
-    events_mis_json = json.dumps(events_mis, ensure_ascii=False)
 
     return f"""
 <!DOCTYPE html>
@@ -1572,25 +2384,6 @@ def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_
 
     #calendar-main {{
       padding: 0 6px;
-      margin-bottom: 12px;
-    }}
-
-    .titulo-misiones {{
-      padding: 0 10px;
-      margin: 8px 0 6px 0;
-      font-size: 15px;
-      font-weight: 800;
-      color: #374151;
-    }}
-
-    #calendar-misiones-wrap {{
-      margin-left: 54px;
-      width: calc(100% - 54px);
-    }}
-
-    #calendar-misiones {{
-      padding: 0 6px;
-      margin-top: 4px;
     }}
 
     .fc .fc-scrollgrid, .fc .fc-scrollgrid td, .fc .fc-scrollgrid th {{
@@ -1598,25 +2391,49 @@ def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_
       border-color: rgba(0,0,0,0.22) !important;
     }}
 
+    .fc .fc-toolbar-title {{
+      text-transform: capitalize;
+    }}
+
     .fc .fc-event {{
       border-width: 3px !important;
       border-style: solid !important;
       border-radius: 10px !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }}
+
+    .fc .fc-timegrid-event {{
+      min-height: 34px !important;
+      max-width: 100% !important;
+    }}
+
+    .fc .fc-timegrid-event-harness {{
+      margin-right: 2px !important;
+    }}
+
+    .fc .fc-event-main {{
+      padding: 3px 5px !important;
+      overflow: hidden !important;
+    }}
+
+    .fc .fc-event-time {{
+      font-size: 10px !important;
+      line-height: 1.05 !important;
+      font-weight: 700 !important;
     }}
 
     .fc .fc-event-title {{
       white-space: normal !important;
-      font-size: 13px !important;
-      line-height: 1.15 !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+      font-size: 10px !important;
+      line-height: 1.05 !important;
       font-weight: 700 !important;
     }}
 
-    .fc .fc-event-main {{
-      padding: 6px 10px !important;
-    }}
-
     .fc .fc-timegrid-slot {{
-      height: 2.0em !important;
+      height: 2.15em !important;
     }}
 
     .fc .fc-day-today {{
@@ -1630,12 +2447,6 @@ def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_
 
     .fc-theme-standard td, .fc-theme-standard th {{
       border-color: rgba(0,0,0,0.22) !important;
-    }}
-
-    .evento-mision {{
-      background: #fee2e2 !important;
-      border-color: #dc2626 !important;
-      color: #7f1d1d !important;
     }}
 
     .modal-overlay {{
@@ -1688,11 +2499,6 @@ def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_
 <body>
   <div id="calendar-main"></div>
 
-  <div class="titulo-misiones">🚩 Misiones de la semana</div>
-  <div id="calendar-misiones-wrap">
-    <div id="calendar-misiones"></div>
-  </div>
-
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <div class="close" id="modalClose">Cerrar ✕</div>
@@ -1708,7 +2514,6 @@ def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_
 
   <script>
     const eventsCal = {events_cal_json};
-    const eventsMis = {events_mis_json};
 
     const overlay = document.getElementById('modalOverlay');
     const closeBtn = document.getElementById('modalClose');
@@ -1736,7 +2541,6 @@ def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_
 
     document.addEventListener('DOMContentLoaded', function() {{
       const calendarMainEl = document.getElementById('calendar-main');
-      const calendarMisEl = document.getElementById('calendar-misiones');
 
       const calMain = new FullCalendar.Calendar(calendarMainEl, {{
         locale: 'es',
@@ -1761,44 +2565,34 @@ def render_fullcalendar_html_con_misiones_abajo(events_cal, events_mis, initial_
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,listWeek'
         }},
+        slotEventOverlap: false,
+        eventOverlap: false,
+        eventMaxStack: 20,
+        dayMaxEvents: false,
+        dayMaxEventRows: false,
+        eventDisplay: 'block',
         events: eventsCal,
         eventClick: function(info) {{
           openModal(info);
         }},
-      }});
-
-      const calMis = new FullCalendar.Calendar(calendarMisEl, {{
-        locale: 'es',
-        timeZone: {json.dumps(tz)},
-        firstDay: 1,
-        initialView: 'dayGridWeek',
-        initialDate: {json.dumps(initial_date)},
-        height: {height_misiones_px},
-        headerToolbar: false,
-        weekNumbers: false,
-        fixedWeekCount: false,
-        showNonCurrentDates: false,
-        contentHeight: "auto",
-        dayMaxEvents: false,
-        dayMaxEventRows: false,
-        displayEventTime: false,
-        dayHeaderFormat: {{ weekday: 'short', day: '2-digit', month: '2-digit' }},
-        events: eventsMis,
-        eventClick: function(info) {{
-          openModal(info);
-        }},
         eventDidMount: function(arg) {{
-          arg.el.classList.add("evento-mision");
-        }}
+          arg.el.style.overflow = 'hidden';
+          const titleEl = arg.el.querySelector('.fc-event-title');
+          if (titleEl) {{
+            titleEl.style.whiteSpace = 'normal';
+            titleEl.style.wordBreak = 'break-word';
+            titleEl.style.overflowWrap = 'anywhere';
+          }}
+        }},
       }});
 
       calMain.render();
-      calMis.render();
     }});
   </script>
 </body>
 </html>
 """
+
 
 
 # ============================================================
@@ -2064,6 +2858,8 @@ mostrar_urgentes_sidebar()
 # ============================================================
 # TAB 1: CALENDARIO
 # ============================================================
+
+
 with tab1:
     sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
 
@@ -2071,6 +2867,9 @@ with tab1:
     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
 
+    # ============================================================
+    # DATA FILTRADA PARA CALENDARIO
+    # ============================================================
     df_f = df.copy()
 
     if sec_selected:
@@ -2078,15 +2877,28 @@ with tab1:
     else:
         df_f = df_f.iloc[0:0].copy()
 
+    # if prof_selected:
+    #     df_f = df_f[df_f["profesores"].apply(lambda x: row_has_prof(x, prof_selected))].copy()
+    # else:
+    #     df_f = df_f.iloc[0:0].copy()
+
     if prof_selected:
-        df_f = df_f[df_f["profesores"].apply(lambda x: row_has_prof(x, prof_selected))].copy()
+        df_f = df_f[
+            df_f.apply(
+                lambda r: row_has_prof(r.get("profesores", ""), prof_selected, r.get("evaluación", "")),
+                axis=1
+            )
+        ].copy()
     else:
         df_f = df_f.iloc[0:0].copy()
 
+    # ============================================================
+    # SEMANA / FECHAS
+    # ============================================================
     fechas_semana = df[df["semana"] == semana_sel]["fecha"].dropna().sort_values()
 
     if not fechas_semana.empty:
-        lunes_semana = fechas_semana.min().normalize()
+        lunes_semana = pd.to_datetime(fechas_semana.min()).normalize()
     else:
         min_global = pd.to_datetime(df["fecha"], errors="coerce").min()
         if pd.notna(min_global):
@@ -2096,16 +2908,32 @@ with tab1:
 
     initial_date = lunes_semana.strftime("%Y-%m-%d")
     fechas_semana_ordenadas = [lunes_semana + pd.Timedelta(days=k) for k in range(7)]
+    fechas_sem = set(pd.Timestamp(x).date() for x in fechas_semana_ordenadas)
 
+    # ============================================================
+    # EVENTOS DEL CALENDARIO (SOLO CLASES)
+    # ============================================================
     events_cal = build_events_calendario_para_html(df_f)
 
+    # ============================================================
+    # EVALUACIONES DE LA SEMANA (AZUL, ABAJO)
+    # ============================================================
+    df_eval_sem = df_f.copy()
+
+    if not df_eval_sem.empty:
+        df_eval_sem["fecha"] = pd.to_datetime(df_eval_sem["fecha"], errors="coerce")
+        df_eval_sem = df_eval_sem[df_eval_sem["fecha"].dt.date.isin(fechas_sem)].copy()
+        df_eval_sem = df_eval_sem[df_eval_sem["evaluación"].astype(str).str.strip() != ""].copy()
+    else:
+        df_eval_sem = pd.DataFrame()
+
+    # ============================================================
+    # MISIONES DE LA SEMANA (ROJO, ABAJO)
+    # ============================================================
     df_mis_sem = df_misiones.copy()
-    events_mis = []
 
     if not df_mis_sem.empty:
         df_mis_sem["fecha_limite"] = pd.to_datetime(df_mis_sem["fecha_limite"], errors="coerce")
-
-        fechas_sem = set(pd.Timestamp(x).date() for x in fechas_semana_ordenadas)
         df_mis_sem = df_mis_sem[df_mis_sem["fecha_limite"].dt.date.isin(fechas_sem)].copy()
 
         if sec_selected:
@@ -2119,44 +2947,56 @@ with tab1:
             ].copy()
         else:
             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+    else:
+        df_mis_sem = pd.DataFrame()
 
-        if not df_mis_sem.empty:
-            events_mis = build_events_misiones_allday_para_html(df_mis_sem)
-
+    # ============================================================
+    # TÍTULO + NAVEGACIÓN SUPERIOR
+    # ============================================================
     st.subheader("Calendario del curso")
 
     st.session_state.nav_render_pos = "arriba"
     render_navegacion_semanal(df, curso_actual)
 
-    # html_cal = render_fullcalendar_html_con_misiones(
-    #     events_cal=events_cal,
-    #     events_mis=events_mis,
-    #     initial_date=initial_date,
-    #     tz=TIMEZONE,
-    #     height_px=980
-    # )
-
-    # components.html(html_cal, height=1100, scrolling=False)
-
-    alto_misiones = 260
-    if events_mis:
-        alto_misiones = max(260, 120 + 48 * max(1, len(events_mis)))
-
-    html_cal = render_fullcalendar_html_con_misiones_abajo(
+    # ============================================================
+    # CALENDARIO
+    # ============================================================
+    html_cal = render_fullcalendar_html_principal(
         events_cal=events_cal,
-        events_mis=events_mis,
         initial_date=initial_date,
         tz=TIMEZONE,
-        height_px=920,
-        height_misiones_px=alto_misiones
+        height_px=980
     )
 
-    components.html(html_cal, height=1050 + alto_misiones, scrolling=False)
+    components.html(html_cal, height=1050, scrolling=False)
+
+    # ============================================================
+    # EVALUACIONES + MISIONES ABAJO
+    # ============================================================
+    st.markdown("### 📌 Evaluaciones y misiones de la semana")
+
+    html_pendientes = render_pendientes_semana_html(
+        df_eval_sem=df_eval_sem,
+        df_mis_sem=df_mis_sem,
+        fechas_semana_ordenadas=fechas_semana_ordenadas
+    )
+
+    components.html(html_pendientes, height=760, scrolling=True)
+
+    # ============================================================
+    # NAVEGACIÓN INFERIOR
+    # ============================================================
+    st.markdown("### Navegación rápida")
+    st.session_state.nav_render_pos = "abajo"
+    render_navegacion_semanal(df, curso_actual)
 
     st.divider()
-    st.subheader("Filtros y navegación")
+    st.subheader("Filtros")
 
-    c_filtros, c_nav = st.columns([2, 1])
+    # ============================================================
+    # FILTROS
+    # ============================================================
+    c_filtros, c_nav_dummy = st.columns([2, 1])
 
     with c_filtros:
         ftop1, ftop2 = st.columns(2)
@@ -2206,44 +3046,196 @@ with tab1:
                 for p in all_prof_codes:
                     st.checkbox(p, key=f"prof_{curso_actual}_{p}")
 
-    with c_nav:
-        st.caption("Navegación semanal")
-
-        max_sem = df["semana"].max()
-        if pd.isna(max_sem):
-            max_sem = 20
-        max_sem = int(max_sem)
-
-        nav1, nav2 = st.columns(2)
-
-        with nav1:
-            if st.button("⬅️ Semana anterior", use_container_width=True, key=f"prev_week_{curso_actual}"):
-                if st.session_state.nav_semana > 1:
-                    st.session_state.nav_semana -= 1
-                st.rerun()
-
-        with nav2:
-            if st.button("Semana siguiente ➡️", use_container_width=True, key=f"next_week_{curso_actual}"):
-                if st.session_state.nav_semana < max_sem:
-                    st.session_state.nav_semana += 1
-                st.rerun()
-
-        semana_nueva = st.radio(
-            "Semana",
-            options=list(range(1, max_sem + 1)),
-            horizontal=True,
-            index=max(0, min(st.session_state.nav_semana - 1, max_sem - 1)),
-            key=f"radio_semana_{curso_actual}"
-        )
-
-        if semana_nueva != st.session_state.nav_semana:
-            st.session_state.nav_semana = semana_nueva
-            st.rerun()
-
-    st.markdown("### Navegación rápida")
-    st.session_state.nav_render_pos = "abajo"
-    render_navegacion_semanal(df, curso_actual)
     sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
+
+
+# with tab1:
+#     sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
+
+#     semana_sel = st.session_state.nav_semana
+#     sec_selected = {s for s, ok in st.session_state.sel_secciones.items() if ok}
+#     prof_selected = {p for p, ok in st.session_state.sel_profes.items() if ok}
+
+#     df_f = df.copy()
+
+#     if sec_selected:
+#         df_f = df_f[df_f["sección"].isin(sec_selected)].copy()
+#     else:
+#         df_f = df_f.iloc[0:0].copy()
+
+#     if prof_selected:
+#         df_f = df_f[df_f["profesores"].apply(lambda x: row_has_prof(x, prof_selected))].copy()
+#     else:
+#         df_f = df_f.iloc[0:0].copy()
+
+#     fechas_semana = df[df["semana"] == semana_sel]["fecha"].dropna().sort_values()
+
+#     if not fechas_semana.empty:
+#         lunes_semana = fechas_semana.min().normalize()
+#     else:
+#         min_global = pd.to_datetime(df["fecha"], errors="coerce").min()
+#         if pd.notna(min_global):
+#             lunes_semana = (min_global + pd.Timedelta(days=7 * (semana_sel - 1))).normalize()
+#         else:
+#             lunes_semana = pd.Timestamp.now().normalize()
+
+#     initial_date = lunes_semana.strftime("%Y-%m-%d")
+#     fechas_semana_ordenadas = [lunes_semana + pd.Timedelta(days=k) for k in range(7)]
+
+#     events_cal = build_events_calendario_para_html(df_f)
+
+#     df_mis_sem = df_misiones.copy()
+#     events_mis = []
+
+#     if not df_mis_sem.empty:
+#         df_mis_sem["fecha_limite"] = pd.to_datetime(df_mis_sem["fecha_limite"], errors="coerce")
+
+#         fechas_sem = set(pd.Timestamp(x).date() for x in fechas_semana_ordenadas)
+#         df_mis_sem = df_mis_sem[df_mis_sem["fecha_limite"].dt.date.isin(fechas_sem)].copy()
+
+#         if sec_selected:
+#             df_mis_sem = df_mis_sem[df_mis_sem["sección"].isin(sec_selected)].copy()
+#         else:
+#             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+#         if prof_selected:
+#             df_mis_sem = df_mis_sem[
+#                 df_mis_sem["responsables"].apply(lambda x: row_has_prof(x, prof_selected))
+#             ].copy()
+#         else:
+#             df_mis_sem = df_mis_sem.iloc[0:0].copy()
+
+#         if not df_mis_sem.empty:
+#             events_mis = build_events_misiones_allday_para_html(df_mis_sem)
+
+#     st.subheader("Calendario del curso")
+
+#     st.session_state.nav_render_pos = "arriba"
+#     render_navegacion_semanal(df, curso_actual)
+
+#     # html_cal = render_fullcalendar_html_con_misiones(
+#     #     events_cal=events_cal,
+#     #     events_mis=events_mis,
+#     #     initial_date=initial_date,
+#     #     tz=TIMEZONE,
+#     #     height_px=980
+#     # )
+
+#     # components.html(html_cal, height=1100, scrolling=False)
+
+#     alto_misiones = 260
+#     if events_mis:
+#         alto_misiones = max(260, 120 + 48 * max(1, len(events_mis)))
+
+#     # html_cal = render_fullcalendar_html_con_misiones_abajo(
+#     #     events_cal=events_cal,
+#     #     events_mis=events_mis,
+#     #     initial_date=initial_date,
+#     #     tz=TIMEZONE,
+#     #     height_px=920,
+#     #     height_misiones_px=alto_misiones
+#     # )
+    
+#     html_cal = render_fullcalendar_html_principal(
+#         events_cal=events_cal,
+#         initial_date=initial_date,
+#         tz=TIMEZONE,
+#         height_px=980
+#     )
+
+#     components.html(html_cal, height=1050 + alto_misiones, scrolling=False)
+
+#     st.divider()
+#     st.subheader("Filtros y navegación")
+
+#     c_filtros, c_nav = st.columns([2, 1])
+
+#     with c_filtros:
+#         ftop1, ftop2 = st.columns(2)
+
+#         with ftop1:
+#             st.caption("Secciones")
+#             bsec1, bsec2 = st.columns(2)
+
+#             with bsec1:
+#                 if st.button("Todas las secciones", key=f"all_sec_{curso_actual}", use_container_width=True):
+#                     for s in all_secciones:
+#                         st.session_state.sel_secciones[s] = True
+#                         st.session_state[f"sec_{curso_actual}_{s}"] = True
+#                     st.rerun()
+
+#             with bsec2:
+#                 if st.button("Ninguna sección", key=f"none_sec_{curso_actual}", use_container_width=True):
+#                     for s in all_secciones:
+#                         st.session_state.sel_secciones[s] = False
+#                         st.session_state[f"sec_{curso_actual}_{s}"] = False
+#                     st.rerun()
+
+#             for s in all_secciones:
+#                 st.checkbox(s, key=f"sec_{curso_actual}_{s}")
+
+#         with ftop2:
+#             st.caption("Profesores")
+#             bpro1, bpro2 = st.columns(2)
+
+#             with bpro1:
+#                 if st.button("Todos los profes", key=f"all_prof_{curso_actual}", use_container_width=True):
+#                     for p in all_prof_codes:
+#                         st.session_state.sel_profes[p] = True
+#                         st.session_state[f"prof_{curso_actual}_{p}"] = True
+#                     st.rerun()
+
+#             with bpro2:
+#                 if st.button("Ningún profe", key=f"none_prof_{curso_actual}", use_container_width=True):
+#                     for p in all_prof_codes:
+#                         st.session_state.sel_profes[p] = False
+#                         st.session_state[f"prof_{curso_actual}_{p}"] = False
+#                     st.rerun()
+
+#             if not all_prof_codes:
+#                 st.info("No hay profesores.")
+#             else:
+#                 for p in all_prof_codes:
+#                     st.checkbox(p, key=f"prof_{curso_actual}_{p}")
+
+#     with c_nav:
+#         st.caption("Navegación semanal")
+
+#         max_sem = df["semana"].max()
+#         if pd.isna(max_sem):
+#             max_sem = 20
+#         max_sem = int(max_sem)
+
+#         nav1, nav2 = st.columns(2)
+
+#         with nav1:
+#             if st.button("⬅️ Semana anterior", use_container_width=True, key=f"prev_week_{curso_actual}"):
+#                 if st.session_state.nav_semana > 1:
+#                     st.session_state.nav_semana -= 1
+#                 st.rerun()
+
+#         with nav2:
+#             if st.button("Semana siguiente ➡️", use_container_width=True, key=f"next_week_{curso_actual}"):
+#                 if st.session_state.nav_semana < max_sem:
+#                     st.session_state.nav_semana += 1
+#                 st.rerun()
+
+#         semana_nueva = st.radio(
+#             "Semana",
+#             options=list(range(1, max_sem + 1)),
+#             horizontal=True,
+#             index=max(0, min(st.session_state.nav_semana - 1, max_sem - 1)),
+#             key=f"radio_semana_{curso_actual}"
+#         )
+
+#         if semana_nueva != st.session_state.nav_semana:
+#             st.session_state.nav_semana = semana_nueva
+#             st.rerun()
+
+#     st.markdown("### Navegación rápida")
+#     st.session_state.nav_render_pos = "abajo"
+#     render_navegacion_semanal(df, curso_actual)
+#     sincronizar_filtros_desde_widgets(curso_actual, all_secciones, all_prof_codes)
 
 # ============================================================
 # TAB 2: HORARIOS

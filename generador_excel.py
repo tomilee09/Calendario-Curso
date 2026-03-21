@@ -247,6 +247,8 @@ def construir_df(config: dict) -> pd.DataFrame:
         prof = normalizar_profesores(r.get("profesores", ""))
         mask = (df["sección"] == secc) & (df["actividad"] == act)
         df.loc[mask, "profesores"] = prof
+    
+    df = aplicar_evaluaciones(df, cfg, inicio)
 
     # for ev in cfg.get("evaluaciones", []) or []:
     #     if ev.get("modo") == "por_filtro":
@@ -263,65 +265,65 @@ def construir_df(config: dict) -> pd.DataFrame:
     #                 lambda x: (x + " | " if x else "") + obs
     #             )
     
-    for ev in cfg.get("evaluaciones", []) or []:
-        modo = str(ev.get("modo", "por_filtro")).strip()
+    # for ev in cfg.get("evaluaciones", []) or []:
+    #     modo = str(ev.get("modo", "por_filtro")).strip()
 
-        if modo == "por_filtro":
-            mask = (
-                (df["sección"] == ev.get("seccion")) &
-                (df["semana"] == int(ev.get("semana"))) &
-                (df["actividad"] == ev.get("actividad"))
-            )
+    #     if modo == "por_filtro":
+    #         mask = (
+    #             (df["sección"] == ev.get("seccion")) &
+    #             (df["semana"] == int(ev.get("semana"))) &
+    #             (df["actividad"] == ev.get("actividad"))
+    #         )
 
-            df.loc[mask, "evaluación"] = ev.get("tipo", "")
+    #         df.loc[mask, "evaluación"] = ev.get("tipo", "")
 
-            obs = str(ev.get("observaciones", "")).strip()
-            if obs:
-                df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
-                df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
-                    lambda x: (x + " | " if x and x != "nan" else "") + obs
-                )
+    #         obs = str(ev.get("observaciones", "")).strip()
+    #         if obs:
+    #             df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
+    #             df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
+    #                 lambda x: (x + " | " if x and x != "nan" else "") + obs
+    #             )
 
-        elif modo == "por_fecha":
-            seccion_ev = str(ev.get("seccion", "")).strip()
-            fecha_ev = pd.Timestamp(ev.get("fecha")).date()
-            tipo_ev = str(ev.get("tipo", "")).strip()
-            obs = str(ev.get("observaciones", "")).strip()
+    #     elif modo == "por_fecha":
+    #         seccion_ev = str(ev.get("seccion", "")).strip()
+    #         fecha_ev = pd.Timestamp(ev.get("fecha")).date()
+    #         tipo_ev = str(ev.get("tipo", "")).strip()
+    #         obs = str(ev.get("observaciones", "")).strip()
 
-            # buscar si ya existe un evento ese día para esa sección
-            mask = (
-                (df["sección"] == seccion_ev) &
-                (df["fecha"] == fecha_ev)
-            )
+    #         # buscar si ya existe un evento ese día para esa sección
+    #         mask = (
+    #             (df["sección"] == seccion_ev) &
+    #             (df["fecha"] == fecha_ev)
+    #         )
 
-            if mask.any():
-                # si ya existe una fila ese día, marcarla como evaluación
-                df.loc[mask, "evaluación"] = tipo_ev
+    #         if mask.any():
+    #             # si ya existe una fila ese día, marcarla como evaluación
+    #             df.loc[mask, "evaluación"] = tipo_ev
 
-                if obs:
-                    df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
-                    df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
-                        lambda x: (x + " | " if x and x != "nan" else "") + obs
-                    )
-            else:
-                # si no existe una fila ese día, crear una nueva
-                fecha_ts = pd.Timestamp(fecha_ev)
-                semana_ev = int(((fecha_ts - inicio).days) // 7) + 1
+    #             if obs:
+    #                 df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].astype(str).str.strip()
+    #                 df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
+    #                     lambda x: (x + " | " if x and x != "nan" else "") + obs
+    #                 )
+    #         else:
+    #             # si no existe una fila ese día, crear una nueva
+    #             fecha_ts = pd.Timestamp(fecha_ev)
+    #             semana_ev = int(((fecha_ts - inicio).days) // 7) + 1
 
-                nuevos = [{
-                    "semana": semana_ev,
-                    "fecha": fecha_ev,
-                    "día": DIAS_ES_POR_WEEKDAY[fecha_ts.weekday()],
-                    "horario": "",
-                    "sección": seccion_ev,
-                    "actividad": "Examen" if tipo_ev.lower() == "examen" else "Clase teórica",
-                    "tema": obs,
-                    "evaluación": tipo_ev,
-                    "profesores": "",
-                    "observaciones": obs
-                }]
+    #             nuevos = [{
+    #                 "semana": semana_ev,
+    #                 "fecha": fecha_ev,
+    #                 "día": DIAS_ES_POR_WEEKDAY[fecha_ts.weekday()],
+    #                 "horario": "",
+    #                 "sección": seccion_ev,
+    #                 "actividad": "Examen" if tipo_ev.lower() == "examen" else "Clase teórica",
+    #                 "tema": obs,
+    #                 "evaluación": tipo_ev,
+    #                 "profesores": "",
+    #                 "observaciones": obs
+    #             }]
 
-                df = pd.concat([df, pd.DataFrame(nuevos)], ignore_index=True)
+    #             df = pd.concat([df, pd.DataFrame(nuevos)], ignore_index=True)
 
     fer = cfg.get("feriados", {}) or {}
     feriados_map = {}
@@ -437,6 +439,129 @@ def construir_df(config: dict) -> pd.DataFrame:
         "actividad", "tema", "evaluación", "profesores", "observaciones"
     ]
     return df[cols]
+
+def combinar_observaciones(obs_actual, obs_nueva):
+    obs_actual = str(obs_actual or "").strip()
+    obs_nueva = str(obs_nueva or "").strip()
+
+    if not obs_nueva:
+        return obs_actual
+    if not obs_actual or obs_actual == "nan":
+        return obs_nueva
+    return f"{obs_actual} | {obs_nueva}"
+
+
+def calcular_semana_desde_fecha(fecha, inicio_semestre, nsem):
+    fecha_ts = pd.Timestamp(fecha)
+    inicio_ts = pd.Timestamp(inicio_semestre)
+
+    semana = int(((fecha_ts.normalize() - inicio_ts.normalize()).days) // 7) + 1
+
+    if semana < 1:
+        semana = 1
+    if semana > nsem:
+        semana = nsem
+
+    return semana
+
+
+def aplicar_evaluaciones(df, cfg, inicio):
+    """
+    Soporta:
+    - modo: por_filtro
+    - modo: por_fecha
+        * si viene inicio+fin => horario específico
+        * si no => todo el día
+    """
+    evaluaciones = cfg.get("evaluaciones", []) or []
+    nsem = int(cfg["periodo"]["numero_semanas"])
+
+    filas_nuevas = []
+
+    for ev in evaluaciones:
+        modo = str(ev.get("modo", "por_filtro")).strip()
+
+        # =====================================================
+        # 1) EVALUACIÓN SOBRE UNA CLASE YA EXISTENTE
+        # =====================================================
+        if modo == "por_filtro":
+            seccion = str(ev.get("seccion", "")).strip()
+            semana = int(ev.get("semana"))
+            actividad = str(ev.get("actividad", "")).strip()
+            tipo = str(ev.get("tipo", "")).strip()
+            obs = str(ev.get("observaciones", "")).strip()
+
+            mask = (
+                (df["sección"] == seccion) &
+                (df["semana"] == semana) &
+                (df["actividad"] == actividad)
+            )
+
+            df.loc[mask, "evaluación"] = tipo
+
+            if obs:
+                df.loc[mask, "observaciones"] = df.loc[mask, "observaciones"].apply(
+                    lambda x: combinar_observaciones(x, obs)
+                )
+
+        # =====================================================
+        # 2) EVALUACIÓN EXTRA POR FECHA
+        # =====================================================
+        elif modo == "por_fecha":
+            seccion = str(ev.get("seccion", "")).strip()
+            fecha_raw = ev.get("fecha", None)
+            tipo = str(ev.get("tipo", "")).strip()
+
+            if not fecha_raw or not tipo or not seccion:
+                continue
+
+            fecha_ts = pd.Timestamp(fecha_raw)
+            fecha_date = fecha_ts.date()
+
+            inicio_ev = str(ev.get("inicio", "")).strip()
+            fin_ev = str(ev.get("fin", "")).strip()
+            actividad_ev = str(ev.get("actividad", "")).strip()
+            tema_ev = str(ev.get("tema", "")).strip()
+            obs = str(ev.get("observaciones", "")).strip()
+            profesores_ev = normalizar_profesores(ev.get("profesores", ""))
+
+            if not actividad_ev:
+                actividad_ev = "Examen" if tipo.lower() == "examen" else "Evaluación especial"
+
+            horario_ev = ""
+            if inicio_ev and fin_ev:
+                horario_ev = rango_horario_str(inicio_ev, fin_ev)
+
+            semana_ev = calcular_semana_desde_fecha(fecha_ts, inicio, nsem)
+
+            filas_nuevas.append({
+                "semana": semana_ev,
+                "fecha": fecha_date,
+                "día": DIAS_ES_POR_WEEKDAY[fecha_ts.weekday()],
+                "horario": horario_ev,
+                "sección": seccion,
+                "actividad": actividad_ev,
+                "tema": tema_ev,
+                "evaluación": tipo,
+                "profesores": profesores_ev,
+                "observaciones": obs
+            })
+
+    if filas_nuevas:
+        df_extra = pd.DataFrame(filas_nuevas)
+
+        for col in df.columns:
+            if col not in df_extra.columns:
+                df_extra[col] = ""
+
+        for col in df_extra.columns:
+            if col not in df.columns:
+                df[col] = ""
+
+        df = pd.concat([df, df_extra[df.columns]], ignore_index=True)
+
+    return df
+
 
 def exportar_excel(df: pd.DataFrame, path: str):
     os.makedirs(os.path.dirname(path), exist_ok=True)

@@ -14,7 +14,7 @@ calendario:
 
   profesores_base:
     - { seccion: "Sección 1", actividad: "Clase teórica", profesores: "CC" }
-    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["TY", "MB", "GM", "XX"] }
+    - { seccion: "Sección 1", actividad: "Seminario", profesores: ["TY", "MB", "GM", "GF"] }
 
   temas_teoricos:
     1: "Lógica 1"

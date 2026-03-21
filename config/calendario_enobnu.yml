@@ -141,6 +141,11 @@ calendario:
     - { modo: "por_filtro", seccion: "Sección 4", semana: 18, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 1" }
     - { modo: "por_filtro", seccion: "Sección 4", semana: 19, actividad: "Clase teórica", tipo: "Examen", observaciones: "Examen 2" }
 
+    - { modo: "por_filtro", seccion: "Sección 1", semana: 17, actividad: "Seminario", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_filtro", seccion: "Sección 2", semana: 17, actividad: "Seminario", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_filtro", seccion: "Sección 3", semana: 17, actividad: "Seminario", tipo: "Portafolio", observaciones: "Portafolio" }
+    - { modo: "por_filtro", seccion: "Sección 4", semana: 17, actividad: "Seminario", tipo: "Portafolio", observaciones: "Portafolio" }
+
   pausas_academicas: []
   semanas_trabajo_autonomo: [17]
 
