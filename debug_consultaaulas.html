@@ -1,0 +1,1014 @@
+<html><head>
+<meta http-equiv="refresh" content="180;url=./consulta_clase.html">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Consulta Aulas</title>
+<link rel="stylesheet" type="text/css" media="all" href="./General/calendario/calendario/skins/aqua/theme.css" title="Aqua">
+<script type="text/javascript" src="./General/calendario/calendario/calendar.js"></script><script type="text/javascript" src="./General/calendario/calendario/lang/calendar-sp.js"></script><script type="text/javascript" src="./General/calendario/calendario/funciones.js"></script><link rel="stylesheet" type="text/css" media="all" href="./cal/cal2/jsDatePick_ltr.min.es.css">
+<script type="text/javascript" src="./cal/cal2/jsDatePick.min.1.3.es.js"></script><style type="text/css"><!--
+H1.SaltoDePagina {
+	PAGE-BREAK-AFTER: always;
+	font-size: small;
+}
+.boxAll {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: #000033;
+	border: 1px solid #000099;
+}
+.tblItemFondo {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: #000066;
+	background-color: #EEEEEE;
+	border: 1px solid #003333;
+}
+body {
+	background-image: url();
+	background-color:  #eff1f4;
+}
+.titMenor {font-size: 10px}
+.invisible {
+	visibility:hidden;
+	height: 0px;
+}
+.txtLinkAyuda {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+.txtTitulo {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 24px;
+}
+.nada {
+}
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #666666;
+	font-weight: bold;
+}
+.txtInput {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+.tablaFondo {
+	background-color: #CCCCCC;
+}
+.titBuscar {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+}
+.tablaDatos {
+	background-color: #FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+}
+--></style>
+<script type="text/javascript">
+	
+	window.onload = function(){
+		var today = new Date(); 
+		var thisYear=today.getFullYear();
+		var nextYear=thisYear + 1;
+
+		g_globalObject = new JsDatePick({
+			useMode:1,
+			isStripped:false,
+			target:"divCalendario",
+			dateFormat:"%d-%m-%Y"
+		});		
+		
+		
+			var strFecha = "23-03-2026";
+			strFecha = strFecha.substr(6,4)+'/'+strFecha.substr(3,2)+'/'+strFecha.substr(0,2)
+
+			today = new Date(); 
+g_currentDateObject = {};
+g_currentDateObject.dateObject = new Date(strFecha);
+g_currentDateObject.day = g_currentDateObject.dateObject.getDate();
+g_currentDateObject.month = g_currentDateObject.dateObject.getMonth() + 1;
+g_currentDateObject.year = g_currentDateObject.dateObject.getFullYear();
+
+			g_globalObject.setSelectedDay(g_currentDateObject);
+		
+		
+		g_globalObject.setOnSelectedDelegate(function(){
+			var obj = g_globalObject.getSelectedDay();
+			var d = String(obj.day);
+			var m = String(obj.month);
+			document.form.txtFecha.value = d.lpad("0",2) + "-" + m.lpad("0",2) + "-" + obj.year;
+		});
+
+	};
+
+
+String.prototype.lpad = function(padString, length) {
+	var str = this;
+    while (str.length < length)
+        str = padString + str;
+    return str;
+}
+
+</script><script language="JavaScript" type="text/JavaScript">
+
+function volver()
+{
+	//if (window.document.form.PaginaAnterior.value == "") return;
+	//window.document.form.queCarpeta.value="admrecurso";
+	window.document.form.Opcion.value="VOLVER";
+	//window.document.form.queFormulario.value=window.document.form.PaginaAnterior.value;
+	window.document.form.submit();
+}
+
+function goForm(queAccion)
+{
+
+	if (document.form.Opcion.value == "BuscarSemestre")
+	{
+		
+		if (document.form.txtSelCurso.value + document.form.txtCurso.value == "" ) {
+				alert("Ingrese curso");
+				return ;
+		}
+	}
+		
+				
+	document.form.Opcion.value = queAccion;
+	document.form.submit();
+	return ;
+}
+
+function goInicio()
+{
+
+var currentTime = new Date();
+var month = currentTime.getMonth() + 1 ;
+var day = currentTime.getDate();
+var year = currentTime.getFullYear();
+
+var fecha1=leftPad(''+day,2,'0') + "/" + leftPad(''+month,2,'0') + "/"  + year;
+month = month + 1;
+
+if (month>12) { month=1; year=year+1;}
+
+var fecha2=day + "/" + leftPad(''+month,2,'0') + "/"  + year;
+
+	if (document.form.txtFecha.value=="") {
+		document.form.txtFecha.value = fecha1;
+	}
+	if (document.form.txtHorFecTer.value=="") {
+		//document.form.txtHorFecTer.value = fecha2;
+	}
+}
+
+function leftPad(num,largo,car)
+{
+
+	for (var i = 1;  (largo - num.length) >= i ; i++)
+		num = ''+car+num; 
+return(num);	
+}
+
+function goClear()
+{
+	document.form.txtCurso.value = "";
+	document.form.txtFecha.value = "";
+	document.form.txtSelCurso.value = "";
+	document.form.selCarrera.value = "";
+	document.form.txtSelHorario.value = "";
+	document.form.txtSelAuditorio.value = "";
+	document.form.selNivel.value = "";
+	document.form.selNivel.options.length = 1
+
+	return false;
+}
+
+function imprimir()
+{
+
+var d = document.getElementById('divBuscar');
+	d.className = 'invisible';
+	window.document.form.btnImprimir.className = 'invisible';
+	window.print();
+	d.className = 'nada';
+	window.document.form.btnImprimir.className = 'inputTxt';
+return false;
+
+}
+
+function toExcel()
+{
+	var d = document.getElementById('divBuscar');
+	d.className = 'invisible';
+	var d2 = document.getElementById('divImprimir');
+	d2.className = 'invisible';
+
+	window.document.form.btnImprimir.className = 'invisible';
+	
+ document.form.target = '_blank';
+ document.form.queFormulario2excel.value = "listaplantillas2excel";
+ document.form.submit();
+ 
+	d.className = 'nada';
+	d2.className = 'nada';
+	window.document.form.btnImprimir.className = 'inputTxt';
+	document.form.target = '';
+	document.form.queFormulario2excel.value = "";
+ return false; 
+ 
+}
+
+
+function chgCurso(v)
+{
+	//alert(v);
+	var myselect=document.getElementById("txtSelCurso")
+	myselect.options.length = 0
+//	alert(myselect.options.length);
+	re = new RegExp(v)
+	 
+	addOption(myselect, "", "");
+	if (v != '')
+	for (var i=0; i<myArr.length; i++)
+	{
+		//alert(myArr[i]);
+		if(v != '' && myArr[i].toUpperCase().match(re))
+			addOption(myselect, myArr[i], myArr[i])
+			//if (i == 10) break;
+	}
+	else
+	for (var i=0; i<myArr.length; i++)
+	{
+			addOption(myselect, myArr[i], myArr[i])
+	}
+	
+		
+}
+
+function chgNivel(vCarrera)
+{
+	//alert(v);
+	var myselect=document.getElementById("selNivel")
+	myselect.options.length = 0
+//	alert(myselect.options.length);
+		
+	window.document.form.indexSelCarrera.value = vCarrera;
+
+	var maxNivel = 5;
+	var vC = '';
+	
+	if (vCarrera == '0') { vC='M';maxNivel = 0;}
+	if (vCarrera == '1') { vC='M';maxNivel = 7;}
+	if (vCarrera == '2') { vC='E';maxNivel = 5;}
+	if (vCarrera == '3') { vC='TO';maxNivel = 5;}
+	if (vCarrera == '4') { vC='O';maxNivel = 5;}
+	if (vCarrera == '5') { vC='TM';maxNivel = 5;}
+	if (vCarrera == '6') { vC='F';maxNivel = 5;}
+	if (vCarrera == '7') { vC='K';maxNivel = 5;}
+	if (vCarrera == '8') { vC='N';maxNivel = 5;}
+	
+	var i;
+
+	addOption(myselect, "", "");
+	for (i = 1;  i <= maxNivel; i++)
+	{
+		addOption(myselect, vC+i, vC+i);
+
+	}
+}
+
+
+var myArr = new Array() ;
+function defValue()
+{
+	
+}
+//defValue();
+
+function addOption(theSel, theText, theValue)
+{
+  var newOpt = new Option(theText, theValue);
+  var selLength = theSel.length;
+  theSel.options[selLength] = newOpt;
+}
+
+function goAyuda()
+{
+	w = window.open("consultas/c_ayuda.html","Ayuda","width=600;status=0,toolbar=0;resizable=0");
+}
+
+
+</script>
+</head>
+<body><form action="./controlxml.php" method="post" enctype="multipart/form-data" name="form" id="form">
+<input type="hidden" name="queCarpeta" value="consultas"><input type="hidden" name="queFormulario" value="c_buscaclasealumnos"><input type="hidden" name="queFormulario2excel" value=""><input type="hidden" name="Pagina" value="c_buscaclasealumnos"><input type="hidden" name="PaginaAnterior" value="c_buscaclasealumnos"><input type="hidden" name="Opcion" value="Buscar"><input type="hidden" name="Location" value=""><input type="hidden" name="loginUsuario" value=""><input type="hidden" name="indexSelCarrera" value=""><input type="hidden" name="txtSelHorario" value=""><table width="100%" border="0">
+<tbody><tr><td class="inputTxt"><div align="right">
+<a href="javascript:void%200" onclick="volver();return false;"></a><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tbody><tr><td align="center"><table width="100%" border="0" cellspacing="2" cellpadding="0"><tbody><tr>
+<td align="right" valign="top">
+<img src="./images/LogoFacultadMedicina.jpg" width="217" height="100"><br>
+</td>
+<td align="center" valign="middle">
+<p>Para realizar solicitud de aulas para asignaturas de Pregrado, visita la página<br><a href="https://dpi.med.uchile.cl/CALENDARIO/" title="Pregrado" target="_blank">https://dpi.med.uchile.cl/CALENDARIO/</a><br>
+				para otras actividades 
+                  <a href="http://solicitaaulas.med.uchile.cl" title="Solicita Aula" target="_blank">
+				  http://solicitaaulas.med.uchile.cl</a></p>
+<p>Reclamos, sugerencias y/o felicitaciones escribir a <a href="mailto:gestionaulas.med@uchile.cl">gestionaulas.med@uchile.cl</a></p>
+</td>
+</tr></tbody></table></td></tr>
+<tr><td align="center" class="txtTitulo">Unidad de Gestión de Aulas</td></tr>
+</tbody></table>
+</div></td></tr>
+<tr><td align="center"><div class="nada" id="divBuscar"><table width="800" border="0">
+<tbody><tr><td align="center" class="titBuscar">Actividades y Horario de Clases</td></tr>
+<tr><td><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr>
+<td><div id="divCalendario" style=" position:relative; width:205px; height:230px;"><div class="JsDatePickBox" style="position: absolute; top: 0px; left: 0px;"><div class="boxLeftWall"><div class="leftTopCorner"></div><div class="leftWall" style="height: 231px;"></div><div class="leftBottomCorner"></div></div><div class="boxMain"><div class="boxMainInner"><div class="controlsBar" globalnumber="319"><div class="monthForwardButton" globalnumber="319"></div><div class="monthBackwardButton" globalnumber="319"></div><div class="yearForwardButton" globalnumber="319"></div><div class="yearBackwardButton" globalnumber="319"></div><div class="controlsBarText">Marzo, 2026</div></div><div class="clearfix"></div><div class="tooltip"></div><div class="weekDaysRow"><div class="weekDay">Lun</div><div class="weekDay">Mar</div><div class="weekDay">Mié</div><div class="weekDay">Jue</div><div class="weekDay">Vie</div><div class="weekDay">Sáb</div><div class="weekDay" style="margin-right: 0px;">Dom</div></div><div class="boxMainCellsContainer"><div class="skipDay"></div><div class="skipDay"></div><div class="skipDay"></div><div class="skipDay"></div><div class="skipDay"></div><div class="skipDay"></div><div globalnumber="319" class="dayNormal" style="margin-right: 0px; background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">1</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">2</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">3</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">4</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">5</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">6</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">7</div><div globalnumber="319" class="dayNormal" style="margin-right: 0px; background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">8</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">9</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">10</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">11</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">12</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">13</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">14</div><div globalnumber="319" class="dayNormal" style="margin-right: 0px; background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">15</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">16</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">17</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">18</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">19</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">20</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">21</div><div globalnumber="319" istoday="1" class="dayNormalToday" style="margin-right: 0px; background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">22</div><div globalnumber="319" isselected="1" class="dayDown" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayDown.gif&quot;) left top no-repeat;">23</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">24</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">25</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">26</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">27</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">28</div><div globalnumber="319" class="dayNormal" style="margin-right: 0px; background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">29</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">30</div><div globalnumber="319" class="dayNormal" style="background: url(&quot;./cal/cal2/img/ocean_blue_dayNormal.gif&quot;) left top no-repeat;">31</div></div><div class="clearfix"></div></div></div><div class="boxRightWall"><div class="rightTopCorner"></div><div class="rightWall" style="height: 231px;"></div><div class="rightBottomCorner"></div></div><div class="clearfix"></div><div class="jsDatePickCloseButton" globalnumber="319"></div><div class="topWall"></div><div class="bottomWall"></div></div></div></td>
+<td><table border="0" align="center">
+<tbody><tr class="boxAll">
+<td align="right">Día</td>
+<td align="left" class="titLabel">:</td>
+<td align="left" class="titLabel"><input name="txtFecha" type="text" class="txtInput" id="txtFecha" size="15" maxlength="15" value="23-03-2026"></td>
+<td align="left" class="titLabel"></td>
+</tr>
+<tr style="visibility: collapse;">
+<td align="right">Asignatura</td>
+<td align="left">:</td>
+<td colspan="2" align="left">
+<select name="txtSelCurso" class="txtInput" id="txtSelCurso"><option value=""></option>
+<option value="CIERRE POSITION PAPER POSITION PAPER: PARTICIPACIÓN DE PERSONAS CON DISCAPACIDAD EN LA EDUCACIÓN SEXUAL Y AFECTIVA INTEGRAL (ESAI)">CIERRE POSITION PAPER POSITION PAPER: PARTICIPACIÓN DE </option>
+<option value="CURSO DE INTRODUCCIÓN A LA VIDA UNIVERSITARIA (SECCIÓN 7)">CURSO DE INTRODUCCIÓN A LA VIDA UNIVERSITARIA (SECCIÓN </option>
+<option value="(HIB) 1ER AVANCE - MICAELA OLIVA">(HIB) 1ER AVANCE - MICAELA OLIVA</option>
+<option value="(HIB) 1° AVANCE DE TESIS - FRANCISCA PIDERIT">(HIB) 1° AVANCE DE TESIS - FRANCISCA PIDERIT</option>
+<option value="(HIB) INDUCCIÓN PGA">(HIB) INDUCCIÓN PGA</option>
+<option value="1ER AVANCE - FABIAN DUARTE">1ER AVANCE - FABIAN DUARTE</option>
+<option value="2 AVANCE DE TESIS JAVIER MORENO DCM">2 AVANCE DE TESIS JAVIER MORENO DCM</option>
+<option value="ACTIVIDAD CON PSICÓLOGA PREVIO AL INTERNADO CLÍNICO KINESIOLOGÍA">ACTIVIDAD CON PSICÓLOGA PREVIO AL INTERNADO CLÍNICO KIN</option>
+<option value="ADMINISTRACIÓN EN SALUD KI10060-1">ADMINISTRACIÓN EN SALUD KI10060-1</option>
+<option value="AGENTES VIVOS DE ENFERMEDAD OB03018-1">AGENTES VIVOS DE ENFERMEDAD OB03018-1</option>
+<option value="AGENTES VIVOS DE LA ENFERMEDAD I ME05027-1">AGENTES VIVOS DE LA ENFERMEDAD I ME05027-1</option>
+<option value="AGENTES VIVOS DE LA ENFERMEDAD I ME05027-2">AGENTES VIVOS DE LA ENFERMEDAD I ME05027-2</option>
+<option value="AGENTES VIVOS DE LA ENFERMEDAD TM03014-1">AGENTES VIVOS DE LA ENFERMEDAD TM03014-1</option>
+<option value="ALIMENTOS I NUA0106-1">ALIMENTOS I NUA0106-1</option>
+<option value="ALTERACIONES NEUROMUSCOLOESQUELÉTICAS TO07039-1">ALTERACIONES NEUROMUSCOLOESQUELÉTICAS TO07039-1</option>
+<option value="ANÁLISIS DE LA RELACIÓN PERSONA ENTORNO KI07042-1">ANÁLISIS DE LA RELACIÓN PERSONA ENTORNO KI07042-1</option>
+<option value="ANÁLISIS DEL MODELO DE SALUD CHILENO KI05031-1">ANÁLISIS DEL MODELO DE SALUD CHILENO KI05031-1</option>
+<option value="ANATOMÍA ESTRUCTURAL I KIA0103-1">ANATOMÍA ESTRUCTURAL I KIA0103-1</option>
+<option value="ANATOMÍA FOA0102-1">ANATOMÍA FOA0102-1</option>
+<option value="ANATOMÍA I MED0102-1">ANATOMÍA I MED0102-1</option>
+<option value="ANATOMÍA I MED0102-2">ANATOMÍA I MED0102-2</option>
+<option value="ANATOMÍA NUA0104-1">ANATOMÍA NUA0104-1</option>
+<option value="ANATOMÍA PATOLÓGICA I TM05203-1">ANATOMÍA PATOLÓGICA I TM05203-1</option>
+<option value="ANATOMÍA PATOLÓGICA ME07039-1">ANATOMÍA PATOLÓGICA ME07039-1</option>
+<option value="ANATOMÍA POR IMÁGENES I TM05305-1">ANATOMÍA POR IMÁGENES I TM05305-1</option>
+<option value="ANATOMÍA POR IMÁGENES III TM07312-1">ANATOMÍA POR IMÁGENES III TM07312-1</option>
+<option value="ANTROPOLOGÍA TO03014-1">ANTROPOLOGÍA TO03014-1</option>
+<option value="APLICACIÓN DE ASPECTOS PSICOLÓGICOS Y SOCIOCULTURALES A LA INTERVENCIÓN TO07040-1">APLICACIÓN DE ASPECTOS PSICOLÓGICOS Y SOCIOCULTURALES A</option>
+<option value="ASAMBLEA ESTUDIANTIL CES">ASAMBLEA ESTUDIANTIL CES</option>
+<option value="ASEGURAMIENTO DE LA CALIDAD EN EL LABORATORIO TM07106-1">ASEGURAMIENTO DE LA CALIDAD EN EL LABORATORIO TM07106-1</option>
+<option value="ASEGURAMIENTO DE LA CALIDAD EN EL LABORATORIO TM07209-1">ASEGURAMIENTO DE LA CALIDAD EN EL LABORATORIO TM07209-1</option>
+<option value="ATENCIÓN BÁSICA EN ENFERMERÍA TM09033-1">ATENCIÓN BÁSICA EN ENFERMERÍA TM09033-1</option>
+<option value="AUDIOLOGÍA I TM05504-1">AUDIOLOGÍA I TM05504-1</option>
+<option value="AUDIOLOGÍA OCUPACIONAL Y CONTROL DE RIESGOS TM07509-1">AUDIOLOGÍA OCUPACIONAL Y CONTROL DE RIESGOS TM07509-1</option>
+<option value="AUTOCONOCIMIENTO Y CONTROL DEL ESTRÉS FG00000503057-1">AUTOCONOCIMIENTO Y CONTROL DEL ESTRÉS FG00000503057-1</option>
+<option value="AUTOCONOCIMIENTO Y CONTROL DEL STRES FG00000503057-1">AUTOCONOCIMIENTO Y CONTROL DEL STRES FG00000503057-1</option>
+<option value="AYUDANTIA FISIOLOGIA">AYUDANTIA FISIOLOGIA</option>
+<option value="BASES ANATÓMICAS OD080004-1">BASES ANATÓMICAS OD080004-1</option>
+<option value="BASES DISCIPLINARES Y ÉTICA NUA0105-1">BASES DISCIPLINARES Y ÉTICA NUA0105-1</option>
+<option value="BASES INTEGRADAS DE INFECTOLOGÍA, INMUNOLOGÍA Y FARMACOLOGÍA GENERAL KI03014-1">BASES INTEGRADAS DE INFECTOLOGÍA, INMUNOLOGÍA Y FARMACO</option>
+<option value="BASES PSICOSOCIALES DE LA OCUPACIÓN TOA0103-1">BASES PSICOSOCIALES DE LA OCUPACIÓN TOA0103-1</option>
+<option value="BASES TEÓRICAS Y PRÁCTICAS DE LA COMUNICACIÓN HUMANA FO01010906002-1">BASES TEÓRICAS Y PRÁCTICAS DE LA COMUNICACIÓN HUMANA FO</option>
+<option value="BECADOS DE HEMATOLOGÍA CON UN INVITADO DEL EXTRANJERO">BECADOS DE HEMATOLOGÍA CON UN INVITADO DEL EXTRANJERO</option>
+<option value="BIENVENIDA ALUMNOS 2026 DCBM">BIENVENIDA ALUMNOS 2026 DCBM</option>
+<option value="BIENVENIDA PREUPED 2026">BIENVENIDA PREUPED 2026</option>
+<option value="BIENVENIDA PROGRAMA DE TÍTULO DE ESPECIALISTA">BIENVENIDA PROGRAMA DE TÍTULO DE ESPECIALISTA</option>
+<option value="BIENVENIDA PTE MEDICINA INTERNA 2026">BIENVENIDA PTE MEDICINA INTERNA 2026</option>
+<option value="BIEVENIDA ALUMNOS NUEVOS DCBM">BIEVENIDA ALUMNOS NUEVOS DCBM</option>
+<option value="BIOESTADÍSTICA ME03014">BIOESTADÍSTICA ME03014</option>
+<option value="BIOESTADÍSTICA ME03014-1">BIOESTADÍSTICA ME03014-1</option>
+<option value="BIOESTADÍSTICA ME03014-2">BIOESTADÍSTICA ME03014-2</option>
+<option value="BIOÉTICA ME03015-1">BIOÉTICA ME03015-1</option>
+<option value="BIOLOGÍA CELULAR Y GENÉTICA TO01011606001-1">BIOLOGÍA CELULAR Y GENÉTICA TO01011606001-1</option>
+<option value="BIOLOGÍA CELULAR Y MOLECULAR KIA0106-1">BIOLOGÍA CELULAR Y MOLECULAR KIA0106-1</option>
+<option value="BIOLOGÍA CELULAR Y MOLECULAR NU01010906002-1">BIOLOGÍA CELULAR Y MOLECULAR NU01010906002-1</option>
+<option value="BIOLOGÍA CELULAR Y MOLECULAR TMA01004-1">BIOLOGÍA CELULAR Y MOLECULAR TMA01004-1</option>
+<option value="BIOLOGÍA CELULAR Y MOLECULAR TMA01004-2">BIOLOGÍA CELULAR Y MOLECULAR TMA01004-2</option>
+<option value="BIOLOGÍA MOLECULAR Y CELULAR FO01010906006-1">BIOLOGÍA MOLECULAR Y CELULAR FO01010906006-1</option>
+<option value="BIOLOGÍA Y GENÉTICA ENA0102-1">BIOLOGÍA Y GENÉTICA ENA0102-1</option>
+<option value="BIOLOGÍA Y GENÉTICA ENA0102-1 Y ENA0102-2">BIOLOGÍA Y GENÉTICA ENA0102-1 Y ENA0102-2</option>
+<option value="BIOLOGÍA Y GENÉTICA OBA0102-1">BIOLOGÍA Y GENÉTICA OBA0102-1</option>
+<option value="BIOQUÍMICA APLICADA TM03101-1">BIOQUÍMICA APLICADA TM03101-1</option>
+<option value="BIOQUÍMICA ME03016-1">BIOQUÍMICA ME03016-1</option>
+<option value="BIOQUÍMICA ME03016-2">BIOQUÍMICA ME03016-2</option>
+<option value="BIOQUÍMICA NUTRICIONAL NU03014-1">BIOQUÍMICA NUTRICIONAL NU03014-1</option>
+<option value="BLOQUEADO MANTENCION ELECTTRICA">BLOQUEADO MANTENCION ELECTTRICA</option>
+<option value="BLOQUEADO MANTENCION INFORMATICA">BLOQUEADO MANTENCION INFORMATICA</option>
+<option value="CALIDAD E INOCUIDAD ALIMENTARIA NU07042-1">CALIDAD E INOCUIDAD ALIMENTARIA NU07042-1</option>
+<option value="CAPACITACIÓN ANTICONCEPCION">CAPACITACIÓN ANTICONCEPCION</option>
+<option value="CAPACITACIÓN DE INSERCIÓN Y EXTRACCIÓN DE IMPLANTES ANTICONCEPTIVOS">CAPACITACIÓN DE INSERCIÓN Y EXTRACCIÓN DE IMPLANTES ANT</option>
+<option value="CAPACITACION UPR -  MANEJO MANUAL DE CARGA (MMC)">CAPACITACION UPR -  MANEJO MANUAL DE CARGA (MMC)</option>
+<option value="CAPACITACIÓN USO DE SERQ">CAPACITACIÓN USO DE SERQ</option>
+<option value="CASOS INTEGRADORES III ME07040-1">CASOS INTEGRADORES III ME07040-1</option>
+<option value="CASOS INTEGRADORES IV ME09052-1">CASOS INTEGRADORES IV ME09052-1</option>
+<option value="CASOS INTEGRADORES IV ME09052-2">CASOS INTEGRADORES IV ME09052-2</option>
+<option value="CELEBRACIÓN DÍA DE KINESIÓLOGO 70 AÑOS">CELEBRACIÓN DÍA DE KINESIÓLOGO 70 AÑOS</option>
+<option value="CEPO">CEPO</option>
+<option value="CEREMONIA DE EGRESO BECARIOS/AS DEPARTAMENTO DE ANESTESIOLOGÍA Y MEDICINA PERIOPERATORIA">CEREMONIA DE EGRESO BECARIOS/AS DEPARTAMENTO DE ANESTES</option>
+<option value="CEREMONIA DE GRADUACIÓN DEL DIPLOMADO EDUCACIÓN EN CIENCIAS PARA EL SIGLO XXI Y DIPLOMADO LIDERAZGO PARA LA EDUCACIÓN EN LAS CIENCIAS DEL SIGLO XXI">CEREMONIA DE GRADUACIÓN DEL DIPLOMADO EDUCACIÓN EN CIEN</option>
+<option value="CEREMONIA DE TITULACIÓN DE LAS/OS RESIDENTES DE 3ER AÑO">CEREMONIA DE TITULACIÓN DE LAS/OS RESIDENTES DE 3ER AÑO</option>
+<option value="CEREMONIA EGRESO BECADOS PEDIATRÍA NORTE">CEREMONIA EGRESO BECADOS PEDIATRÍA NORTE</option>
+<option value="CEREMONIA PARA CELEBRACIÓN ALIANZA INTA CON ESCUELA DE NUTRICIÓN Y DIETÉTICA.">CEREMONIA PARA CELEBRACIÓN ALIANZA INTA CON ESCUELA DE </option>
+<option value="CIENCIA Y CONTROVERSIA EN SALUD FG00000502446-1">CIENCIA Y CONTROVERSIA EN SALUD FG00000502446-1</option>
+<option value="CIENCIAS SOCIALES Y SALUD II OB03019-1">CIENCIAS SOCIALES Y SALUD II OB03019-1</option>
+<option value="CIENCIAS SOCIALES Y SALUD IV OB07045-1">CIENCIAS SOCIALES Y SALUD IV OB07045-1</option>
+<option value="CITOPATOLOGÍA I">CITOPATOLOGÍA I</option>
+<option value="CLASE BASICNCCSIGNALING AQ LLO">CLASE BASICNCCSIGNALING AQ LLO</option>
+<option value="CLASE FINAL EXAM BASICNCCSIGN AQ LLO">CLASE FINAL EXAM BASICNCCSIGN AQ LLO</option>
+<option value="CLASE FINAL EXMAN BASICNCCSIGN AQ LLO">CLASE FINAL EXMAN BASICNCCSIGN AQ LLO</option>
+<option value="CLASES BECADOS PSIQUIATRÍA 1 AÑO">CLASES BECADOS PSIQUIATRÍA 1 AÑO</option>
+<option value="CLASES DE IV AÑO DE MEDICINA">CLASES DE IV AÑO DE MEDICINA</option>
+<option value="CLÍNICA DE ATENCIÓN PRIMARIA I OB05030-1">CLÍNICA DE ATENCIÓN PRIMARIA I OB05030-1</option>
+<option value="CLÍNICA DE PARTOS I OB05029-1">CLÍNICA DE PARTOS I OB05029-1</option>
+<option value="CLÍNICA DE PUERPERIO OB05031-1">CLÍNICA DE PUERPERIO OB05031-1</option>
+<option value="CLÍNICA DE SALUD COMUNITARIA OB05032-1">CLÍNICA DE SALUD COMUNITARIA OB05032-1</option>
+<option value="CLÍNICA NEONATAL I OB05028-1">CLÍNICA NEONATAL I OB05028-1</option>
+<option value="COACHING ESTRATEGIAS PARA LA VIDA : HACER QUE LAS COSAS PASEN FG00000503363-1">COACHING ESTRATEGIAS PARA LA VIDA : HACER QUE LAS COSAS</option>
+<option value="COMUNICACIÓN CIENTÍFICA KI09056-1">COMUNICACIÓN CIENTÍFICA KI09056-1</option>
+<option value="COMUNICACIÓN Y EDUCACIÓN EN ALIMENTACIÓN Y NUTRICIÓN NU05028-1">COMUNICACIÓN Y EDUCACIÓN EN ALIMENTACIÓN Y NUTRICIÓN NU</option>
+<option value="CONCEPTOS BÁSICOS DE ADMINISTRACIÓN EN SALUD KI07045-1">CONCEPTOS BÁSICOS DE ADMINISTRACIÓN EN SALUD KI07045-1</option>
+<option value="CONFERENCIA DE  MATEMÁTICA APLICADA">CONFERENCIA DE  MATEMÁTICA APLICADA</option>
+<option value="CONFERENCIA ENFERMERÍA">CONFERENCIA ENFERMERÍA</option>
+<option value="CONSEJERÍA EN ITS/VIH: PROMOCIÓN Y PREVENCIÓN EN POBLACIÓN JOVEN FG00000502436-1">CONSEJERÍA EN ITS/VIH: PROMOCIÓN Y PREVENCIÓN EN POBLAC</option>
+<option value="CONSEJO DE FACULTAD">CONSEJO DE FACULTAD</option>
+<option value="CONSEJO DPTO. KINESIOLOGÍA">CONSEJO DPTO. KINESIOLOGÍA</option>
+<option value="CONSEJO ESCUELA DE POSTGRADO">CONSEJO ESCUELA DE POSTGRADO</option>
+<option value="CONTROL Y APRENDIZAJE MOTOR KI03016-1">CONTROL Y APRENDIZAJE MOTOR KI03016-1</option>
+<option value="CUENTA PÚBLICA HCUCH">CUENTA PÚBLICA HCUCH</option>
+<option value="CUIDADOS RESPIRATORIOS PARA KINESIÓLOGOS">CUIDADOS RESPIRATORIOS PARA KINESIÓLOGOS</option>
+<option value="CULTURA Y SEGURIDAD ALIMENTARIA NU05029-1">CULTURA Y SEGURIDAD ALIMENTARIA NU05029-1</option>
+<option value="CURSO  ENTRENAMIENTO DE LA FUERZA KINE">CURSO  ENTRENAMIENTO DE LA FUERZA KINE</option>
+<option value="CURSO 1° AÑO MEDICINA DE URGENCIA">CURSO 1° AÑO MEDICINA DE URGENCIA</option>
+<option value="CURSO BASES ANATOMO CLÍNICAS APLICADAS AL MÉTODO PILATES">CURSO BASES ANATOMO CLÍNICAS APLICADAS AL MÉTODO PILATE</option>
+<option value="CURSO DE FISIOPATOLOGÍA CARDIOVASCULAR 2026">CURSO DE FISIOPATOLOGÍA CARDIOVASCULAR 2026</option>
+<option value="CURSO DE 3 AÑO DE MEDICINA I">CURSO DE 3 AÑO DE MEDICINA I</option>
+<option value="CURSO DE EDUCACIÓN FÍSICA">CURSO DE EDUCACIÓN FÍSICA</option>
+<option value="CURSO DE IMPLANTE COCLEAR">CURSO DE IMPLANTE COCLEAR</option>
+<option value="CURSO DE TRAUMATOLOGÍA PARA MÉDICOS GENERALES">CURSO DE TRAUMATOLOGÍA PARA MÉDICOS GENERALES</option>
+<option value="CURSO ETICA CLÍNICA 1">CURSO ETICA CLÍNICA 1</option>
+<option value="CURSO HOSPITAL SALVADOR- CONVENIO ASISTENCIAL DOCENTE">CURSO HOSPITAL SALVADOR- CONVENIO ASISTENCIAL DOCENTE</option>
+<option value="CURSO INTERNADO DE MEDICINA INTERNA 6TO AÑO">CURSO INTERNADO DE MEDICINA INTERNA 6TO AÑO</option>
+<option value="CURSO LIPIDOS">CURSO LIPIDOS</option>
+<option value="CURSO ONCOLOGÍA BÁSICA">CURSO ONCOLOGÍA BÁSICA</option>
+<option value="CURSOS DE PROFUNDIZACIÓN DISCIPLINAR Y PROFESIONAL KI10059-1">CURSOS DE PROFUNDIZACIÓN DISCIPLINAR Y PROFESIONAL KI10</option>
+<option value="DANZA CONTEMPORÁNEA FG00000501313-1">DANZA CONTEMPORÁNEA FG00000501313-1</option>
+<option value="DEFENSA DE TESIS - GABRIEL ZAMORA">DEFENSA DE TESIS - GABRIEL ZAMORA</option>
+<option value="DEFENSA DE TESIS - RAIMUNDO VILLALOBOS">DEFENSA DE TESIS - RAIMUNDO VILLALOBOS</option>
+<option value="DEGI">DEGI</option>
+<option value="DEMOGRAFÍA Y EPIDEMIOLOGÍA OBA0105-1">DEMOGRAFÍA Y EPIDEMIOLOGÍA OBA0105-1</option>
+<option value="DETERMINANTES SOCIALES DE LA SALUD KI07043-1">DETERMINANTES SOCIALES DE LA SALUD KI07043-1</option>
+<option value="DIAGNÓSTICO DE SITUACIÓN DE SALUD Y ORGANIZACIÓN FO05027-1">DIAGNÓSTICO DE SITUACIÓN DE SALUD Y ORGANIZACIÓN FO0502</option>
+<option value="DIAGNÓSTICO HISTOLÓGICO TM05204-1">DIAGNÓSTICO HISTOLÓGICO TM05204-1</option>
+<option value="DIETÉTICA DEL ADULTO Y ADULTO MAYOR NU05030-1">DIETÉTICA DEL ADULTO Y ADULTO MAYOR NU05030-1</option>
+<option value="DIETOTERAPIA II NU07043-1">DIETOTERAPIA II NU07043-1</option>
+<option value="DIPLOMA EN PRESCRIPICION DE EJERCICIO KINESIOLOGIA">DIPLOMA EN PRESCRIPICION DE EJERCICIO KINESIOLOGIA</option>
+<option value="DIPLOMA EN TERAPIA MANUAL ARTRO NEURO MUSCULOESQUELÉTICA">DIPLOMA EN TERAPIA MANUAL ARTRO NEURO MUSCULOESQUELÉTIC</option>
+<option value="DIRECCIÓN DE SERVICIOS DE ALIMENTACIÓN COLECTIVA NU07044-1">DIRECCIÓN DE SERVICIOS DE ALIMENTACIÓN COLECTIVA NU0704</option>
+<option value="DISCIPLINA Y PROFESIÓN DE ENFERMERÍA ENA0106-1">DISCIPLINA Y PROFESIÓN DE ENFERMERÍA ENA0106-1</option>
+<option value="DISCIPLINA Y PROFESIÓN DE ENFERMERÍA III EN03013-1">DISCIPLINA Y PROFESIÓN DE ENFERMERÍA III EN03013-1</option>
+<option value="DISEÑO DE PROYECTO DE INVESTIGACIÓN NU07045-1">DISEÑO DE PROYECTO DE INVESTIGACIÓN NU07045-1</option>
+<option value="DOCENCIA DE PREGRADO, CURSO ÉTICA CLÍNICA II">DOCENCIA DE PREGRADO, CURSO ÉTICA CLÍNICA II</option>
+<option value="ECOLOGÍA HUMANA FG00000503347-1">ECOLOGÍA HUMANA FG00000503347-1</option>
+<option value="EDUCACIÓN FÍSICA II KI05032-1">EDUCACIÓN FÍSICA II KI05032-1</option>
+<option value="EDUCACIÓN PARA LA SALUD CON PERTINENCIA TERRITORIAL FGA005-1">EDUCACIÓN PARA LA SALUD CON PERTINENCIA TERRITORIAL FGA</option>
+<option value="EDUCACIÓN PARA LA SALUD EN03014-1">EDUCACIÓN PARA LA SALUD EN03014-1</option>
+<option value="EDUCACIÓN Y ENFERMERÍA ENA0105-1">EDUCACIÓN Y ENFERMERÍA ENA0105-1</option>
+<option value="EFECTOS DE ACTIVIDAD FÍSICA EN LA SALUD KI05026-1">EFECTOS DE ACTIVIDAD FÍSICA EN LA SALUD KI05026-1</option>
+<option value="ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-1">ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-1</option>
+<option value="ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-2">ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-2</option>
+<option value="ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-3">ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-3</option>
+<option value="ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-4">ELECTIVO DE LINGÜÍSTICA APLICADA FO07040-4</option>
+<option value="ELECTIVO PROFESIONAL: DIVERSIDADES SEXUALES Y DE GÉNERO EN LA ATENCIÓN DE SALUD ME08089-1">ELECTIVO PROFESIONAL: DIVERSIDADES SEXUALES Y DE GÉNERO</option>
+<option value="ELECTIVO PROFESIONAL: DONACIÓN Y TRASPLANTE DE ÓRGANOS Y TEJIDOS ME08082-1">ELECTIVO PROFESIONAL: DONACIÓN Y TRASPLANTE DE ÓRGANOS </option>
+<option value="ELECTIVO PROFESIONAL: ECOTOMOGRAFIA ME08059-1">ELECTIVO PROFESIONAL: ECOTOMOGRAFIA ME08059-1</option>
+<option value="ELECTIVO PROFESIONAL: ENFOQUE DE DERECHOS DE LA NIÑEZ EN LA ATENCIÓN DE SALUD ME08086-1">ELECTIVO PROFESIONAL: ENFOQUE DE DERECHOS DE LA NIÑEZ E</option>
+<option value="ELECTIVO PROFESIONAL: IMAGENOLOGÍA EN URGENCIAS ME08066-1">ELECTIVO PROFESIONAL: IMAGENOLOGÍA EN URGENCIAS ME08066</option>
+<option value="ELECTIVO PROFESIONAL: INTERCULTURALIDAD EN SALUD ME08090-1">ELECTIVO PROFESIONAL: INTERCULTURALIDAD EN SALUD ME0809</option>
+<option value="ELECTIVO PROFESIONAL: LENGUA DE SEÑAS CHILENA ME08078-1">ELECTIVO PROFESIONAL: LENGUA DE SEÑAS CHILENA ME08078-1</option>
+<option value="ELECTIVO PROFESIONAL: MEDICINA TRADICIONAL CHINA INTEGRATIVA (MTCI) ME08091-1">ELECTIVO PROFESIONAL: MEDICINA TRADICIONAL CHINA INTEGR</option>
+<option value="ELECTIVO PROFESIONAL: NEUROLOGÍA APLICADA PARA MÉDICOS GENERALES ME08085-1">ELECTIVO PROFESIONAL: NEUROLOGÍA APLICADA PARA MÉDICOS </option>
+<option value="ELECTIVO PROFESIONAL: ONCOLOGÍA BÁSICA ME08073-1">ELECTIVO PROFESIONAL: ONCOLOGÍA BÁSICA ME08073-1</option>
+<option value="ENFERMERÍA DEL ENVEJECIMIENTO II EN07038-1">ENFERMERÍA DEL ENVEJECIMIENTO II EN07038-1</option>
+<option value="ENFERMERÍA EN LA ADOLESCENCIA EN05027-1">ENFERMERÍA EN LA ADOLESCENCIA EN05027-1</option>
+<option value="ENFERMERÍA EN LA INFANCIA EN05028-1">ENFERMERÍA EN LA INFANCIA EN05028-1</option>
+<option value="ENFERMERÍA EN SALUD OCUPACIONAL EN07039-1">ENFERMERÍA EN SALUD OCUPACIONAL EN07039-1</option>
+<option value="ENFERMERÍA MÉDICO QUIRÚRGICA OB07040-1">ENFERMERÍA MÉDICO QUIRÚRGICA OB07040-1</option>
+<option value="ENFOQUE DE SALUD Y DERECHOS DE ADOLESCENTES DE LA DIVERSIDAD SEXUAL FG00000502388-1">ENFOQUE DE SALUD Y DERECHOS DE ADOLESCENTES DE LA DIVER</option>
+<option value="ENSAYO DE ORQUESTA FACULTAD DE MEDICINA DAEC">ENSAYO DE ORQUESTA FACULTAD DE MEDICINA DAEC</option>
+<option value="ENTREGA CARTAS KINESIOLGÍA">ENTREGA CARTAS KINESIOLGÍA</option>
+<option value="ENTREVISTA BIOLOGÍA PREUPED">ENTREVISTA BIOLOGÍA PREUPED</option>
+<option value="ENTREVISTA FÍSICA PREUPED">ENTREVISTA FÍSICA PREUPED</option>
+<option value="ENTREVISTA MATEMATICA PREUPED">ENTREVISTA MATEMATICA PREUPED</option>
+<option value="ENTREVISTA MATEMÁTICAS PREUPED">ENTREVISTA MATEMÁTICAS PREUPED</option>
+<option value="ENTREVISTA PREUPED">ENTREVISTA PREUPED</option>
+<option value="ENTREVISTA PREUPED FISICA">ENTREVISTA PREUPED FISICA</option>
+<option value="EPIDEMIOLOGÍA DESCRIPTIVA ME05028-1">EPIDEMIOLOGÍA DESCRIPTIVA ME05028-1</option>
+<option value="EPIDEMIOLOGÍA Y BIOESTADÍSTICA NU03015-1">EPIDEMIOLOGÍA Y BIOESTADÍSTICA NU03015-1</option>
+<option value="ESPECIALIDADES MÉDICA Y QUIRÚRGICAS I ME08047-1">ESPECIALIDADES MÉDICA Y QUIRÚRGICAS I ME08047-1</option>
+<option value="ESTADÍSTICA Y EPIDEMIOLOGÍA TM05022-1">ESTADÍSTICA Y EPIDEMIOLOGÍA TM05022-1</option>
+<option value="ESTRATEGIAS DEPORTIVAS Y RECREATIVAS KI07041-1">ESTRATEGIAS DEPORTIVAS Y RECREATIVAS KI07041-1</option>
+<option value="ESTRATEGIAS PARA EL ACOMPAÑAMIENTO AL DUELO PERINATAL IMPLEMENTACION  DE LEY (Nº21371)LEY DOMINGA">ESTRATEGIAS PARA EL ACOMPAÑAMIENTO AL DUELO PERINATAL I</option>
+<option value="ESTUDIO Y TRATAMIENTO ORTÓPTICO Y PLEÓPTICO TM05404-1">ESTUDIO Y TRATAMIENTO ORTÓPTICO Y PLEÓPTICO TM05404-1</option>
+<option value="ÉTICA CLÍNICA I ME05029-1">ÉTICA CLÍNICA I ME05029-1</option>
+<option value="ÉTICA CLÍNICA II ME07042-1">ÉTICA CLÍNICA II ME07042-1</option>
+<option value="ÉTICA CLÍNICA II ME07042-2">ÉTICA CLÍNICA II ME07042-2</option>
+<option value="ÉTICA CLÍNICA II ME07042-3">ÉTICA CLÍNICA II ME07042-3</option>
+<option value="ÉTICA CLÍNICA II ME07042-4">ÉTICA CLÍNICA II ME07042-4</option>
+<option value="EUNACOM (PRE-RESERVADO)">EUNACOM (PRE-RESERVADO)</option>
+<option value="EVALUACIÓN DEL ESTADO NUTRICIONAL NU03016-1">EVALUACIÓN DEL ESTADO NUTRICIONAL NU03016-1</option>
+<option value="EVALUACIÓN DEL ESTADO NUTRICIONAL NU03016-2">EVALUACIÓN DEL ESTADO NUTRICIONAL NU03016-2</option>
+<option value="EVALUACIÓN DEL ESTADO NUTRICIONAL NU03016-3">EVALUACIÓN DEL ESTADO NUTRICIONAL NU03016-3</option>
+<option value="EVALUACIÓN E INTERVENCIÓN EN CUIDADOS RESPIRATORIOS I KI05028-1">EVALUACIÓN E INTERVENCIÓN EN CUIDADOS RESPIRATORIOS I K</option>
+<option value="EVALUACIÓN E INTERVENCIÓN EN MÚSCULO-ESQUELÉTICO I KI05029-1">EVALUACIÓN E INTERVENCIÓN EN MÚSCULO-ESQUELÉTICO I KI05</option>
+<option value="EVALUACIÓN E INTERVENCIÓN EN NEUROKINESIOLOGÍA I KI05027-1">EVALUACIÓN E INTERVENCIÓN EN NEUROKINESIOLOGÍA I KI0502</option>
+<option value="EVALUACIÓN Y DIAGNÓSTICO AUDITIVO Y VESTIBULAR FO05028-1">EVALUACIÓN Y DIAGNÓSTICO AUDITIVO Y VESTIBULAR FO05028-</option>
+<option value="EVALUACIÓN Y DIAGNÓSTICO AUDITIVO Y VESTIBULAR FO05028-2">EVALUACIÓN Y DIAGNÓSTICO AUDITIVO Y VESTIBULAR FO05028-</option>
+<option value="EVALUACIÓN Y DIAGNÓSTICO DE LA VOZ HUMANA FO05029-1">EVALUACIÓN Y DIAGNÓSTICO DE LA VOZ HUMANA FO05029-1</option>
+<option value="EXAMEN CARDIOLOGÍA">EXAMEN CARDIOLOGÍA</option>
+<option value="EXAMEN CARDIOLOGÍA PEDIÁTRICA">EXAMEN CARDIOLOGÍA PEDIÁTRICA</option>
+<option value="EXAMEN CIRUGÍA GENERAL (INICIA 8.00 HORAS)">EXAMEN CIRUGÍA GENERAL (INICIA 8.00 HORAS)</option>
+<option value="EXAMEN CIRUGÍA PEDIÁTRICA">EXAMEN CIRUGÍA PEDIÁTRICA</option>
+<option value="EXAMEN CONACEM (CERTIFICACIÓN MEDICINA INTENSIVA DE ADULTOS)">EXAMEN CONACEM (CERTIFICACIÓN MEDICINA INTENSIVA DE ADU</option>
+<option value="EXAMEN DE GRADO - NICOLE ORTEGA">EXAMEN DE GRADO - NICOLE ORTEGA</option>
+<option value="EXAMEN DE GRADO DE PAULA CORDOBA NEUROCIENCIAS">EXAMEN DE GRADO DE PAULA CORDOBA NEUROCIENCIAS</option>
+<option value="EXAMEN DE GRADO JAVIER MORENO">EXAMEN DE GRADO JAVIER MORENO</option>
+<option value="EXAMEN ESCUELA DE OBSTETRICIA">EXAMEN ESCUELA DE OBSTETRICIA</option>
+<option value="EXAMEN KINÉSICO BÁSICO KI03015-1">EXAMEN KINÉSICO BÁSICO KI03015-1</option>
+<option value="EXAMEN MEDICINA INTENSIVA DE ADULTO">EXAMEN MEDICINA INTENSIVA DE ADULTO</option>
+<option value="EXAMEN MEDICINA INTERNA">EXAMEN MEDICINA INTERNA</option>
+<option value="EXAMEN MEDICINA MATERNO FETAL">EXAMEN MEDICINA MATERNO FETAL</option>
+<option value="EXAMEN NEFROLOGÍA">EXAMEN NEFROLOGÍA</option>
+<option value="EXAMEN NEFROLOGÍA PEDIÁTRICA">EXAMEN NEFROLOGÍA PEDIÁTRICA</option>
+<option value="EXAMEN NEONATOLOGÍA">EXAMEN NEONATOLOGÍA</option>
+<option value="EXAMEN OBSTETRICIA Y GINECOLOGÍA">EXAMEN OBSTETRICIA Y GINECOLOGÍA</option>
+<option value="EXAMEN PEDIATRÍA">EXAMEN PEDIATRÍA</option>
+<option value="EXAMEN POSTÍTULO">EXAMEN POSTÍTULO</option>
+<option value="EXAMEN TEÓRICO REVÁLIDA MEDICINA">EXAMEN TEÓRICO REVÁLIDA MEDICINA</option>
+<option value="EXPLORACIÓN DE LA FUNCIÓN NASAL TM05505-1">EXPLORACIÓN DE LA FUNCIÓN NASAL TM05505-1</option>
+<option value="EXPLORANDO LA IA EN SALUD: RETOS Y OPORTUNIDADES FG00000503429-1">EXPLORANDO LA IA EN SALUD: RETOS Y OPORTUNIDADES FG0000</option>
+<option value="EXTENSIÓN ANATOMÍA">EXTENSIÓN ANATOMÍA</option>
+<option value="FARMACOLOGÍA GENERAL EN03015-1">FARMACOLOGÍA GENERAL EN03015-1</option>
+<option value="FARMACOLOGÍA I ME05030-1">FARMACOLOGÍA I ME05030-1</option>
+<option value="FARMACOLOGÍA I ME05030-2">FARMACOLOGÍA I ME05030-2</option>
+<option value="FG: GRIPS TO09051-1">FG: GRIPS TO09051-1</option>
+<option value="FÍSICA CB10007-1">FÍSICA CB10007-1</option>
+<option value="FÍSICA CB10008-1">FÍSICA CB10008-1</option>
+<option value="FÍSICA CB10008-2">FÍSICA CB10008-2</option>
+<option value="FÍSICA DE EQUIPOS OFTALMOLÓGICOS TM03401-1">FÍSICA DE EQUIPOS OFTALMOLÓGICOS TM03401-1</option>
+<option value="FÍSICA I TMA01002-1">FÍSICA I TMA01002-1</option>
+<option value="FÍSICA MODERNA TM03301-1">FÍSICA MODERNA TM03301-1</option>
+<option value="FISIOLOGÍA DE SISTEMAS CB20001-1">FISIOLOGÍA DE SISTEMAS CB20001-1</option>
+<option value="FISIOLOGÍA DE SISTEMAS CB20001-2">FISIOLOGÍA DE SISTEMAS CB20001-2</option>
+<option value="FISIOLOGÍA DE SISTEMAS CB20001-3">FISIOLOGÍA DE SISTEMAS CB20001-3</option>
+<option value="FISIOLOGÍA DE SISTEMAS CB20001-3  FISIOLOGÍA DE SISTEMAS 	CB20001">FISIOLOGÍA DE SISTEMAS CB20001-3  FISIOLOGÍA DE SISTEMA</option>
+<option value="FISIOLOGÍA DE SISTEMAS CB20001-4">FISIOLOGÍA DE SISTEMAS CB20001-4</option>
+<option value="FISIOLOGÍA I ME03017-1">FISIOLOGÍA I ME03017-1</option>
+<option value="FISIOLOGÍA I ME03017-2">FISIOLOGÍA I ME03017-2</option>
+<option value="FISIOPATOLOGÍA DE LA VISIÓN MONO Y BINOCULAR TM05405-1">FISIOPATOLOGÍA DE LA VISIÓN MONO Y BINOCULAR TM05405-1</option>
+<option value="FISIOPATOLOGÍA I ME05031-1">FISIOPATOLOGÍA I ME05031-1</option>
+<option value="FISIOPATOLOGÍA I ME05031-2">FISIOPATOLOGÍA I ME05031-2</option>
+<option value="FISIOPATOLOGÍA Y ESTUDIO DEL POLO ANTERIOR TM07411-1">FISIOPATOLOGÍA Y ESTUDIO DEL POLO ANTERIOR TM07411-1</option>
+<option value="FISIOPATOLOGÍA Y FARMACOLOGÍA II NU07046-1">FISIOPATOLOGÍA Y FARMACOLOGÍA II NU07046-1</option>
+<option value="FONÉTICA Y FONOLOGÍA ESPAÑOLAS FOA0105-1">FONÉTICA Y FONOLOGÍA ESPAÑOLAS FOA0105-1</option>
+<option value="FONO GENETICA">FONO GENETICA</option>
+<option value="FUNCIÓN PULMONAR 2025">FUNCIÓN PULMONAR 2025</option>
+<option value="FUNDAMENTOS COGNITIVOS DE LA COMUNICACIÓN FO03015-1">FUNDAMENTOS COGNITIVOS DE LA COMUNICACIÓN FO03015-1</option>
+<option value="FUNDAMENTOS DE ENFERMERÍA II OB03013-1">FUNDAMENTOS DE ENFERMERÍA II OB03013-1</option>
+<option value="FUNDAMENTOS DE LA INVESTIGACIÓN CIENTÍFICA KI03017-1">FUNDAMENTOS DE LA INVESTIGACIÓN CIENTÍFICA KI03017-1</option>
+<option value="FUNDAMENTOS DE LA KINESIOLOGÍA KIA0102-1">FUNDAMENTOS DE LA KINESIOLOGÍA KIA0102-1</option>
+<option value="FUNDAMENTOS DE LA TERAPIA OCUPACIONAL  TOA0104-1">FUNDAMENTOS DE LA TERAPIA OCUPACIONAL  TOA0104-1</option>
+<option value="FUNDAMENTOS DE LA TERAPIA OCUPACIONAL TOA0104-1">FUNDAMENTOS DE LA TERAPIA OCUPACIONAL TOA0104-1</option>
+<option value="FUNDAMENTOS FÍSICOS Y CONTROL DE CALIDAD DE EQUIPOS DE MEDICINA NUCLEAR Y RADIOTERAPIA TM07313-1">FUNDAMENTOS FÍSICOS Y CONTROL DE CALIDAD DE EQUIPOS DE </option>
+<option value="FUNDAMENTOS FÍSICOS Y CONTROL DE CALIDAD DE EQUIPOS IMAGENEOLÓGICOS I TM05306-1">FUNDAMENTOS FÍSICOS Y CONTROL DE CALIDAD DE EQUIPOS IMA</option>
+<option value="FUNDAMENTOS HUMANISTAS PARA LA ATENCIÓN EN SALUD SEXUAL Y REPRODUCTIVA OBA0104-1">FUNDAMENTOS HUMANISTAS PARA LA ATENCIÓN EN SALUD SEXUAL</option>
+<option value="GENÉTICA FO03016-1">GENÉTICA FO03016-1</option>
+<option value="GENÉTICA ME03018-1">GENÉTICA ME03018-1</option>
+<option value="GENÉTICA ME03018-2">GENÉTICA ME03018-2</option>
+<option value="GERIATRÍA ME07043-1">GERIATRÍA ME07043-1</option>
+<option value="GESTIÓN APLICADA A TERAPIA OCUPACIONAL TO08046-1">GESTIÓN APLICADA A TERAPIA OCUPACIONAL TO08046-1</option>
+<option value="GESTIÓN DEL CUIDADO DE ENFERMERÍA APLICADA A LA APS 2025">GESTIÓN DEL CUIDADO DE ENFERMERÍA APLICADA A LA APS 202</option>
+<option value="GESTIÓN EN SALUD II TO07042-1">GESTIÓN EN SALUD II TO07042-1</option>
+<option value="GESTIÓN EN SALUD NU05031-1">GESTIÓN EN SALUD NU05031-1</option>
+<option value="GESTIÓN I ME09055-1">GESTIÓN I ME09055-1</option>
+<option value="GESTIÓN I SP30001-1">GESTIÓN I SP30001-1</option>
+<option value="GESTIÓN II TM07025-1">GESTIÓN II TM07025-1</option>
+<option value="GESTIÓN II TM07025-2">GESTIÓN II TM07025-2</option>
+<option value="GESTIÓN Y ADMINISTRACIÓN EN SALUD I EN05029-1">GESTIÓN Y ADMINISTRACIÓN EN SALUD I EN05029-1</option>
+<option value="GESTIÓN Y ADMINISTRACIÓN EN SALUD III EN07040-1">GESTIÓN Y ADMINISTRACIÓN EN SALUD III EN07040-1</option>
+<option value="GESTIÓN Y LIDERAZGO EN SALUD II OB07043-1">GESTIÓN Y LIDERAZGO EN SALUD II OB07043-1</option>
+<option value="GINECOLOGÍA PATOLÓGICA OB07042-1">GINECOLOGÍA PATOLÓGICA OB07042-1</option>
+<option value="GINECOLOGÍA-OBSTETRICIA ME10060-1">GINECOLOGÍA-OBSTETRICIA ME10060-1</option>
+<option value="GINECOLOGÍA-OBSTETRICIA ME10060-4">GINECOLOGÍA-OBSTETRICIA ME10060-4</option>
+<option value="GINECOLOGÍA-OBSTETRICIA ME10060-5">GINECOLOGÍA-OBSTETRICIA ME10060-5</option>
+<option value="GRADUACIÓN DIPLOMADO PIJ. SALÓN ROJO">GRADUACIÓN DIPLOMADO PIJ. SALÓN ROJO</option>
+<option value="HABILIDADES DIRECTIVAS FUNDACIÓN HCUCH">HABILIDADES DIRECTIVAS FUNDACIÓN HCUCH</option>
+<option value="HABILIDADES EXPRESIVAS FG00000503074-1">HABILIDADES EXPRESIVAS FG00000503074-1</option>
+<option value="HEMATOLOGÍA TM07107-1">HEMATOLOGÍA TM07107-1</option>
+<option value="HIB - CURSO DE IMAGENOLOGÍA EN REUMATOLOGÍA">HIB - CURSO DE IMAGENOLOGÍA EN REUMATOLOGÍA</option>
+<option value="HIB - JORNADA DE INDUCCIÓN PARA ACADÉMICOS NUEVOS">HIB - JORNADA DE INDUCCIÓN PARA ACADÉMICOS NUEVOS</option>
+<option value="HIB - SEMINARIO INTERNACIONAL EVIDENCIA EN EL MANEJO DEL DOLOR">HIB - SEMINARIO INTERNACIONAL EVIDENCIA EN EL MANEJO DE</option>
+<option value="HIGIENE EN LA PRODUCCIÓN DE ALIMENTOS NU05032-1">HIGIENE EN LA PRODUCCIÓN DE ALIMENTOS NU05032-1</option>
+<option value="HIGIENE OCUPACIONAL">HIGIENE OCUPACIONAL</option>
+<option value="HISTOLOGÍA NUA0103-1">HISTOLOGÍA NUA0103-1</option>
+<option value="HISTOLOGÍA Y EMBRIOLOGÍA KIA0104-1">HISTOLOGÍA Y EMBRIOLOGÍA KIA0104-1</option>
+<option value="HISTORIAS Y PERFILES OCUPACIONALES TO07041-1">HISTORIAS Y PERFILES OCUPACIONALES TO07041-1</option>
+<option value="ICBM">ICBM</option>
+<option value="INCORPORANDO LA PERTINENCIA CULTURAL EN EL DESARROLLO DE MIS CURSOS">INCORPORANDO LA PERTINENCIA CULTURAL EN EL DESARROLLO D</option>
+<option value="INGLÉS BEGINNER ID00000604002-1">INGLÉS BEGINNER ID00000604002-1</option>
+<option value="INGLÉS BEGINNER ID00000604002-2">INGLÉS BEGINNER ID00000604002-2</option>
+<option value="INGLÉS BEGINNER ID00000604002-3">INGLÉS BEGINNER ID00000604002-3</option>
+<option value="INGLÉS BEGINNER ID00000604002-4">INGLÉS BEGINNER ID00000604002-4</option>
+<option value="INGLÉS BEGINNER ID00000604002-5">INGLÉS BEGINNER ID00000604002-5</option>
+<option value="INGLES INTERMEDIATE ID00000604004-1">INGLES INTERMEDIATE ID00000604004-1</option>
+<option value="INGLES INTERMEDIATE ID00000604004-2">INGLES INTERMEDIATE ID00000604004-2</option>
+<option value="INGLES INTERMEDIATE ID00000604004-3">INGLES INTERMEDIATE ID00000604004-3</option>
+<option value="INGLES INTERMEDIATE ID00000604004-4">INGLES INTERMEDIATE ID00000604004-4</option>
+<option value="INGLES INTERMEDIATE ID00000604004-5">INGLES INTERMEDIATE ID00000604004-5</option>
+<option value="INGLES INTERMEDIATE ID00000604004-6">INGLES INTERMEDIATE ID00000604004-6</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-1">INGLES PRE-INTERMEDIATE ID00000604003-1</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-2">INGLES PRE-INTERMEDIATE ID00000604003-2</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-3">INGLES PRE-INTERMEDIATE ID00000604003-3</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-4">INGLES PRE-INTERMEDIATE ID00000604003-4</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-5">INGLES PRE-INTERMEDIATE ID00000604003-5</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-6">INGLES PRE-INTERMEDIATE ID00000604003-6</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-7">INGLES PRE-INTERMEDIATE ID00000604003-7</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-8">INGLES PRE-INTERMEDIATE ID00000604003-8</option>
+<option value="INGLES PRE-INTERMEDIATE ID00000604003-9">INGLES PRE-INTERMEDIATE ID00000604003-9</option>
+<option value="INGLES STARTER ID00000604001-1">INGLES STARTER ID00000604001-1</option>
+<option value="INGLES STARTER ID00000604001-2">INGLES STARTER ID00000604001-2</option>
+<option value="INGLES STARTER ID00000604001-3">INGLES STARTER ID00000604001-3</option>
+<option value="INMUNOHISTOQUÍMICA APLICADA TM07211-1">INMUNOHISTOQUÍMICA APLICADA TM07211-1</option>
+<option value="INMUNOLOGÍA NU05033-1">INMUNOLOGÍA NU05033-1</option>
+<option value="INMUNOLOGÍA OB03017-1">INMUNOLOGÍA OB03017-1</option>
+<option value="INMUNOLOGÍA TM03016-1">INMUNOLOGÍA TM03016-1</option>
+<option value="INTEGRADO CLÍNICO EN SALUD PRIMARIA FO07041-1">INTEGRADO CLÍNICO EN SALUD PRIMARIA FO07041-1</option>
+<option value="INTEGRÁNDONOS EN EL MUNDO DEL TEA FG00000503410-1">INTEGRÁNDONOS EN EL MUNDO DEL TEA FG00000503410-1</option>
+<option value="INTELIGENCIA EMOCIONAL FG00000503298-1">INTELIGENCIA EMOCIONAL FG00000503298-1</option>
+<option value="INTERNADO ATENCIÓN PRIMARIA OB09053-1">INTERNADO ATENCIÓN PRIMARIA OB09053-1</option>
+<option value="INTERNADO DE MEDICINA INTERNA ORIENTE (6° AÑO DE MEDICINA)">INTERNADO DE MEDICINA INTERNA ORIENTE (6° AÑO DE MEDICI</option>
+<option value="INTERNADO DE URGENCIAS ME11069-101">INTERNADO DE URGENCIAS ME11069-101</option>
+<option value="INTERNADO GINECOLOGÍA OB09054-1">INTERNADO GINECOLOGÍA OB09054-1</option>
+<option value="INTERNADO MEDICINA INTERNA">INTERNADO MEDICINA INTERNA</option>
+<option value="INTERNADO NEONATOLOGÍA OB09051-1">INTERNADO NEONATOLOGÍA OB09051-1</option>
+<option value="INTERNADO PROFESIONAL ÁREA ADULTOS FO09053-1">INTERNADO PROFESIONAL ÁREA ADULTOS FO09053-1</option>
+<option value="INTERNADO PROFESIONAL ÁREA INFANTO-JUVENIL FO09052-1">INTERNADO PROFESIONAL ÁREA INFANTO-JUVENIL FO09052-1</option>
+<option value="INTERNADO PROFESIONAL ÁREA VOZ FO09055-1">INTERNADO PROFESIONAL ÁREA VOZ FO09055-1</option>
+<option value="INTERNADO PROFESIONAL AUDIOLOGÍA FO09054-1">INTERNADO PROFESIONAL AUDIOLOGÍA FO09054-1</option>
+<option value="INTERVENCIÓN COMUNITARIA II TM07026-1">INTERVENCIÓN COMUNITARIA II TM07026-1</option>
+<option value="INTERVENCIÓN COMUNITARIA II TM07026-2">INTERVENCIÓN COMUNITARIA II TM07026-2</option>
+<option value="INTERVENCIÓN DEL LENGUAJE Y COMUNICACIÓN EN ADULTOS FO07042-1">INTERVENCIÓN DEL LENGUAJE Y COMUNICACIÓN EN ADULTOS FO0</option>
+<option value="INTERVENCIÓN EN SALUD COMUNITARIA">INTERVENCIÓN EN SALUD COMUNITARIA</option>
+<option value="INTERVENCIÓN EN SALUD COMUNITARIA KI10058-1">INTERVENCIÓN EN SALUD COMUNITARIA KI10058-1</option>
+<option value="INTERVENCIÓN FONOAUDIOLÓGICA EN EL ADULTO MAYOR FO07043-1">INTERVENCIÓN FONOAUDIOLÓGICA EN EL ADULTO MAYOR FO07043</option>
+<option value="INTERVENCIÓN PROFESIONAL EN CONTEXTO I KI07040-1">INTERVENCIÓN PROFESIONAL EN CONTEXTO I KI07040-1</option>
+<option value="INTRODUCCIÓN A LA FONOAUDIOLOGÍA FOA0103-1">INTRODUCCIÓN A LA FONOAUDIOLOGÍA FOA0103-1</option>
+<option value="INTRODUCCIÓN A LA PROFESIÓN MÉDICA MED0104-1">INTRODUCCIÓN A LA PROFESIÓN MÉDICA MED0104-1</option>
+<option value="INTRODUCCIÓN A LA SALUD PÚBLICA SP10001-1">INTRODUCCIÓN A LA SALUD PÚBLICA SP10001-1</option>
+<option value="INVESTIGACIÓN APLICADA EN LOS DIFERENTES NIVELES DE ATENCIÓN DE SALUD 2025">INVESTIGACIÓN APLICADA EN LOS DIFERENTES NIVELES DE ATE</option>
+<option value="INVESTIGACIÓN EN CIENCIA DE LA OCUPACIÓN Y TERAPIA OCUPACIONAL I TO05028-1">INVESTIGACIÓN EN CIENCIA DE LA OCUPACIÓN Y TERAPIA OCUP</option>
+<option value="INVESTIGACIÓN EN CIENCIA DE LA OCUPACIÓN Y TERAPIA OCUPACIONAL III TO07043-1">INVESTIGACIÓN EN CIENCIA DE LA OCUPACIÓN Y TERAPIA OCUP</option>
+<option value="INVESTIGACIÓN EN SALUD III OB07044-1">INVESTIGACIÓN EN SALUD III OB07044-1</option>
+<option value="INVESTIGACIÓN EN SALUD Y METODOLOGÍAS CUANTITATIVAS EN05030-1">INVESTIGACIÓN EN SALUD Y METODOLOGÍAS CUANTITATIVAS EN0</option>
+<option value="JORNADA CAPACITACIÓN DE FACILITADORES DE LOS GRUPOS DE DISCUSIÓN PDI FAMED 2026-2036">JORNADA CAPACITACIÓN DE FACILITADORES DE LOS GRUPOS DE </option>
+<option value="JORNADA DE PSICOLOGIA INTERNADO DE KINESIOLOGÍA">JORNADA DE PSICOLOGIA INTERNADO DE KINESIOLOGÍA</option>
+<option value="JORNADA DE SERVICIOS CONCESIONADOS">JORNADA DE SERVICIOS CONCESIONADOS</option>
+<option value="JORNADA DE TRABAJO DE LA CORPORACIÓN ECOSS DE BARRIO">JORNADA DE TRABAJO DE LA CORPORACIÓN ECOSS DE BARRIO</option>
+<option value="JORNADA INTERNA DEL DPTO. ORTOPEDIA Y TRAUMATOLOGÍA">JORNADA INTERNA DEL DPTO. ORTOPEDIA Y TRAUMATOLOGÍA</option>
+<option value="LACTANCIA MATERNA: FORMANDO MONITORES EN EL EQUIPO DE LA SALUD FG00000502206-1">LACTANCIA MATERNA: FORMANDO MONITORES EN EL EQUIPO DE L</option>
+<option value="LANZAMIENTO NUEVO PROCESO PDI FAMED 2026-2036.">LANZAMIENTO NUEVO PROCESO PDI FAMED 2026-2036.</option>
+<option value="LECTURAS FEMINISTAS: REFLEXIONES PARA UNA CIUDADANÍA INCLUSIVA FG00000502377-1">LECTURAS FEMINISTAS: REFLEXIONES PARA UNA CIUDADANÍA IN</option>
+<option value="LENGUA DE SEÑAS TM09032-1">LENGUA DE SEÑAS TM09032-1</option>
+<option value="LENGUAJE Y TEORÍA MUSICAL INICIAL FG00000501392-1">LENGUAJE Y TEORÍA MUSICAL INICIAL FG00000501392-1</option>
+<option value="MAGÍSTER DE OCUPACIÓN Y TERAPIA OCUPACIONAL">MAGÍSTER DE OCUPACIÓN Y TERAPIA OCUPACIONAL</option>
+<option value="MANEJO AVANZADO CURACIONES DE PERSONAS DIABÉTICAS CON ÚLCERAS DE PIE DIABÉTICO">MANEJO AVANZADO CURACIONES DE PERSONAS DIABÉTICAS CON Ú</option>
+<option value="MANTENCION AUDITORIO">MANTENCION AUDITORIO</option>
+<option value="MATEMÁTICA APLICADA TM03302-1">MATEMÁTICA APLICADA TM03302-1</option>
+<option value="MATEMÁTICA APLICADA TM03502-1">MATEMÁTICA APLICADA TM03502-1</option>
+<option value="MATEMÁTICAS CB10005-1">MATEMÁTICAS CB10005-1</option>
+<option value="MATEMÁTICAS CBA0102-1">MATEMÁTICAS CBA0102-1</option>
+<option value="MATEMÁTICAS CBA0102-2">MATEMÁTICAS CBA0102-2</option>
+<option value="MATEMÁTICAS CBA0102-3">MATEMÁTICAS CBA0102-3</option>
+<option value="MATEMÁTICAS CBA0102-4">MATEMÁTICAS CBA0102-4</option>
+<option value="MATEMÁTICAS I TMA01005-1">MATEMÁTICAS I TMA01005-1</option>
+<option value="MATEMÁTICAS MED0101-1">MATEMÁTICAS MED0101-1</option>
+<option value="MATEMÁTICAS MED0101-2">MATEMÁTICAS MED0101-2</option>
+<option value="MATEMÁTICAS Y ESTADÍSTICA CBA0103-1">MATEMÁTICAS Y ESTADÍSTICA CBA0103-1</option>
+<option value="MATEMÁTICAS Y ESTADÍSTICA CBA0103-2">MATEMÁTICAS Y ESTADÍSTICA CBA0103-2</option>
+<option value="MATEMÁTICAS Y ESTADÍSTICA CBA0103-3">MATEMÁTICAS Y ESTADÍSTICA CBA0103-3</option>
+<option value="MATEMÁTICAS Y ESTADÍSTICA CBA0103-4">MATEMÁTICAS Y ESTADÍSTICA CBA0103-4</option>
+<option value="MATRICULA PREUPED">MATRICULA PREUPED</option>
+<option value="MEDICINA DE URGENCIA ME09057-1">MEDICINA DE URGENCIA ME09057-1</option>
+<option value="MEDICINA GENERAL FAMILIAR I ME07044">MEDICINA GENERAL FAMILIAR I ME07044</option>
+<option value="MEDICINA GENERAL FAMILIAR I ME07044-1">MEDICINA GENERAL FAMILIAR I ME07044-1</option>
+<option value="MEDICINA GENERAL FAMILIAR I ME07044-2">MEDICINA GENERAL FAMILIAR I ME07044-2</option>
+<option value="MEDICINA GENERAL FAMILIAR I ME07044-3">MEDICINA GENERAL FAMILIAR I ME07044-3</option>
+<option value="MEDICINA GENERAL FAMILIAR I ME07044-4">MEDICINA GENERAL FAMILIAR I ME07044-4</option>
+<option value="MEDICINA GENETICA">MEDICINA GENETICA</option>
+<option value="MEDICINA INTERNA I ME05032-1">MEDICINA INTERNA I ME05032-1</option>
+<option value="MEDICINA INTERNA I ME05032-3">MEDICINA INTERNA I ME05032-3</option>
+<option value="MEDICINA INTERNA I ME05032-4">MEDICINA INTERNA I ME05032-4</option>
+<option value="MEDICINA, PERSONA Y SOCIEDAD MED0105-1">MEDICINA, PERSONA Y SOCIEDAD MED0105-1</option>
+<option value="MEDICINA, PERSONA Y SOCIEDAD MED0105-2">MEDICINA, PERSONA Y SOCIEDAD MED0105-2</option>
+<option value="METODOLOGÍAS DE ENSEÑANZA APRENDIZAJE KI07046-1">METODOLOGÍAS DE ENSEÑANZA APRENDIZAJE KI07046-1</option>
+<option value="METODOLOGÍAS DE LA INVESTIGACIÓN TM07027-1">METODOLOGÍAS DE LA INVESTIGACIÓN TM07027-1</option>
+<option value="MÉTODOS DE EXPLORACIÓN DIAGNÓSTICA POR IMÁGENES II TM05307-1">MÉTODOS DE EXPLORACIÓN DIAGNÓSTICA POR IMÁGENES II TM05</option>
+<option value="MÉTODOS DE EXPLORACIÓN DIAGNÓSTICA POR IMÁGENES IV TM07314-1">MÉTODOS DE EXPLORACIÓN DIAGNÓSTICA POR IMÁGENES IV TM07</option>
+<option value="MÉTODOS DE INVESTIGACIÓN CUALITATIVOS Y CUANTITATIVOS FO05031-1">MÉTODOS DE INVESTIGACIÓN CUALITATIVOS Y CUANTITATIVOS F</option>
+<option value="MIIM">MIIM</option>
+<option value="MINDFULNESS (MFN)">MINDFULNESS (MFN)</option>
+<option value="MODELOS ANIMALES DE EXPERIMENTACIÓN TM09036-1">MODELOS ANIMALES DE EXPERIMENTACIÓN TM09036-1</option>
+<option value="MODELOS PRAGMÁTICOS DEL ESTUDIO DE LA OCUPACIÓN 	TO03015-1">MODELOS PRAGMÁTICOS DEL ESTUDIO DE LA OCUPACIÓN 	TO0301</option>
+<option value="MODELOS PRAGMÁTICOS DEL ESTUDIO DE LA OCUPACIÓN TO03015-1">MODELOS PRAGMÁTICOS DEL ESTUDIO DE LA OCUPACIÓN TO03015</option>
+<option value="MODULO INTEGRADO INTERDISCIPLINARIO Y MULTIPROFESIONAL I MI02020505001-1">MODULO INTEGRADO INTERDISCIPLINARIO Y MULTIPROFESIONAL </option>
+<option value="MORFOLOGÍA I: ANATOMÍA, HISTOLOGÍA Y EMBRIOLOGÍA TOA0106-1">MORFOLOGÍA I: ANATOMÍA, HISTOLOGÍA Y EMBRIOLOGÍA TOA010</option>
+<option value="MORFOLOGÍA II: ANATOMÍA, HISTOLOGÍA Y EMBRIOLOGÍA TO03018-1">MORFOLOGÍA II: ANATOMÍA, HISTOLOGÍA Y EMBRIOLOGÍA TO030</option>
+<option value="MORFOSINTAXIS ESPAÑOLA FOA0104-1">MORFOSINTAXIS ESPAÑOLA FOA0104-1</option>
+<option value="MOTRICIDAD OROFACIAL FO05032-1">MOTRICIDAD OROFACIAL FO05032-1</option>
+<option value="NEONATOLOGÍA I OB03015-1">NEONATOLOGÍA I OB03015-1</option>
+<option value="NEUROANATOMÍA TM03402-1">NEUROANATOMÍA TM03402-1</option>
+<option value="NEUROCIENCIA CLÍNICA Y NEURORREHABILITACIÓN">NEUROCIENCIA CLÍNICA Y NEURORREHABILITACIÓN</option>
+<option value="NEUROFTALMOLOGÍA TM07412-1">NEUROFTALMOLOGÍA TM07412-1</option>
+<option value="NEUROLOGÍA FO03018-1">NEUROLOGÍA FO03018-1</option>
+<option value="NEUROLOGÍA ME08050-1">NEUROLOGÍA ME08050-1</option>
+<option value="NUTRICIÓN COMUNITARIA I NU07047-1">NUTRICIÓN COMUNITARIA I NU07047-1</option>
+<option value="NUTRICIÓN EN03017-1">NUTRICIÓN EN03017-1</option>
+<option value="NUTRICION Y HUERTOS URBANOS FG00000502294-1">NUTRICION Y HUERTOS URBANOS FG00000502294-1</option>
+<option value="OBSTETRICIA FISIOLÓGICA I OB03014-1">OBSTETRICIA FISIOLÓGICA I OB03014-1</option>
+<option value="OCUPACIÓN Y REDES TO05026-1">OCUPACIÓN Y REDES TO05026-1</option>
+<option value="OPTOMETRÍA III TM07413-1">OPTOMETRÍA III TM07413-1</option>
+<option value="ORDEN DE SALA PARA DIPLOMA EN FUNCIÓN PULMONAR">ORDEN DE SALA PARA DIPLOMA EN FUNCIÓN PULMONAR</option>
+<option value="PARASITOLOGÍA TM05103-1">PARASITOLOGÍA TM05103-1</option>
+<option value="PARES EVALUADORES NEUROLOGÍA">PARES EVALUADORES NEUROLOGÍA</option>
+<option value="PATOLOGÍA DEL GLOBO OCULAR Y SUS ANEXOS TM05407-1">PATOLOGÍA DEL GLOBO OCULAR Y SUS ANEXOS TM05407-1</option>
+<option value="PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-1">PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-1</option>
+<option value="PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-2">PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-2</option>
+<option value="PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-3">PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-3</option>
+<option value="PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-4">PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-4</option>
+<option value="PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-5">PEDIATRÍA Y CIRUGÍA INFANTIL ME09056-5</option>
+<option value="PLANIFICACIÓN EN SERVICIOS DE ALIMENTACIÓN COLECTIVA NU05035-1">PLANIFICACIÓN EN SERVICIOS DE ALIMENTACIÓN COLECTIVA NU</option>
+<option value="POSTGRADO BECA MEDICINA INTERNA.">POSTGRADO BECA MEDICINA INTERNA.</option>
+<option value="PRÁCTICA INTEGRADA IV: EN SALUD TO08048-1">PRÁCTICA INTEGRADA IV: EN SALUD TO08048-1</option>
+<option value="PRE RESERVA CELEBRACIÓN DÍA DE KINESIÓLOGO 70 AÑOS">PRE RESERVA CELEBRACIÓN DÍA DE KINESIÓLOGO 70 AÑOS</option>
+<option value="PRE RESERVA CEREMONIA RECONOCIMIENTO  MARIA ALEJANDRA MARÍN KINE">PRE RESERVA CEREMONIA RECONOCIMIENTO  MARIA ALEJANDRA M</option>
+<option value="PRE RESERVA VISITA DE PROGRAMA INTERNACIONAL">PRE RESERVA VISITA DE PROGRAMA INTERNACIONAL</option>
+<option value="PRE-PASO AVE MEDICINA (VIROLOGIA)">PRE-PASO AVE MEDICINA (VIROLOGIA)</option>
+<option value="PRESENTACIÓN PROGRAMA CANDIDATURA RECTORÍA PROF. ALEJANDRA MIZALA">PRESENTACIÓN PROGRAMA CANDIDATURA RECTORÍA PROF. ALEJAN</option>
+<option value="PRESENTACIÓN PROGRAMA CANDIDATURA RECTORÍA PROF. FRANCISCO MARTINEZ">PRESENTACIÓN PROGRAMA CANDIDATURA RECTORÍA PROF. FRANCI</option>
+<option value="PRESENTACIÓN PROGRAMA CANDIDATURA RECTORÍA PROF. PABLO RUIZ-TAGLE">PRESENTACIÓN PROGRAMA CANDIDATURA RECTORÍA PROF. PABLO </option>
+<option value="PREUPED 2026">PREUPED 2026</option>
+<option value="PREVENCIÓN DE LA VIOLENCIA LABORAL Y PROMOCIÓN DE ENTORNOS RESPETUOSOS FG00000502417-1">PREVENCIÓN DE LA VIOLENCIA LABORAL Y PROMOCIÓN DE ENTOR</option>
+<option value="PRIMEROS AUXILIOS FG00000502282-1">PRIMEROS AUXILIOS FG00000502282-1</option>
+<option value="PROCESAMIENTO CITO-HISTOLÓGICO PARA EL DIAGNÓSTICO TM05205-1">PROCESAMIENTO CITO-HISTOLÓGICO PARA EL DIAGNÓSTICO TM05</option>
+<option value="PROCESOS CREATIVOS Y AUTOCONOCIMIENTO TOA0105-1">PROCESOS CREATIVOS Y AUTOCONOCIMIENTO TOA0105-1</option>
+<option value="PROMOCIÓN EN SALUD FO03019-1">PROMOCIÓN EN SALUD FO03019-1</option>
+<option value="PROMOCIÓN Y EDUCACIÓN EN SALUD I">PROMOCIÓN Y EDUCACIÓN EN SALUD I</option>
+<option value="PROTECCIÓN RADIOLÓGICA Y RADIOBIOLOGÍA I TM05308-1">PROTECCIÓN RADIOLÓGICA Y RADIOBIOLOGÍA I TM05308-1</option>
+<option value="PROYECTO DE INTERVENCIÓN ERGONÓMICA KINESIOLOGÍA">PROYECTO DE INTERVENCIÓN ERGONÓMICA KINESIOLOGÍA</option>
+<option value="PROYECTO DE INVESTIGACIÓN I EN07041-1">PROYECTO DE INVESTIGACIÓN I EN07041-1</option>
+<option value="PROYECTO DE INVESTIGACIÓN I FO07044-1">PROYECTO DE INVESTIGACIÓN I FO07044-1</option>
+<option value="PROYECTO DE TITULACIÓN TO10053-1">PROYECTO DE TITULACIÓN TO10053-1</option>
+<option value="PRUEBA DE INGLES DRA. LEYTON">PRUEBA DE INGLES DRA. LEYTON</option>
+<option value="PRUEBA FISIOPATOLOGÍA (1° AÑO)">PRUEBA FISIOPATOLOGÍA (1° AÑO)</option>
+<option value="PRUEBA INGLES DRA. LEYTON">PRUEBA INGLES DRA. LEYTON</option>
+<option value="PSICOLOGÍA DEL DESARROLLO INFANTIL FO03020-1">PSICOLOGÍA DEL DESARROLLO INFANTIL FO03020-1</option>
+<option value="PSICOLOGÍA GENERAL Y SOCIAL EN03019-1">PSICOLOGÍA GENERAL Y SOCIAL EN03019-1</option>
+<option value="QUÍMICA CLÍNICA TM05104-1">QUÍMICA CLÍNICA TM05104-1</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA CBA0104-1">QUÍMICA GENERAL Y ORGÁNICA CBA0104-1</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA CBA0104-2">QUÍMICA GENERAL Y ORGÁNICA CBA0104-2</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA CBA0105-1">QUÍMICA GENERAL Y ORGÁNICA CBA0105-1</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA CBA0105-2">QUÍMICA GENERAL Y ORGÁNICA CBA0105-2</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA CBA0106-1">QUÍMICA GENERAL Y ORGÁNICA CBA0106-1</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA CBA0106-2">QUÍMICA GENERAL Y ORGÁNICA CBA0106-2</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA MED0103-1">QUÍMICA GENERAL Y ORGÁNICA MED0103-1</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA MED0103-2">QUÍMICA GENERAL Y ORGÁNICA MED0103-2</option>
+<option value="QUÍMICA GENERAL Y ORGÁNICA TMA01003-1">QUÍMICA GENERAL Y ORGÁNICA TMA01003-1</option>
+<option value="RECIBIMIENTO BECADOS MEDICINA INTERNA">RECIBIMIENTO BECADOS MEDICINA INTERNA</option>
+<option value="RED DE HUMANIZACIÓN DE LA SALUD DE CHILE">RED DE HUMANIZACIÓN DE LA SALUD DE CHILE</option>
+<option value="REPRODUCCIÓN HUMANA OB07041-1">REPRODUCCIÓN HUMANA OB07041-1</option>
+<option value="RESPUESTAS INMUNES DEL SER HUMANO EN03018-1">RESPUESTAS INMUNES DEL SER HUMANO EN03018-1</option>
+<option value="REUNIÓN ACADÉMICA DEL DEPARTAMENTO DE KINESIOLOGÍA">REUNIÓN ACADÉMICA DEL DEPARTAMENTO DE KINESIOLOGÍA</option>
+<option value="REUNIÓN ACREDITACIÓN (AUTORIDADES) - INICIA 8.00 HORAS">REUNIÓN ACREDITACIÓN (AUTORIDADES) - INICIA 8.00 HORAS</option>
+<option value="REUNIÓN CEPEC">REUNIÓN CEPEC</option>
+<option value="REUNIÓN CLÍNICA CEMERA">REUNIÓN CLÍNICA CEMERA</option>
+<option value="REUNIÓN CLÍNICA TRANSVERSAL DEL HCUCH">REUNIÓN CLÍNICA TRANSVERSAL DEL HCUCH</option>
+<option value="REUNIÓN CONSEJO DE NIVEL T.M">REUNIÓN CONSEJO DE NIVEL T.M</option>
+<option value="REUNIÓN DE COMITÉ DE CARDIOLOGÍA">REUNIÓN DE COMITÉ DE CARDIOLOGÍA</option>
+<option value="REUNIÓN DE LA MESA DE DIVERSIDADES SEXUALES Y DE GÉNERO">REUNIÓN DE LA MESA DE DIVERSIDADES SEXUALES Y DE GÉNERO</option>
+<option value="REUNIÓN DEL CLAUSTRO CON POSTULANTE A RECTOR">REUNIÓN DEL CLAUSTRO CON POSTULANTE A RECTOR</option>
+<option value="REUNION DR. RICARDO SOTO">REUNION DR. RICARDO SOTO</option>
+<option value="REUNION DRA LOBOS">REUNION DRA LOBOS</option>
+<option value="REUNIÓN DRA. AGUIRRE">REUNIÓN DRA. AGUIRRE</option>
+<option value="REUNIÓN EDUCACIÓN CONTINUA  DPP CASA CENTRAL">REUNIÓN EDUCACIÓN CONTINUA  DPP CASA CENTRAL</option>
+<option value="REUNIÓN GENERAL DEPARTAMENTO DE ENFERMERÍA.">REUNIÓN GENERAL DEPARTAMENTO DE ENFERMERÍA.</option>
+<option value="REUNION LAB AQ">REUNION LAB AQ</option>
+<option value="REUNION LIDA VOLAR HDS">REUNION LIDA VOLAR HDS</option>
+<option value="REUNION PLANIFICACION ACTIVIDADES DE EXTENSION">REUNION PLANIFICACION ACTIVIDADES DE EXTENSION</option>
+<option value="REUNIÓN PTE">REUNIÓN PTE</option>
+<option value="REVALIDA KINESIOLOGÍA">REVALIDA KINESIOLOGÍA</option>
+<option value="REVISIÓN BIBLIOGRÁFICA KI05030-1">REVISIÓN BIBLIOGRÁFICA KI05030-1</option>
+<option value="SALUD MENTAL Y PSICOPATOLOGÍA TO05029-1">SALUD MENTAL Y PSICOPATOLOGÍA TO05029-1</option>
+<option value="SALUD PÚBLICA II EN05031-1">SALUD PÚBLICA II EN05031-1</option>
+<option value="SALUD Y SOCIEDAD ENA0104-1">SALUD Y SOCIEDAD ENA0104-1</option>
+<option value="SEMINARIO BECADOS 2 AÑO PSIQUIATRÍA ORIENTE">SEMINARIO BECADOS 2 AÑO PSIQUIATRÍA ORIENTE</option>
+<option value="SEMINARIO BECADOS. PSIQUIATRÍA ORIENTE">SEMINARIO BECADOS. PSIQUIATRÍA ORIENTE</option>
+<option value="SEMINARIO CON BECADOS DE HEMATOLOGÍ">SEMINARIO CON BECADOS DE HEMATOLOGÍ</option>
+<option value="SEMINARIO INTERNOS DE PSIQUIATRÍA">SEMINARIO INTERNOS DE PSIQUIATRÍA</option>
+<option value="SEMINARIO PARA ALUMNOS DE PREGRADO DE LA CARRERA DE MEDICINA.">SEMINARIO PARA ALUMNOS DE PREGRADO DE LA CARRERA DE MED</option>
+<option value="SEMINARIO UNIDAD DE INVESTIGACIÓN I OB09055-1">SEMINARIO UNIDAD DE INVESTIGACIÓN I OB09055-1</option>
+<option value="SEMINARIOS DEL INTERNADO DE MEDICINA INTERNA ORIENTE,(6° AÑO DE MEDICINA)">SEMINARIOS DEL INTERNADO DE MEDICINA INTERNA ORIENTE,(6</option>
+<option value="SEMIOLOGÍA I">SEMIOLOGÍA I</option>
+<option value="SEMIOLOGÍA I ME03019-1">SEMIOLOGÍA I ME03019-1</option>
+<option value="SEMIOLOGÍA I ME03019-3">SEMIOLOGÍA I ME03019-3</option>
+<option value="SEMIOLOGÍA I ME03019-4">SEMIOLOGÍA I ME03019-4</option>
+<option value="SOCIEDAD Y PROFESIÓN III TM03017-1">SOCIEDAD Y PROFESIÓN III TM03017-1</option>
+<option value="SUMMIT LA UNIVERSIDAD DESAFIADA: IA + MICROCREDENCIALES">SUMMIT LA UNIVERSIDAD DESAFIADA: IA + MICROCREDENCIALES</option>
+<option value="TALLER ARTES ESCÉNICAS DAEC">TALLER ARTES ESCÉNICAS DAEC</option>
+<option value="TALLER ARTES VISUALES">TALLER ARTES VISUALES</option>
+<option value="TALLER CASO CLÍNICO MEDICINA INTERNA I (PREGRADO)">TALLER CASO CLÍNICO MEDICINA INTERNA I (PREGRADO)</option>
+<option value="TALLER CASOS CLINICOS MEDICINA INTERNA I">TALLER CASOS CLINICOS MEDICINA INTERNA I</option>
+<option value="TALLER CORO">TALLER CORO</option>
+<option value="TALLER DANZA CONTEMPORÁNEA DAEC">TALLER DANZA CONTEMPORÁNEA DAEC</option>
+<option value="TALLER DE LENGUA DE SEÑAS CHILENA FG00000502285-1">TALLER DE LENGUA DE SEÑAS CHILENA FG00000502285-1</option>
+<option value="TALLER DE TEATRO DAEC">TALLER DE TEATRO DAEC</option>
+<option value="TÉCNICAS CULINARIAS I NU03019-1">TÉCNICAS CULINARIAS I NU03019-1</option>
+<option value="TÉCNICAS CULINARIAS I NU03019-2">TÉCNICAS CULINARIAS I NU03019-2</option>
+<option value="TÉCNICAS CULINARIAS I NU03019-3">TÉCNICAS CULINARIAS I NU03019-3</option>
+<option value="TECNOLOGÍA DE LOS ALIMENTOS NU03020-1">TECNOLOGÍA DE LOS ALIMENTOS NU03020-1</option>
+<option value="TECNOLOGÍA MÉDICA Y SALUD TMA01001-1">TECNOLOGÍA MÉDICA Y SALUD TMA01001-1</option>
+<option value="TERAPIA DE LA COMUNICACIÓN EN NIÑOS Y ADOLESCENTE EN EL CONTEXTO CLÍNICO Y EDUCATIVO FO07045-1">TERAPIA DE LA COMUNICACIÓN EN NIÑOS Y ADOLESCENTE EN EL</option>
+<option value="TERAPIA OCUPACIONAL Y ESTRATEGIAS DE INTERVENCIÓN III TO03019-1">TERAPIA OCUPACIONAL Y ESTRATEGIAS DE INTERVENCIÓN III T</option>
+<option value="TERAPIA OCUPACIONAL Y ESTRATEGIAS DE INTERVENCIÓN V TO05031-1">TERAPIA OCUPACIONAL Y ESTRATEGIAS DE INTERVENCIÓN V TO0</option>
+<option value="TERAPIA OCUPACIONAL Y ESTRATEGIAS DE INTERVENCIÓN VII TO07044-1">TERAPIA OCUPACIONAL Y ESTRATEGIAS DE INTERVENCIÓN VII T</option>
+<option value="TITULACIÓN PTE ORL PROMOCIÓN 2026">TITULACIÓN PTE ORL PROMOCIÓN 2026</option>
+<option value="TOMA DE PRUEBA A  BECADO">TOMA DE PRUEBA A  BECADO</option>
+<option value="TRABAJO DE INVESTIGACIÓN TM09030-1">TRABAJO DE INVESTIGACIÓN TM09030-1</option>
+<option value="TRAUMATOLOGÍA DEL ADULTO PARA MÉDICOS GENERALES">TRAUMATOLOGÍA DEL ADULTO PARA MÉDICOS GENERALES</option>
+<option value="UNIDAD DE INVESTIGACIÓN I	ME03020-1">UNIDAD DE INVESTIGACIÓN I	ME03020-1</option>
+<option value="UNIDAD DE INVESTIGACIÓN I ME03020-1">UNIDAD DE INVESTIGACIÓN I ME03020-1</option>
+<option value="UNIDAD DE INVESTIGACIÓN I ME03020-2">UNIDAD DE INVESTIGACIÓN I ME03020-2</option>
+<option value="VENTILACIÓN MECÁNICA 2025">VENTILACIÓN MECÁNICA 2025</option>
+<option value="VISITA PARES NEUROLOGÍA">VISITA PARES NEUROLOGÍA</option>
+<option value="VT CONFERENCIA ENFERMERÍA">VT CONFERENCIA ENFERMERÍA</option>
+<option value="“ENCUENTRO CANDIDATOS A RECTORÍA UNIVERSIDAD DE CHILE”">“ENCUENTRO CANDIDATOS A RECTORÍA UNIVERSIDAD DE CHILE”</option>
+<option value="¿QUÉ INVESTIGAMOS LAS MUJERES EN LAS CIENCIAS DEL MOVIMIENTO HUMANO?">¿QUÉ INVESTIGAMOS LAS MUJERES EN LAS CIENCIAS DEL MOVIM</option></select><script>document.form.txtSelCurso.value = '';</script>
+</td>
+</tr>
+<tr class="boxAll">
+<td align="right">Texto Asignatura </td>
+<td align="left">:</td>
+<td colspan="2" align="left"><input name="txtCurso" type="text" class="txtInput" id="txtCurso" value="MATEM" size="79" maxlength="79"></td>
+</tr>
+</tbody></table></td>
+</tr></tbody></table></td></tr>
+<tr><td><div align="right"><table width="100%" border="0"><tbody><tr>
+<td height="50" align="left" valign="bottom" class="txtLinkAyuda"></td>
+<td height="50" valign="bottom"><input name="btnBuscarsem" type="button" class="txtInput" id="btnBuscarsem" value="Ver semestre" onclick="Opcion.value='BuscarSemestre';goForm('BuscarSemestre');"></td>
+<td height="50"><div align="right">
+<input name="btnClear" type="button" class="txtInput" id="btnClear2" value="Limpiar" onclick=" goClear();"><input name="btnBuscar" type="button" class="txtInput" id="btnBuscar2" value="Buscar" onclick="Opcion.value='Buscar';document.form.submit();">
+</div></td>
+</tr></tbody></table></div></td></tr>
+<tr><td><hr></td></tr>
+</tbody></table></div></td></tr>
+<tr><td align="center">
+<br><table width="800" border="0" cellpadding="5" cellspacing="5" class="tablaFondo">
+<tbody><tr><td><div style="font-size:16px; color:#0000CC">Asignatura: Matemática Aplicada TM03302-1</div></td></tr>
+<tr><td><table width="100%" border="0" cellpadding="1" cellspacing="2">
+<tbody><tr class="titTabla">
+<td>Día</td>
+<td>Fecha </td>
+<td>Horario </td>
+<td>Sala</td>
+<td>Ubicación</td>
+<td></td>
+</tr>
+<tr class="tblItem">
+<td class="tablaDatos">Lunes</td>
+<td class="tablaDatos">23-03-2026</td>
+<td class="tablaDatos">10:15 -  13:30</td>
+<td class="tablaDatos">CAMPUS NORTE SALA BIOQUIMICA 03</td>
+<td align="left" class="tablaDatos">NORTE.Bioquimica..Sector D 2º piso</td>
+<td></td>
+</tr>
+</tbody></table></td></tr>
+</tbody></table>
+<br><table width="800" border="0" cellpadding="5" cellspacing="5" class="tablaFondo">
+<tbody><tr><td><div style="font-size:16px; color:#0000CC">Asignatura: Matemática Aplicada TM03502-1</div></td></tr>
+<tr><td><table width="100%" border="0" cellpadding="1" cellspacing="2">
+<tbody><tr class="titTabla">
+<td>Día</td>
+<td>Fecha </td>
+<td>Horario </td>
+<td>Sala</td>
+<td>Ubicación</td>
+<td></td>
+</tr>
+<tr class="tblItem">
+<td class="tablaDatos">Lunes</td>
+<td class="tablaDatos">23-03-2026</td>
+<td class="tablaDatos">10:15 -  11:45</td>
+<td class="tablaDatos">CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ</td>
+<td align="left" class="tablaDatos">NORTE...2° piso - Pasillo Cafetería</td>
+<td></td>
+</tr>
+</tbody></table></td></tr>
+</tbody></table>
+<br><table width="800" border="0" cellpadding="5" cellspacing="5" class="tablaFondo">
+<tbody><tr><td><div style="font-size:16px; color:#0000CC">Asignatura: Matemáticas CB10005-1</div></td></tr>
+<tr><td><table width="100%" border="0" cellpadding="1" cellspacing="2">
+<tbody><tr class="titTabla">
+<td>Día</td>
+<td>Fecha </td>
+<td>Horario </td>
+<td>Sala</td>
+<td>Ubicación</td>
+<td></td>
+</tr>
+<tr class="tblItem">
+<td class="tablaDatos">Lunes</td>
+<td class="tablaDatos">23-03-2026</td>
+<td class="tablaDatos">08:30 -  10:00</td>
+<td class="tablaDatos">CAMPUS NORTE T.O SALA ARTE </td>
+<td align="left" class="tablaDatos">NORTE..Terapia Ocupacional.</td>
+<td></td>
+</tr>
+</tbody></table></td></tr>
+</tbody></table>
+<br><table width="800" border="0" cellpadding="5" cellspacing="5" class="tablaFondo">
+<tbody><tr><td><div style="font-size:16px; color:#0000CC">Asignatura: Matemáticas y Estadística CBA0103-1</div></td></tr>
+<tr><td><table width="100%" border="0" cellpadding="1" cellspacing="2">
+<tbody><tr class="titTabla">
+<td>Día</td>
+<td>Fecha </td>
+<td>Horario </td>
+<td>Sala</td>
+<td>Ubicación</td>
+<td></td>
+</tr>
+<tr class="tblItem">
+<td class="tablaDatos">Lunes</td>
+<td class="tablaDatos">23-03-2026</td>
+<td class="tablaDatos">12:00 -  13:30</td>
+<td class="tablaDatos">CAMPUS NORTE AUDITORIO SOFIA PINCHEIRA  Monica 3</td>
+<td align="left" class="tablaDatos">NORTE...Frente a salas de Computacion 2° piso</td>
+<td></td>
+</tr>
+</tbody></table></td></tr>
+</tbody></table>
+<br><table width="800" border="0" cellpadding="5" cellspacing="5" class="tablaFondo">
+<tbody><tr><td><div style="font-size:16px; color:#0000CC">Asignatura: Matemáticas y Estadística CBA0103-2</div></td></tr>
+<tr><td><table width="100%" border="0" cellpadding="1" cellspacing="2">
+<tbody><tr class="titTabla">
+<td>Día</td>
+<td>Fecha </td>
+<td>Horario </td>
+<td>Sala</td>
+<td>Ubicación</td>
+<td></td>
+</tr>
+<tr class="tblItem">
+<td class="tablaDatos">Lunes</td>
+<td class="tablaDatos">23-03-2026</td>
+<td class="tablaDatos">15:00 -  16:30</td>
+<td class="tablaDatos">CAMPUS NORTE SALA COMPUTACION VILMA YAÑEZ</td>
+<td align="left" class="tablaDatos">NORTE...2° piso - Pasillo Cafetería</td>
+<td></td>
+</tr>
+<tr class="tblItem">
+<td class="tablaDatos">Lunes</td>
+<td class="tablaDatos">23-03-2026</td>
+<td class="tablaDatos">15:00 -  16:30</td>
+<td class="tablaDatos">CAMPUS NORTE SALA COMPUTACION ANA MARIA ROJAS</td>
+<td align="left" class="tablaDatos">NORTE...</td>
+<td></td>
+</tr>
+<tr class="tblItem">
+<td class="tablaDatos">Lunes</td>
+<td class="tablaDatos">23-03-2026</td>
+<td class="tablaDatos">16:45 -  18:15</td>
+<td class="tablaDatos">CAMPUS NORTE AUDITORIO HERNÁN ROMERO</td>
+<td align="left" class="tablaDatos">NORTE...Sector J-K</td>
+<td></td>
+</tr>
+</tbody></table></td></tr>
+</tbody></table>
+</td></tr>
+<tr><td><div align="right"><a href="#top">Subir</a></div></td></tr>
+</tbody></table>
+</form>
+<script>
+//chgCurso('')
+//window.document.form.txtSelCurso.value = ''
+//chgNivel('')
+//window.document.form.selNivel.value = ''
+</script>
+</body></html>
