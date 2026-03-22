@@ -13,7 +13,7 @@ import yaml
 # ============================================================
 # https://docs.google.com/spreadsheets/d/1F_-cTrLiNtYM736nWm_UquKuRWm7MNf5BDcU_I7IF4A/edit?usp=sharing
 GSHEET_ID_URGENTES = "1F_-cTrLiNtYM736nWm_UquKuRWm7MNf5BDcU_I7IF4A"
-GSHEET_GID_URGENTES = "0"
+GSHEET_GID_URGENTES = "266710740"
 
 
 @st.cache_data(ttl=60)
@@ -436,7 +436,7 @@ def mostrar_urgentes_sidebar():
         return
 
     try:
-        df_u = cargar_urgentes_google_sheet(GSHEET_ID_URGENTES, GSHEET_GID_URGENTES)
+        df_u = cargar_urgentes_google_sheet()
     except Exception as e:
         st.sidebar.error(f"No pude leer la Google Sheet: {e}")
         return
@@ -2810,8 +2810,8 @@ df_misiones = cargar_datos_misiones_base(EXCEL_MISIONES_PATH)
 df_mat = cargar_sheet_excel(EXCEL_MISIONES_PATH, "Matriz")
 df_plan = cargar_sheet_excel(EXCEL_MISIONES_PATH, "Plan")
 
-df_urgentes = cargar_urgentes("config/urgente.yml", curso_actual=curso_actual)
-render_sidebar_urgentes(df_urgentes)
+# df_urgentes = cargar_urgentes("config/urgente.yml", curso_actual=curso_actual)
+# render_sidebar_urgentes(df_urgentes)
 
 all_secciones = sorted([x for x in df["sección"].dropna().astype(str).unique() if str(x).strip()])
 
