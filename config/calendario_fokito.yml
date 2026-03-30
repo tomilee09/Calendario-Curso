@@ -399,9 +399,16 @@ misiones:
       "Sección 4": "TY"
 
   # overrides SOLO si quieres romper el ciclo normal
-  overrides_responsables:
+  # overrides_responsables:
     # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-03-26", slot: "C" }
     # - { tipo_evento: "Control", seccion: "Sección 1", fecha_evento: "2026-04-02", responsables: ["GM"] }
+
+  overrides_responsables:
+    - { tipo_evento: "Taller", seccion: "Sección 1", fecha_evento: "2026-03-25", paso: "construir_taller", responsables: ["IG"] }
+    - { tipo_evento: "Taller", seccion: "Sección 2", fecha_evento: "2026-03-27", paso: "construir_taller", responsables: ["IG"] }
+    - { tipo_evento: "Taller", seccion: "Sección 3", fecha_evento: "2026-03-27", paso: "construir_taller", responsables: ["IG"] }
+    - { tipo_evento: "Taller", seccion: "Sección 4", fecha_evento: "2026-03-27", paso: "construir_taller", responsables: ["IG"] }
+    - { tipo_evento: "Taller", seccion: "Sección 4", fecha_evento: "2026-03-27", paso: "corregir_taller", responsables: ["SM"] }
 
   protocolos:
     Control:

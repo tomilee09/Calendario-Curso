@@ -3296,6 +3296,53 @@ def a_fecha(x):
     return ts.date()
 
 
+def construir_horas_seminario_map(df_cal):
+    df_horas = horas_seminario_por_profesor(df_cal)
+    if df_horas.empty:
+        return {}
+    return dict(zip(df_horas["profesor"], df_horas["horas_seminario"]))
+
+
+def score_balance(profesor, carga_actual, horas_map):
+    horas = float(horas_map.get(profesor, 0.0))
+    carga = float(carga_actual.get(profesor, 0.0))
+
+    if horas <= 0:
+        return -10**9
+
+    return horas / (carga + 1.0)
+
+
+def elegir_balanceado(pool, carga_actual, horas_map, cantidad=1, excluir=None):
+    if excluir is None:
+        excluir = set()
+    else:
+        excluir = set(excluir)
+
+    candidatos = [p for p in unicos(pool) if p not in excluir]
+
+    if not candidatos:
+        return []
+
+    candidatos = sorted(
+        candidatos,
+        key=lambda p: (
+            score_balance(p, carga_actual, horas_map),
+            float(horas_map.get(p, 0.0)),
+            -float(carga_actual.get(p, 0.0)),
+            p
+        ),
+        reverse=True
+    )
+
+    return candidatos[:cantidad]
+
+
+def sumar_carga(carga_actual, responsables, peso=1.0):
+    for p in split_profes(responsables):
+        carga_actual[p] = float(carga_actual.get(p, 0.0)) + float(peso)
+
+
 def construir_id_mision(row):
     """
     ID estable para preservar estado entre regeneraciones.
@@ -3520,7 +3567,25 @@ def construir_overrides(cfg_mis):
     return overrides
 
 
-def buscar_override(config, tipo_evento, seccion, fecha_evento):
+# def buscar_override(config, tipo_evento, seccion, fecha_evento):
+#     mis = config.get("misiones", {}) or {}
+#     overrides = mis.get("overrides_responsables", []) or []
+
+#     fecha_evento_str = pd.Timestamp(fecha_evento).strftime("%Y-%m-%d")
+
+#     for ov in overrides:
+#         tipo_ov = str(ov.get("tipo_evento", "")).strip().lower()
+#         seccion_ov = str(ov.get("seccion", "")).strip()
+#         fecha_ov = str(ov.get("fecha_evento", "")).strip()
+
+#         if tipo_ov == str(tipo_evento).strip().lower() and seccion_ov == seccion and fecha_ov == fecha_evento_str:
+#             return ov
+
+#     return None
+
+
+
+def buscar_override(config, tipo_evento, seccion, fecha_evento, paso=None):
     mis = config.get("misiones", {}) or {}
     overrides = mis.get("overrides_responsables", []) or []
 
@@ -3530,11 +3595,25 @@ def buscar_override(config, tipo_evento, seccion, fecha_evento):
         tipo_ov = str(ov.get("tipo_evento", "")).strip().lower()
         seccion_ov = str(ov.get("seccion", "")).strip()
         fecha_ov = str(ov.get("fecha_evento", "")).strip()
+        paso_ov = str(ov.get("paso", "")).strip()
 
-        if tipo_ov == str(tipo_evento).strip().lower() and seccion_ov == seccion and fecha_ov == fecha_evento_str:
-            return ov
+        if tipo_ov != str(tipo_evento).strip().lower():
+            continue
+        if seccion_ov != seccion:
+            continue
+        if fecha_ov != fecha_evento_str:
+            continue
+
+        if paso is not None and paso_ov:
+            if paso_ov != paso:
+                continue
+
+        return ov
 
     return None
+
+
+
 
 
 def slot_a_indice(slot):
@@ -3667,6 +3746,137 @@ def detectar_evaluaciones(df_cal):
     return df_evs
 
 
+
+
+
+
+
+import matplotlib.pyplot as plt
+
+
+def horas_seminario_por_profesor(df_cal):
+    df = df_cal.copy()
+
+    for c in ["actividad", "profesores", "horario"]:
+        if c not in df.columns:
+            df[c] = ""
+
+    df = df[df["actividad"].astype(str).str.strip() == "Seminario"].copy()
+
+    filas = []
+    for _, row in df.iterrows():
+        horario = str(row.get("horario", "")).strip()
+        profes = split_profes(row.get("profesores", ""))
+
+        duracion = 0.0
+        m = pd.Series([horario]).astype(str).str.replace("–", "-", regex=False).iloc[0]
+        mm = __import__("re").match(r"^\s*(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*$", m)
+        if mm:
+            t1 = pd.to_datetime(mm.group(1), format="%H:%M", errors="coerce")
+            t2 = pd.to_datetime(mm.group(2), format="%H:%M", errors="coerce")
+            if pd.notna(t1) and pd.notna(t2):
+                duracion = (t2 - t1).total_seconds() / 3600.0
+
+        for p in profes:
+            filas.append({"profesor": p, "horas": duracion})
+
+    if not filas:
+        return pd.DataFrame(columns=["profesor", "horas_seminario"])
+
+    out = pd.DataFrame(filas).groupby("profesor", as_index=False)["horas"].sum()
+    out = out.rename(columns={"horas": "horas_seminario"})
+    return out
+
+
+# def misiones_seminario_por_profesor(df_mis):
+#     if df_mis.empty:
+#         return pd.DataFrame(columns=["profesor", "misiones_seminario"])
+
+#     df = df_mis.copy()
+
+#     # excluimos laboratorio
+#     df = df[df["tipo_evento"].astype(str).str.strip() != "Laboratorio"].copy()
+
+#     filas = []
+#     for _, row in df.iterrows():
+#         for p in split_profes(row.get("responsables", "")):
+#             filas.append({"profesor": p, "misiones_seminario": 1})
+
+#     if not filas:
+#         return pd.DataFrame(columns=["profesor", "misiones_seminario"])
+
+#     out = pd.DataFrame(filas).groupby("profesor", as_index=False)["misiones_seminario"].sum()
+#     return out
+
+
+def misiones_seminario_por_profesor(df_mis):
+    if df_mis.empty:
+        return pd.DataFrame(columns=["profesor", "misiones_seminario"])
+
+    df = df_mis.copy()
+
+    # solo misiones realmente repartibles respecto a horas de seminario
+    pasos_validos = {
+        "construir_control",
+        "escanear",
+        "corregir_y_notas",
+        "revisar_tp",
+        "construir_taller",
+        "corregir_taller",
+        "revisar_portafolio",
+    }
+
+    df = df[df["paso"].astype(str).str.strip().isin(pasos_validos)].copy()
+
+    filas = []
+    for _, row in df.iterrows():
+        for p in split_profes(row.get("responsables", "")):
+            filas.append({"profesor": p, "misiones_seminario": 1})
+
+    if not filas:
+        return pd.DataFrame(columns=["profesor", "misiones_seminario"])
+
+    out = pd.DataFrame(filas).groupby("profesor", as_index=False)["misiones_seminario"].sum()
+    return out
+
+
+def graficar_equilibrio_curso(nombre_curso, df_cal, df_mis, carpeta_salida):
+    df_horas = horas_seminario_por_profesor(df_cal)
+    df_misiones_prof = misiones_seminario_por_profesor(df_mis)
+
+    df_plot = pd.merge(df_horas, df_misiones_prof, on="profesor", how="outer").fillna(0)
+
+    if df_plot.empty:
+        print(f"⚠️ No hay datos para graficar equilibrio en {nombre_curso}")
+        return
+
+    df_plot["ratio_horas_por_mision"] = df_plot.apply(
+        lambda r: (r["horas_seminario"] / r["misiones_seminario"]) if r["misiones_seminario"] > 0 else 0,
+        axis=1
+    )
+
+    df_plot = df_plot.sort_values("ratio_horas_por_mision", ascending=False).reset_index(drop=True)
+
+    plt.figure(figsize=(10, 5))
+    plt.bar(df_plot["profesor"], df_plot["ratio_horas_por_mision"])
+    plt.xticks(rotation=45, ha="right")
+    plt.ylabel("Horas de seminario / misiones")
+    plt.title(f"Equilibrio de carga — {nombre_curso}")
+    plt.tight_layout()
+
+    os.makedirs(carpeta_salida, exist_ok=True)
+    path_png = os.path.join(carpeta_salida, "equilibrio_carga.png")
+    plt.savefig(path_png, dpi=200)
+    plt.close()
+
+    print(f"✅ Gráfico de equilibrio guardado en: {path_png}")
+    print(df_plot.to_string(index=False))
+
+
+
+
+
+
 # ============================================================
 # CONSTRUCCIÓN DE MISIONES
 # ============================================================
@@ -3699,6 +3909,8 @@ def construir_misiones(config, df_cal):
     contador_control_por_seccion = {}
     contador_lab_video_por_seccion = {}
     contador_taller_global = 0
+    horas_map = construir_horas_seminario_map(df_cal)
+    carga_actual = {}
 
     pec_por_seccion, pcc_por_seccion = obtener_coordinacion(config)
     pools_por_seccion = construir_pools_por_seccion(config)
@@ -3760,9 +3972,75 @@ def construir_misiones(config, df_cal):
         # CONTROL
         # pool cíclico ponderado por sección
         # ========================================================
-        if proto_nombre == "Control":
-            idx = contador_control_por_seccion.get(seccion, 0)
+        # if proto_nombre == "Control":
+        #     idx = contador_control_por_seccion.get(seccion, 0)
 
+        #     pool_control = obtener_pool_controles_seccion(config, seccion)
+        #     pool_slots = pools_por_seccion.get(seccion, [])
+
+        #     responsable_control = []
+        #     slot_usado = ""
+
+        #     if override and "responsables" in override:
+        #         responsable_control = normalizar_lista_profes(override.get("responsables", []))
+        #         slot_usado = "MANUAL"
+
+        #     elif override and "slot" in override:
+        #         slot_override = str(override.get("slot", "")).strip().upper()
+        #         encontrado = False
+
+        #         for item in pool_slots:
+        #             if str(item.get("slot", "")).strip().upper() == slot_override:
+        #                 responsable_control = [str(item.get("profesor", "")).strip()]
+        #                 slot_usado = slot_override
+        #                 encontrado = True
+        #                 break
+
+        #         if not encontrado and pool_control:
+        #             responsable_control = [str(pool_control[idx % len(pool_control)]).strip()]
+        #             slot_usado = f"AUTO-{(idx % len(pool_control)) + 1}"
+
+        #     else:
+        #         if pool_control:
+        #             responsable_control = [str(pool_control[idx % len(pool_control)]).strip()]
+        #             if pool_slots:
+        #                 slot_usado = str(pool_slots[idx % len(pool_slots)].get("slot", "")).strip()
+        #             else:
+        #                 slot_usado = f"AUTO-{(idx % len(pool_control)) + 1}"
+
+        #     contador_control_por_seccion[seccion] = idx + 1
+
+        #     filas_chequeo.append({
+        #         "sección": seccion,
+        #         "fecha_evento": fecha_evento.date(),
+        #         "evento": nombre,
+        #         "observaciones": obs_cal,
+        #         "slot_pool": slot_usado,
+        #         "responsable_control": normalizar_profes_str(responsable_control),
+        #     })
+
+        #     for paso_key, paso in proto.items():
+        #         offset = int(paso.get("offset_dias", 0))
+        #         deadline = (fecha_evento + pd.Timedelta(days=offset)).date()
+
+        #         detalle = str(paso.get("detalle", "")).strip()
+        #         if detalle_base_evento:
+        #             detalle = f"{detalle} — {detalle_base_evento}" if detalle else detalle_base_evento
+
+        #         filas.append({
+        #             "fecha_limite": deadline,
+        #             "fecha_evento": fecha_evento.date(),
+        #             "evento": nombre,
+        #             "tipo_evento": proto_nombre,
+        #             "paso": paso_key,
+        #             "sección": seccion,
+        #             "responsables": normalizar_profes_str(responsable_control),
+        #             "detalle": detalle,
+        #             "estado": "Pendiente",
+        #         })
+        #     continue
+        
+        if proto_nombre == "Control":
             pool_control = obtener_pool_controles_seccion(config, seccion)
             pool_slots = pools_por_seccion.get(seccion, [])
 
@@ -3784,19 +4062,17 @@ def construir_misiones(config, df_cal):
                         encontrado = True
                         break
 
-                if not encontrado and pool_control:
-                    responsable_control = [str(pool_control[idx % len(pool_control)]).strip()]
-                    slot_usado = f"AUTO-{(idx % len(pool_control)) + 1}"
+                if not encontrado:
+                    elegido = elegir_balanceado(pool_control, carga_actual, horas_map, cantidad=1)
+                    if elegido:
+                        responsable_control = elegido
+                        slot_usado = "BALANCEADO"
 
             else:
-                if pool_control:
-                    responsable_control = [str(pool_control[idx % len(pool_control)]).strip()]
-                    if pool_slots:
-                        slot_usado = str(pool_slots[idx % len(pool_slots)].get("slot", "")).strip()
-                    else:
-                        slot_usado = f"AUTO-{(idx % len(pool_control)) + 1}"
-
-            contador_control_por_seccion[seccion] = idx + 1
+                elegido = elegir_balanceado(pool_control, carga_actual, horas_map, cantidad=1)
+                if elegido:
+                    responsable_control = elegido
+                    slot_usado = "BALANCEADO"
 
             filas_chequeo.append({
                 "sección": seccion,
@@ -3826,6 +4102,11 @@ def construir_misiones(config, df_cal):
                     "detalle": detalle,
                     "estado": "Pendiente",
                 })
+
+                # contar esta carga como repartible de seminario
+                if paso_key in ["construir_control", "escanear", "corregir_y_notas"]:
+                    sumar_carga(carga_actual, responsable_control, peso=1.0)
+
             continue
 
 
@@ -3972,37 +4253,254 @@ def construir_misiones(config, df_cal):
 
         #     p1, p2, p3, p4 = elegidos[:4]
         
+        
+        
+        
+        
+        
+        
+        # if proto_nombre == "Taller":
+        #     pool_global = obtener_pool_global_participantes(config)
+
+        #     if len(pool_global) == 0:
+        #         continue
+
+        #     elegidos, nuevo_cursor = elegir_varios_ciclico_sin_repetir(
+        #         pool_global,
+        #         contador_taller_global,
+        #         4
+        #     )
+
+        #     if len(elegidos) < 4:
+        #         elegidos_extra, cursor_extra = elegir_varios_ciclico_sin_repetir(
+        #             pool_global,
+        #             nuevo_cursor,
+        #             4
+        #         )
+        #         for p in elegidos_extra:
+        #             if p not in elegidos:
+        #                 elegidos.append(p)
+        #             if len(elegidos) == 4:
+        #                 break
+        #         nuevo_cursor = cursor_extra
+
+        #     if len(elegidos) < 4:
+        #         continue
+
+        #     contador_taller_global = nuevo_cursor
+
+        #     p1, p2, p3, p4 = elegidos[:4]
+
+        #     for paso_key, paso in proto.items():
+        #         offset = int(paso.get("offset_dias", 0))
+        #         deadline = (fecha_evento + pd.Timedelta(days=offset)).date()
+
+        #         detalle = str(paso.get("detalle", "")).strip()
+        #         if detalle_base_evento:
+        #             detalle = f"{detalle} — {detalle_base_evento}" if detalle else detalle_base_evento
+
+        #         if paso_key == "construir_taller":
+        #             filas.append({
+        #                 "fecha_limite": deadline,
+        #                 "fecha_evento": fecha_evento.date(),
+        #                 "evento": nombre,
+        #                 "tipo_evento": proto_nombre,
+        #                 "paso": "construir_taller_AB",
+        #                 "sección": seccion,
+        #                 "responsables": normalizar_profes_str([p1, p2]),
+        #                 "detalle": f"{detalle} — Versiones A y B.",
+        #                 "estado": "Pendiente",
+        #             })
+
+        #             filas.append({
+        #                 "fecha_limite": deadline,
+        #                 "fecha_evento": fecha_evento.date(),
+        #                 "evento": nombre,
+        #                 "tipo_evento": proto_nombre,
+        #                 "paso": "construir_taller_CD",
+        #                 "sección": seccion,
+        #                 "responsables": normalizar_profes_str([p3, p4]),
+        #                 "detalle": f"{detalle} — Versiones C y D.",
+        #                 "estado": "Pendiente",
+        #             })
+
+        #         elif paso_key == "corregir_taller":
+        #             for prof, version in [(p1, "A"), (p2, "B"), (p3, "C"), (p4, "D")]:
+        #                 filas.append({
+        #                     "fecha_limite": deadline,
+        #                     "fecha_evento": fecha_evento.date(),
+        #                     "evento": nombre,
+        #                     "tipo_evento": proto_nombre,
+        #                     "paso": f"corregir_taller_{version}",
+        #                     "sección": seccion,
+        #                     "responsables": normalizar_profes_str([prof]),
+        #                     "detalle": f"{detalle} — Corregir versión {version}.",
+        #                     "estado": "Pendiente",
+        #                 })
+
+        #         else:
+        #             filas.append({
+        #                 "fecha_limite": deadline,
+        #                 "fecha_evento": fecha_evento.date(),
+        #                 "evento": nombre,
+        #                 "tipo_evento": proto_nombre,
+        #                 "paso": paso_key,
+        #                 "sección": seccion,
+        #                 "responsables": normalizar_profes_str(elegidos),
+        #                 "detalle": detalle,
+        #                 "estado": "Pendiente",
+        #             })
+
+        #     continue
+        
+        
+        
+        # if proto_nombre == "Taller":
+        #     pool_global = obtener_pool_global_participantes(config)
+
+        #     if len(pool_global) == 0:
+        #         continue
+
+        #     # una persona para construir
+        #     elegido_construccion, cursor_1 = elegir_varios_ciclico_sin_repetir(
+        #         pool_global,
+        #         contador_taller_global,
+        #         1
+        #     )
+
+        #     if len(elegido_construccion) < 1:
+        #         continue
+
+        #     # una persona para corregir (idealmente distinta)
+        #     elegido_correccion, cursor_2 = elegir_varios_ciclico_sin_repetir(
+        #         pool_global,
+        #         cursor_1,
+        #         1
+        #     )
+
+        #     if len(elegido_correccion) < 1:
+        #         elegido_correccion = elegido_construccion[:]
+        #         cursor_2 = cursor_1
+
+        #     profe_construccion = elegido_construccion[0]
+        #     profe_correccion = elegido_correccion[0]
+
+        #     # overrides manuales
+        #     override_construccion = buscar_override(
+        #         config,
+        #         proto_nombre,
+        #         seccion,
+        #         fecha_evento.date(),
+        #         paso="construir_taller"
+        #     )
+        #     if override_construccion and "responsables" in override_construccion:
+        #         manual = normalizar_lista_profes(override_construccion.get("responsables", []))
+        #         if manual:
+        #             profe_construccion = manual[0]
+
+        #     override_correccion = buscar_override(
+        #         config,
+        #         proto_nombre,
+        #         seccion,
+        #         fecha_evento.date(),
+        #         paso="corregir_taller"
+        #     )
+        #     if override_correccion and "responsables" in override_correccion:
+        #         manual = normalizar_lista_profes(override_correccion.get("responsables", []))
+        #         if manual:
+        #             profe_correccion = manual[0]
+
+        #     contador_taller_global = cursor_2
+
+        #     for paso_key, paso in proto.items():
+        #         offset = int(paso.get("offset_dias", 0))
+        #         deadline = (fecha_evento + pd.Timedelta(days=offset)).date()
+
+        #         detalle = str(paso.get("detalle", "")).strip()
+        #         if detalle_base_evento:
+        #             detalle = f"{detalle} — {detalle_base_evento}" if detalle else detalle_base_evento
+
+        #         if paso_key == "construir_taller":
+        #             responsables = [profe_construccion]
+        #             detalle_final = detalle
+
+        #         elif paso_key == "corregir_taller":
+        #             responsables = [profe_correccion]
+        #             detalle_final = detalle
+
+        #         else:
+        #             responsables = [profe_construccion]
+        #             detalle_final = detalle
+
+        #         filas.append({
+        #             "fecha_limite": deadline,
+        #             "fecha_evento": fecha_evento.date(),
+        #             "evento": nombre,
+        #             "tipo_evento": proto_nombre,
+        #             "paso": paso_key,
+        #             "sección": seccion,
+        #             "responsables": normalizar_profes_str(responsables),
+        #             "detalle": detalle_final,
+        #             "estado": "Pendiente",
+        #         })
+
+        #     continue
+
+
+
         if proto_nombre == "Taller":
             pool_global = obtener_pool_global_participantes(config)
 
             if len(pool_global) == 0:
                 continue
 
-            elegidos, nuevo_cursor = elegir_varios_ciclico_sin_repetir(
+            elegido_construccion = elegir_balanceado(
                 pool_global,
-                contador_taller_global,
-                4
+                carga_actual,
+                horas_map,
+                cantidad=1
             )
 
-            if len(elegidos) < 4:
-                elegidos_extra, cursor_extra = elegir_varios_ciclico_sin_repetir(
-                    pool_global,
-                    nuevo_cursor,
-                    4
-                )
-                for p in elegidos_extra:
-                    if p not in elegidos:
-                        elegidos.append(p)
-                    if len(elegidos) == 4:
-                        break
-                nuevo_cursor = cursor_extra
-
-            if len(elegidos) < 4:
+            if len(elegido_construccion) < 1:
                 continue
 
-            contador_taller_global = nuevo_cursor
+            elegido_correccion = elegir_balanceado(
+                pool_global,
+                carga_actual,
+                horas_map,
+                cantidad=1,
+                excluir=set(elegido_construccion)
+            )
 
-            p1, p2, p3, p4 = elegidos[:4]
+            if len(elegido_correccion) < 1:
+                elegido_correccion = elegido_construccion[:]
+
+            profe_construccion = elegido_construccion[0]
+            profe_correccion = elegido_correccion[0]
+
+            override_construccion = buscar_override(
+                config,
+                proto_nombre,
+                seccion,
+                fecha_evento.date(),
+                paso="construir_taller"
+            )
+            if override_construccion and "responsables" in override_construccion:
+                manual = normalizar_lista_profes(override_construccion.get("responsables", []))
+                if manual:
+                    profe_construccion = manual[0]
+
+            override_correccion = buscar_override(
+                config,
+                proto_nombre,
+                seccion,
+                fecha_evento.date(),
+                paso="corregir_taller"
+            )
+            if override_correccion and "responsables" in override_correccion:
+                manual = normalizar_lista_profes(override_correccion.get("responsables", []))
+                if manual:
+                    profe_correccion = manual[0]
 
             for paso_key, paso in proto.items():
                 offset = int(paso.get("offset_dias", 0))
@@ -4013,58 +4511,29 @@ def construir_misiones(config, df_cal):
                     detalle = f"{detalle} — {detalle_base_evento}" if detalle else detalle_base_evento
 
                 if paso_key == "construir_taller":
-                    filas.append({
-                        "fecha_limite": deadline,
-                        "fecha_evento": fecha_evento.date(),
-                        "evento": nombre,
-                        "tipo_evento": proto_nombre,
-                        "paso": "construir_taller_AB",
-                        "sección": seccion,
-                        "responsables": normalizar_profes_str([p1, p2]),
-                        "detalle": f"{detalle} — Versiones A y B.",
-                        "estado": "Pendiente",
-                    })
-
-                    filas.append({
-                        "fecha_limite": deadline,
-                        "fecha_evento": fecha_evento.date(),
-                        "evento": nombre,
-                        "tipo_evento": proto_nombre,
-                        "paso": "construir_taller_CD",
-                        "sección": seccion,
-                        "responsables": normalizar_profes_str([p3, p4]),
-                        "detalle": f"{detalle} — Versiones C y D.",
-                        "estado": "Pendiente",
-                    })
-
+                    responsables = [profe_construccion]
                 elif paso_key == "corregir_taller":
-                    for prof, version in [(p1, "A"), (p2, "B"), (p3, "C"), (p4, "D")]:
-                        filas.append({
-                            "fecha_limite": deadline,
-                            "fecha_evento": fecha_evento.date(),
-                            "evento": nombre,
-                            "tipo_evento": proto_nombre,
-                            "paso": f"corregir_taller_{version}",
-                            "sección": seccion,
-                            "responsables": normalizar_profes_str([prof]),
-                            "detalle": f"{detalle} — Corregir versión {version}.",
-                            "estado": "Pendiente",
-                        })
-
+                    responsables = [profe_correccion]
                 else:
-                    filas.append({
-                        "fecha_limite": deadline,
-                        "fecha_evento": fecha_evento.date(),
-                        "evento": nombre,
-                        "tipo_evento": proto_nombre,
-                        "paso": paso_key,
-                        "sección": seccion,
-                        "responsables": normalizar_profes_str(elegidos),
-                        "detalle": detalle,
-                        "estado": "Pendiente",
-                    })
+                    responsables = [profe_construccion]
+
+                filas.append({
+                    "fecha_limite": deadline,
+                    "fecha_evento": fecha_evento.date(),
+                    "evento": nombre,
+                    "tipo_evento": proto_nombre,
+                    "paso": paso_key,
+                    "sección": seccion,
+                    "responsables": normalizar_profes_str(responsables),
+                    "detalle": detalle,
+                    "estado": "Pendiente",
+                })
+
+                if paso_key in ["construir_taller", "corregir_taller"]:
+                    sumar_carga(carga_actual, responsables, peso=1.0)
 
             continue
+
 
 
         # ========================================================
@@ -4307,12 +4776,14 @@ def exportar_excel(df_mis, df_mat, df_chequeo, df_pools, path):
             "escanear",
             "corregir_y_notas",
             "revisar_tp",
-            "construir_taller_AB",
-            "construir_taller_CD",
-            "corregir_taller_A",
-            "corregir_taller_B",
-            "corregir_taller_C",
-            "corregir_taller_D",
+            # "construir_taller_AB",
+            # "construir_taller_CD",
+            # "corregir_taller_A",
+            # "corregir_taller_B",
+            # "corregir_taller_C",
+            # "corregir_taller_D",
+            "construir_taller",
+            "corregir_taller",
             "construir_examen",
             "pauta_examen",
             "corregir_examen",
@@ -4402,6 +4873,15 @@ def main():
         df_mis, df_chequeo, df_pools = construir_misiones(config, df_cal)
         df_mis = aplicar_estados_previos(df_mis, estados_previos)
         df_mat = armar_matriz(df_mis, config)
+
+
+        graficar_equilibrio_curso(
+            nombre_curso=curso,
+            df_cal=df_cal,
+            df_mis=df_mis,
+            carpeta_salida=os.path.dirname(out_path)
+        )
+
 
         exportar_excel(df_mis, df_mat, df_chequeo, df_pools, out_path)
 

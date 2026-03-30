@@ -36,28 +36,120 @@ CURSOS = {
 
 ACTIVIDADES_OBJETIVO = ["Seminario", "Laboratorio"]
 
+# PROFES_VALIDOS = {
+#     "TY", "IG", "CC", "AR", "JCS", "MB", "GM", "VB", "NV",
+#     "JM", "EG", "RL", "DH", "SM", "RM", "XX"
+# }
+
 PROFES_VALIDOS = {
     "TY", "IG", "CC", "AR", "JCS", "MB", "GM", "VB", "NV",
-    "JM", "EG", "RL", "DH", "SM", "RM", "XX"
+    "JM", "EG", "GF", "DH", "SM", "RM", "XX"
 }
 
+# MAPEO_PROFES_NOMBRES = {
+#     "TY": [
+#         "tomás yáñez", "tomas yanez", "joriv tomás", "joriv tomas",
+#         "tomas", "tomás", "yáñez", "yanez", "prof. tomás yáñez", "prof. tomas yanez"
+#     ],
+#     "IG": [
+#         "ingrid galaz", "ingrid", "galaz", "prof. ingrid galaz"
+#     ],
+#     "CC": [
+#         "caroll cuellar", "carol cuellar", "caroll", "carol", "cuellar", "prof. caroll cuellar"
+#     ],
+#     "AR": [
+#         "alexander riquelme", "alexander", "riquelme", "prof. alexander riquelme"
+#     ],
+#     "JCS": [
+#         "juan carlos salas", "juan carlos", "salas", "prof. juan carlos salas"
+#     ],
+#     "MB": [
+#         "maximiliano bernal", "maximiliano", "bernal", "max"
+#     ],
+#     "GM": [
+#         "gabriela martinez", "gabriela martínez", "gabriela", "martinez", "martínez"
+#     ],
+#     "VB": [
+#         "valeria brancacho", "valeria", "brancacho"
+#     ],
+#     "NV": [
+#         "nathalie varas", "natalie varas", "nathalie", "nataly", "natalia", "varas"
+#     ],
+#     "JM": [
+#         "jose mondaca", "josé mondaca", "jose", "josé", "mondaca"
+#     ],
+#     "EG": [
+#         "eduardo guerra", "eduardo", "guerra", "prof. eduardo guerra"
+#     ],
+#     "RL": [
+#         "rosa muñoz", "rosa munoz", "rosa"
+#     ],
+#     "DH": [
+#         "diego hidalgo", "diego", "hidalgo"
+#     ],
+#     "SM": [
+#         "sebastian marconi", "sebastián marconi", "sebastian", "sebastián", "marconi"
+#     ],
+#     "RM": [
+#         "rm"
+#     ],
+#     "XX": [
+#         "xx"
+#     ],
+# }
+
+
+
 MAPEO_PROFES_NOMBRES = {
-    "TY": ["tomás yáñez", "tomas yanez", "joriv tomás", "joriv tomas", "tomas", "tomás"],
-    "IG": ["ingrid galaz", "ingrid"],
-    "CC": ["caroll", "carol", "cuellar"],
-    "AR": ["alexander", "riquelme"],
-    "JCS": ["juan", "salas"],
-    "MB": ["maximiliano", "bernal", "max"],
-    "GM": ["gabriela", "martinez", "gabriela martinez"],
-    "VB": ["valeria", "brancacho"],
-    "NV": ["naty", "nataly", "natalia", "varas"],
-    "JM": ["jose", "josé", "mondaca"],
-    "EG": ["eduardo", "guerra"],
-    "RL": ["rosa"],
-    "DH": ["diego", "hidalgo"],
-    "SM": ["sebastian", "sebastián", "sandoval"],
-    "RM": ["rm"],
-    "XX": ["xx"],
+    "TY": [
+        "tomás yáñez", "tomas yanez", "joriv tomás", "joriv tomas",
+        "tomas", "tomás", "yáñez", "yanez", "prof. tomás yáñez", "prof. tomas yanez"
+    ],
+    "IG": [
+        "ingrid galaz", "ingrid", "galaz", "prof. ingrid galaz"
+    ],
+    "CC": [
+        "caroll cuellar", "carol cuellar", "caroll", "carol", "cuellar", "prof. caroll cuellar"
+    ],
+    "AR": [
+        "alexander riquelme", "alexander", "riquelme", "prof. alexander riquelme"
+    ],
+    "JCS": [
+        "juan carlos salas", "juan carlos", "salas", "prof. juan carlos salas"
+    ],
+    "MB": [
+        "maximiliano bernal", "maximiliano", "bernal", "max"
+    ],
+    "GM": [
+        "gabriela martinez", "gabriela martínez", "gabriela", "martinez", "martínez"
+    ],
+    "VB": [
+        "valeria brancacho", "valeria", "brancacho"
+    ],
+    "NV": [
+        "nathalie varas", "natalie varas", "nathalie", "nataly", "natalia", "varas"
+    ],
+    "JM": [
+        "jose mondaca", "josé mondaca", "jose", "josé", "mondaca"
+    ],
+    "EG": [
+        "eduardo guerra", "eduardo", "guerra", "prof. eduardo guerra"
+    ],
+    "GF": [
+        "gabriel fraczinet", "fraczinet", "gabriel", "prof. gabriel fraczinet"
+    ],
+    "DH": [
+        "diego hidalgo", "diego", "hidalgo"
+    ],
+    "SM": [
+        "sebastian marconi", "sebastián marconi", "sebastian", "sebastián", "marconi"
+    ],
+    "RM": [
+        "rosa muñoz", "rosa munoz", "rosa", "prof. rosa muñoz", "prof. rosa munoz"
+    ],
+    "XX": [
+        "xx"
+    ],
 }
 
 # ============================================================
@@ -334,17 +426,96 @@ def normalizar_nombre_alumno(txt):
     txt = re.sub(r"\s+", " ", txt).strip()
     return txt
 
+def es_numero_lista(txt):
+    txt = limpiar_texto(txt)
+    if not txt:
+        return False
+
+    txt = txt.replace(",", ".")
+    return bool(re.match(r"^\d+(\.0+)?$", txt))
+
 def detectar_profesor_en_fila(txt):
-    txt = limpiar_texto(txt).upper()
+    txt_norm = normalizar_columna_texto(txt)
 
-    if txt in PROFES_VALIDOS:
-        return txt
+    for codigo, variantes in MAPEO_PROFES_NOMBRES.items():
+        for v in variantes:
+            if v in txt_norm:
+                return codigo
 
-    m = re.search(r"\b(" + "|".join(PROFES_VALIDOS) + r")\b", txt)
+    txt_up = limpiar_texto(txt).upper()
+    m = re.search(r"\b(" + "|".join(PROFES_VALIDOS) + r")\b", txt_up)
     if m:
         return m.group(1)
 
     return None
+
+# def leer_alumnos_desde_archivo_por_bloques(ruta_archivo):
+#     ext = os.path.splitext(ruta_archivo)[1].lower()
+
+#     if ext == ".ods":
+#         df_raw = pd.read_excel(ruta_archivo, sheet_name=0, header=None, engine="odf")
+#     else:
+#         df_raw = pd.read_excel(ruta_archivo, sheet_name=0, header=None)
+
+#     seccion_forzada = extraer_seccion_desde_nombre_archivo(ruta_archivo)
+#     if seccion_forzada is None:
+#         raise ValueError(
+#             "No pude inferir la sección desde el nombre del archivo. "
+#             "Usa nombres como alumnos_1.ods, alumnos_2.xls, etc."
+#         )
+
+#     resultado = {}
+#     profesor_actual = None
+#     alumnos_actuales = []
+
+#     def cerrar_bloque():
+#         nonlocal profesor_actual, alumnos_actuales
+#         if profesor_actual and alumnos_actuales:
+#             resultado[(seccion_forzada, profesor_actual)] = alumnos_actuales[:]
+#         profesor_actual = None
+#         alumnos_actuales = []
+
+#     for _, row in df_raw.iterrows():
+#         valores = [limpiar_texto(x) for x in list(row)]
+
+#         if all(v == "" for v in valores):
+#             cerrar_bloque()
+#             continue
+
+#         # unir toda la fila para detectar encabezados tipo:
+#         # "Grupo Seminario - Grupo 1 (Prof. Tomás Yáñez)"
+#         fila_texto = " | ".join([v for v in valores if v])
+
+#         if "grupo" in normalizar_columna_texto(fila_texto) and "prof" in normalizar_columna_texto(fila_texto):
+#             cerrar_bloque()
+#             profesor_actual = detectar_profesor_en_fila(fila_texto)
+#             alumnos_actuales = []
+#             continue
+
+#         if profesor_actual is None:
+#             continue
+
+#         # ignorar encabezados tipo: Integrante / Alias
+#         fila_norm = [normalizar_columna_texto(v) for v in valores]
+#         if "integrante" in fila_norm or "alias" in fila_norm:
+#             continue
+
+#         # formato esperado:
+#         # col0 = número
+#         # col1 = nombre alumno
+#         # col2 = alias/rut
+#         numero = valores[0] if len(valores) > 0 else ""
+#         nombre = valores[1] if len(valores) > 1 else ""
+
+#         if re.match(r"^\d+$", numero):
+#             nombre = normalizar_nombre_alumno(nombre)
+#             if nombre:
+#                 alumnos_actuales.append(nombre)
+#             continue
+
+#     cerrar_bloque()
+#     return resultado
+
 
 def leer_alumnos_desde_archivo_por_bloques(ruta_archivo):
     ext = os.path.splitext(ruta_archivo)[1].lower()
@@ -373,29 +544,54 @@ def leer_alumnos_desde_archivo_por_bloques(ruta_archivo):
         alumnos_actuales = []
 
     for _, row in df_raw.iterrows():
-        if es_fila_vacia(row):
+        valores = [limpiar_texto(x) for x in list(row)]
+
+        if all(v == "" for v in valores):
             cerrar_bloque()
             continue
 
-        primera = limpiar_texto(row.iloc[0] if len(row) > 0 else "")
-        if not primera:
-            continue
+        fila_texto = " | ".join([v for v in valores if v])
+        fila_norm = normalizar_columna_texto(fila_texto)
 
-        prof_detectado = detectar_profesor_en_fila(primera)
-
-        if prof_detectado:
+        # Detectar encabezados de grupo aunque NO digan "Prof."
+        # Ejemplos:
+        # "Grupo Seminario - Grupo 1 (Nathalie Varas)"
+        # "Grupos Seminarios - Grupo 2 (José Mondaca)"
+        if "grupo" in fila_norm and "(" in fila_texto and ")" in fila_texto:
             cerrar_bloque()
-            profesor_actual = prof_detectado
+            profesor_actual = detectar_profesor_en_fila(fila_texto)
+            if profesor_actual is None:
+                print(f"⚠️ No reconocí profesor en encabezado: {fila_texto}")
             alumnos_actuales = []
             continue
 
-        if profesor_actual:
-            nombre = normalizar_nombre_alumno(primera)
+        if profesor_actual is None:
+            continue
+
+        # Ignorar encabezados tipo: Nº | Integrante | Alias
+        fila_norm_cols = [normalizar_columna_texto(v) for v in valores]
+        if "integrante" in fila_norm_cols or "alias" in fila_norm_cols:
+            continue
+        if "sin grupo" in fila_norm:
+            continue
+
+        # Buscar número de lista y nombre de alumno de forma robusta
+        numero = valores[0] if len(valores) > 0 else ""
+        nombre = valores[1] if len(valores) > 1 else ""
+
+        # Si por alguna razón el nombre quedó corrido de columna, intentar rescatarlo
+        if not nombre and len(valores) > 2:
+            nombre = valores[2]
+
+        if es_numero_lista(numero):
+            nombre = normalizar_nombre_alumno(nombre)
             if nombre:
                 alumnos_actuales.append(nombre)
+            continue
 
     cerrar_bloque()
     return resultado
+
 
 def cargar_alumnos_desde_carpeta(carpeta_curso, df_eventos):
     alumnos_por_seccion_profesor = {}
@@ -677,6 +873,14 @@ def procesar_curso(curso_key, info):
         return
 
     alumnos_por_seccion_profesor = cargar_alumnos_desde_carpeta(carpeta_curso, df_eventos)
+    
+    print("\nProfes/Secciones esperados desde eventos:")
+    for clave in sorted(df_eventos[["sección", "profesor"]].drop_duplicates().itertuples(index=False, name=None)):
+        print("  ", clave)
+
+    print("\nProfes/Secciones con alumnos detectados:")
+    for clave in sorted(alumnos_por_seccion_profesor.keys()):
+        print("  ", clave, "->", len(alumnos_por_seccion_profesor[clave]), "alumnos")
 
     print("Profes/Secciones con alumnos detectados:")
     for clave in sorted(alumnos_por_seccion_profesor.keys()):
