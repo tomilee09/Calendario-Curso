@@ -1,0 +1,15 @@
+Asunto: [Medicina] Solicitud de preguntas para la prueba
+
+Buen día,
+
+Para las misiones les pido que hagan preguntas para la prueba.
+
+Profesor  Conocimiento  Comprensión  Análisis
+TY        L1            L2           L3      
+JCS       L2            L3           L1      
+AR        L3            L1           L2      
+EG        L1            L3           L2      
+
+¡Que les vaya muy bien!
+
+J. Tomás Yáñez

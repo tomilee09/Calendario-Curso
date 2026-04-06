@@ -1,0 +1,24 @@
+Asunto: [Fokito - Sección 1] Solicitud de preguntas para la prueba
+
+Buen día,
+
+Tenemos la misión de realizar preguntas para el primer certamen, les pedimos hagan preguntas de acuerdo a la siguiente distribución. 
+
+
+Profesor   Conocimiento   Comprensión   Análisis
+--------   ------------   -----------   --------
+JM         Lógica 3       Lógica 1      Lógica 2
+NV         Lógica 2       Lógica 3      Lógica 1
+MB         Lógica 1       Lógica 2      Lógica 3
+
+
+Para ver el tipo de preguntas que se les piden pueden ver las preguntas de los seminarios, las preguntas autónomas, los controles formativos y los controles sumativos.
+ La idea es que las preguntas tengan un contexto de salud. 
+Las preguntas deben subirse al onedrive en formato word o latex (puede ser link a overleaf), y debe venir con la solución en cualquier formato, es decir, solución escrita a mano o en el mismo word/latex (se debe diferenciar claramente la pregunta con las alternativas de la sección de la solución).
+ Las preguntas deben venir listas para poner en la prueba y deben tener 4 alternativas. Se debe indicar los motivos por los cuales se eligió a los 3 distractores de forma rápida, por ejemplo puede ser algo así: d) Verdadero (distractor, pues les puede faltar una negación al aplicar morgan). 
+
+plazo de entrega: jueves 09 de abril a las 23:59
+
+¡Que les vaya muy bien!
+
+J. Tomás Yáñez

@@ -1,0 +1,19 @@
+Asunto: [Ennuob] Solicitud de preguntas para la prueba
+
+Buen día,
+
+Para las misiones les pido que hagan preguntas para la prueba.
+
+Profesor  Conocimiento  Comprensión  Análisis
+JM        L1            L2           L3      
+MB        L2            L3           L1      
+VB        L3            L1           L2      
+NV        L1            L3           L2      
+RM        L2            L1           L3      
+SM        L3            L2           L1      
+GM        L1            L2           L3      
+DH        L2            L3           L1      
+
+¡Que les vaya muy bien!
+
+J. Tomás Yáñez
