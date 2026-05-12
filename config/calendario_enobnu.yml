@@ -36,6 +36,57 @@ calendario:
 
     - { seccion: "Sección 4", actividad: "Clase teórica", profesores: "CC" }
     - { seccion: "Sección 4", actividad: "Seminario", profesores: ["DH", "GM", "VB"] }
+# JM: 1
+# MB: 2
+# VB: 2
+# NV: 1
+# RM: 1
+# SM: 1
+# DH: 2
+# GM: 2
+
+# JM: 3
+# MB: 1
+# NV: 3
+# RM: 2
+# SM: 1
+# GF: 1
+# EG: 1
+
+# sumando
+# JM: 4
+# MB: 3
+# VB: 2
+# NV: 4
+# RM: 3
+# SM: 2
+# DH: 2
+# GM: 2
+# GF: 1
+# EG: 1
+
+# ----------
+
+# Taller 2:
+# JM: 4 # Crear P1 A y B y soluciones, corregir 12*8 = 96
+# NV: 4 # Crear P2 A y B y soluciones, corregir 12*8 = 96
+# MB: 3 # Crear P3 A y B y soluciones, corregir 12*4 = 48
+# VB: 2 # Crear Preguntas copias del viernes (2 copias por pregunta de la forma B) y soluciones, corregir 12*4 = 48
+
+
+
+# Taller 3:
+# RM: 3 # Crear P1 A y B y soluciones, Corregir 12*4 = 48
+# SM: 2 # Crear P2 A y B y soluciones, Corregir 12*4 = 48
+# DH: 2 # Crear P3 A y B y soluciones, Corregir 12*4 = 48
+# GM: 2 # Crear Copias C y D del viernes y soluciones, Corregir 12*4 = 48
+# GF: 1 # Corregir 12*4 = 48
+# EG: 1 # Corregir 12*4 = 48
+
+
+# la suma de todo lo anterior es: 24
+
+# 4 preguntas de cada tema
 
   temas_teoricos:
     1: "Lógica 1"
@@ -69,8 +120,8 @@ calendario:
     5: "Modelos y Derivadas 2"
     6: "Modelos y Derivadas 3"
     7: "Sin Seminario" # perdemos 1 seminario
-    8: "Revisión Certamen 1"
-    9: "Modelos y Derivadas 4"
+    8: "Modelos y Derivadas 4"
+    9: "Revisión Certamen 1"
     10: "Semana Receso"
     11: "Modelos y Derivadas 5"
     12: "Linealización de modelos"

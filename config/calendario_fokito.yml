@@ -44,7 +44,13 @@ calendario:
     - { seccion: "Sección 4", actividad: "Clase teórica", profesores: "CC" }
     - { seccion: "Sección 4", actividad: "Seminario",    profesores: ["EG", "SM", "GF"] }
     - { seccion: "Sección 4", actividad: "Laboratorio",  profesores: ["EG", "SM", "CC", "GF"] }
-
+# JM: 3
+# MB: 1
+# NV: 3
+# RM: 2
+# SM: 1
+# GF: 1
+# EG: 1
   # temas_por_semana:
   #   1: "Lógica 1"
   #   2: "Lógica 2"
@@ -98,8 +104,8 @@ calendario:
     5: "Modelos y Derivadas 2"
     6: "Modelos y Derivadas 3"
     7: "Sin Seminario" 
-    8: "Revisión Certamen 1"
-    9: "Modelos y Derivadas 4"
+    8: "Modelos y Derivadas 4"
+    9: "Revisión Certamen 1"
     10: "Semana Receso"
     11: "Modelos y Derivadas 5"
     12: "Linealización de modelos"
@@ -194,7 +200,7 @@ calendario:
     - { seccion: "Sección 1", semana: 1,  actividad: "Laboratorio", tema: "Tablas" }
     - { seccion: "Sección 1", semana: 3,  actividad: "Laboratorio", tema: "Gráficos" }
     - { seccion: "Sección 1", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen" }
-    - { seccion: "Sección 1", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
+    - { seccion: "Sección 1", semana: 8,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
     - { seccion: "Sección 1", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5" }
     - { seccion: "Sección 1", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 6" }
     - { seccion: "Sección 1", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7" }
@@ -217,8 +223,8 @@ calendario:
     - { seccion: "Sección 2", semana: 3,  actividad: "Laboratorio", tema: "Gráficos" }
     - { seccion: "Sección 2", semana: 5,  actividad: "Laboratorio", tema: "Medidas de resumen" }
     - { seccion: "Sección 2", semana: 6,  actividad: "Laboratorio", tema: "no hay" }
-    - { seccion: "Sección 2", semana: 7,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
-    - { seccion: "Sección 2", semana: 8,  actividad: "Laboratorio", tema: "no hay" }
+    - { seccion: "Sección 2", semana: 7,  actividad: "Laboratorio", tema: "no hay" }
+    - { seccion: "Sección 2", semana: 8,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
     - { seccion: "Sección 2", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 5" }
     - { seccion: "Sección 2", semana: 11, actividad: "Laboratorio", tema: "laboratorio 6" }
     - { seccion: "Sección 2", semana: 14, actividad: "Laboratorio", tema: "laboratorio 7" }
@@ -246,9 +252,9 @@ calendario:
     - { seccion: "Sección 4", semana: 4,  actividad: "Laboratorio", tema: "Medidas de resumen" }
     - { seccion: "Sección 4", semana: 6,  actividad: "Laboratorio", tema: "Trabajo Exploratorio 1" }
     - { seccion: "Sección 4", semana: 8,  actividad: "Laboratorio", tema: "Laboratorio 5" }
-    - { seccion: "Sección 4", semana: 9,  actividad: "Laboratorio", tema: "Laboratorio 6" }
-    - { seccion: "Sección 4", semana: 11, actividad: "Laboratorio", tema: "Laboratorio 7" }
-    - { seccion: "Sección 4", semana: 13, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2" }
+    - { seccion: "Sección 4", semana: 11,  actividad: "Laboratorio", tema: "Laboratorio 6" }
+    - { seccion: "Sección 4", semana: 13, actividad: "Laboratorio", tema: "Laboratorio 7" }
+    - { seccion: "Sección 4", semana: 14, actividad: "Laboratorio", tema: "Trabajo Exploratorio 2" }
 
   # excepciones_evento:
     # - { seccion: "Sección 4", semana: 6, actividad: "Laboratorio", dia_semana: "Thursday", inicio: "18:30", fin: "20:00", tema: "Lab especial en otra sala", observaciones: "Sala 203" }
